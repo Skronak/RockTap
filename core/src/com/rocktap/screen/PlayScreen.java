@@ -1,6 +1,5 @@
 package com.rocktap.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -8,29 +7,24 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rocktap.Animation.AnimatedActor;
 import com.rocktap.game.AccountInformation;
 import com.rocktap.game.Constants;
-import com.rocktap.game.Station;
 import com.rocktap.input.CustomInputProcessor;
 import com.rocktap.menu.MainMenuBar;
+import com.rocktap.station.stationActor;
 
 import java.util.Random;
 
@@ -55,7 +49,6 @@ public class PlayScreen implements Screen {
     private int textAnimMinX;
     private AccountInformation accountInformation;
     private com.rocktap.utils.BitmapFontGenerator generator;
-    private Image beamImage;
     private Image beamCriticalImage;
     private Image beamMaxSpeedImage;
     private Image stationBorderImage;
@@ -68,15 +61,11 @@ public class PlayScreen implements Screen {
     private Group layer2GraphicObject = new Group(); // Foreground
     private MainMenuBar mainMenuBar;
     private Label goldLabel;
-    private Station station;
+    private stationActor.Station station;
     private AnimatedActor beamActor;
     private AnimatedActor tapActor;
     private Array<TextureRegion> frames;
     private InputMultiplexer inputMultiplexer;
-    private Image amelio1;
-    private Image amelio2;
-    private Image amelio3;
-    Table stationTable = new Table();
 
     @Override
     public void show() {
@@ -136,37 +125,22 @@ public class PlayScreen implements Screen {
         tapActor = new AnimatedActor(0,0,20,20,0.1f,frames);
         tapActor.setVisible(false);
 
-        // FOR TESTING: amelioration
-        amelio1 = new Image(new Texture(Gdx.files.internal("sprites/beamup1.png")));
-        amelio2 = new Image(new Texture(Gdx.files.internal("sprites/beamup2.png")));
-        amelio3 = new Image(new Texture(Gdx.files.internal("sprites/antenna.png")));
-        amelio1.setBounds(70,300,20,10);
-        amelio2.setBounds(70,300,20,10);
-        amelio3.setBounds(70,300,20,10);
-
         // Station //TODO a mettre dans une classe specifique pour gerer les amelio
-        station = new Station(70,300,200,100,2f);
-        stationTable.setBounds(70,300,200,100);
-        stationTable.add(station);
+        station = new stationActor.Station(70,300,200,100,2f);
         //TODO => j'ajoute dans une table pour add facilement des amelioration => creer object station direct avec partie amovibles
 
         // TODO: Mettre asset dans classe de chargement => splash screen
-        beamImage = new Image(new Texture(Gdx.files.internal("sprites/beam.png")));
-        beamImage.setBounds(155,50, 32,270); // position de l'image
         beamCriticalImage = new Image(new Texture(Gdx.files.internal("sprites/beamCritical.png")));
         beamCriticalImage.setBounds(155,50, 32,270); // position de l'image
         beamCriticalImage.setVisible(false);
         beamMaxSpeedImage = new Image(new Texture(Gdx.files.internal("sprites/bMaxSpeed.png")));
         beamMaxSpeedImage.setBounds(155,50, 32,270); // position de l'image
         beamMaxSpeedImage.setVisible(false);
-        beamMaxSpeedImage.setVisible(false);
         stationBorderImage = new Image(new Texture(Gdx.files.internal("sprites/ship.png")));
         stationBorderImage.setBounds(70,300,200,100);
-        stationBorderImage.debug();
         backgroundImage = new Image(new Texture(Gdx.files.internal("sprites/rock.png")));
         backgroundImageOverlay = new Image(new Texture(Gdx.files.internal("sprites/rock_overlay.png")));
 
-//        backgroundImage.setScale(0.8f);
         mainMenuBar = new MainMenuBar();
 
         // Gestion des calques
@@ -182,10 +156,8 @@ public class PlayScreen implements Screen {
         layer1GraphicObject.addActor(beamCriticalImage);
         layer1GraphicObject.addActor(tapActor);
         layer2GraphicObject.addActor(stationBorderImage);
-        layer2GraphicObject.addActor(stationTable);
-        layer2GraphicObject.addActor(amelio1);
-        layer2GraphicObject.addActor(amelio2);
-        layer2GraphicObject.addActor(amelio3);
+        layer2GraphicObject.addActor(station);
+
         layer2GraphicObject.addActor(mainMenuBar);
     }
 
@@ -245,6 +217,8 @@ public class PlayScreen implements Screen {
         }
         if (consecutivTouch >= 10) {
             beamActor.increaseSpeed(0.05f);
+//            beamActor.setWidth(beamActor.getWidth()+1);
+//            beamActor.setX(beamActor.getX()-1);
         }
     }
 
@@ -351,8 +325,15 @@ public class PlayScreen implements Screen {
         }
 
         if(otherbeamTimer >= 5f) {
+//            otherBeamImage.addAction(Actions.sequence(
+//                    Actions.show(),
+//                    Actions.fadeIn(0.5f),
+//                    Actions.fadeOut(0.3f),
+//                    Actions.hide()
+//            ));
             otherbeamTimer = 0;
         }
+
     }
 
     @Override

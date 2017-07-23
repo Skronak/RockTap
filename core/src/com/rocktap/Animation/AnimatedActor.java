@@ -16,14 +16,12 @@ public class AnimatedActor extends Actor {
 
         private Animation idleAnimation;
         private float deltatime;
-        private int width;
-        private int height;
         private TextureRegion currentFrame;
 
         public AnimatedActor (int posX, int posY, int width, int height, float animSpeed, Array<TextureRegion> frames) {
             deltatime = 0;
-            this.width = width;
-            this.height = height;
+            this.setWidth(width);
+            this.setHeight(height);
             this.setPosition(posX, posY);
             idleAnimation = new Animation(animSpeed, frames);
             idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -35,7 +33,7 @@ public class AnimatedActor extends Actor {
             Color color = getColor();
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
             currentFrame = (TextureRegion) idleAnimation.getKeyFrame(deltatime, true);
-            batch.draw(currentFrame,getX(),getY(),width,height);
+            batch.draw(currentFrame,getX(),getY(),getWidth(),getHeight());
         }
 
         @Override
