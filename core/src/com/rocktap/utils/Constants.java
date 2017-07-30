@@ -1,4 +1,4 @@
-package com.rocktap.game;
+package com.rocktap.utils;
 
 import com.badlogic.gdx.graphics.Color;
 

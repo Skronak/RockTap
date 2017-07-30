@@ -8,6 +8,7 @@ import com.rocktap.menu.UpgradeMenu;
 /**
  * Created by Skronak on 29/01/2017.
  * Click listner des boutons d'upgrade
+ * Classe de gestion des input du menu d'UPGRADE
  * // TODO: modifie le fichier de pref l'etat du compte courant
  */
 public class CustomInputUpgradeListener extends ClickListener {
@@ -26,7 +27,6 @@ public class CustomInputUpgradeListener extends ClickListener {
 
     @Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-        Gdx.app.log("LISTENER","LISTENER");
         this.upgradeMenu.getDetailGold().setText(cost);
         this.upgradeMenu.getDetailDetail().setText(detail);
         this.upgradeMenu.getDetailPower().setText(power);

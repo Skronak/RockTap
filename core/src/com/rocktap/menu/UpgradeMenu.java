@@ -1,30 +1,22 @@
 package com.rocktap.menu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.rocktap.game.Constants;
+import com.rocktap.utils.Constants;
 import com.rocktap.input.CustomInputUpgradeListener;
 import com.rocktap.utils.BitmapFontGenerator;
 
@@ -79,6 +71,7 @@ public class UpgradeMenu {
         menutable.add(initUpgradeButtonTable());
         menutable.add(initUpgradeDetailsTable()).top().expand();
         menutable.debug();
+        menutable.setVisible(false);
 
      }
 
@@ -122,16 +115,16 @@ public class UpgradeMenu {
 //            upgradeTable.row();
 //        }
 
-        // Definitoin des boutons
+        // Definition des boutons
         // TODO: Donnes test a rempalcer par fichier
-        Drawable drawable1 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o1.png"))));
-        Drawable drawable2 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o2.png"))));
-        Drawable drawable3 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o3.png"))));
-        Drawable drawable4 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o4.png"))));
-        Drawable drawable5 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o5.png"))));
-        Drawable drawable6 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o6.png"))));
-        Drawable drawable7 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o7.png"))));
-        Drawable drawable8 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o8.png"))));
+        Drawable drawable1 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o1_r.png"))));
+        Drawable drawable2 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o2_r.png"))));
+        Drawable drawable3 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o3_r.png"))));
+        Drawable drawable4 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o4_r.png"))));
+        Drawable drawable5 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o5_r.png"))));
+        Drawable drawable6 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o6_r.png"))));
+        Drawable drawable7 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o7_r.png"))));
+        Drawable drawable8 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o8_r.png"))));
         Button upgradeButton1 = new ImageButton(drawable1);
         Button upgradeButton2 = new ImageButton(drawable2);
         Button upgradeButton3 = new ImageButton(drawable3);
@@ -140,6 +133,7 @@ public class UpgradeMenu {
         Button upgradeButton6 = new ImageButton(drawable6);
         Button upgradeButton7 = new ImageButton(drawable7);
         Button upgradeButton8 = new ImageButton(drawable8);
+
         CustomInputUpgradeListener customInputUpgradeProcessor1 = new CustomInputUpgradeListener(this,"GENERATEUR ION" ,"Amelioration du generateur a ION", "500","5","10");
         CustomInputUpgradeListener customInputUpgradeProcessor2 = new CustomInputUpgradeListener(this,"PROCESSUS" ,"Optimisation des\n processus", "1500","45","0");
         CustomInputUpgradeListener customInputUpgradeProcessor3 = new CustomInputUpgradeListener(this,"RAYON GAMMA" ,"Decouverte des\n rayons GAMMA", "1500","150","15");
@@ -168,15 +162,12 @@ public class UpgradeMenu {
         return pane;
     }
 
-
-
     /**
      * Definition du fond du menu
      * @param fname
      * @return
      */
     private NinePatch getNinePatch(String fname) {
-
         // Get the image
         final Texture t = new Texture(Gdx.files.internal(fname));
         return new NinePatch( new TextureRegion(t, 1, 1 , t.getWidth() - 2, t.getHeight() - 2), 10, 10, 10, 10);

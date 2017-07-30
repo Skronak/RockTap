@@ -21,10 +21,11 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rocktap.Animation.AnimatedActor;
 import com.rocktap.game.AccountInformation;
-import com.rocktap.game.Constants;
+import com.rocktap.utils.Constants;
 import com.rocktap.input.CustomInputProcessor;
+import com.rocktap.manager.GameManager;
 import com.rocktap.menu.MainMenuBar;
-import com.rocktap.station.stationActor;
+import com.rocktap.station.StationActor;
 
 import java.util.Random;
 
@@ -34,6 +35,7 @@ import java.util.Random;
 public class PlayScreen implements Screen {
 
     private SpriteBatch spriteBatch;
+    private GameManager gameManager;
     private Random random;
     private Stage stage;
     private BitmapFont font;
@@ -61,8 +63,8 @@ public class PlayScreen implements Screen {
     private Group layer2GraphicObject = new Group(); // Foreground
     private MainMenuBar mainMenuBar;
     private Label goldLabel;
-    private stationActor.Station station;
-    private AnimatedActor beamActor;
+    private StationActor station;
+
     private AnimatedActor tapActor;
     private Array<TextureRegion> frames;
     private InputMultiplexer inputMultiplexer;
@@ -82,6 +84,7 @@ public class PlayScreen implements Screen {
         font = generator.getFont();
 
         accountInformation = new AccountInformation();
+        gameManager = new GameManager(accountInformation);
         spriteBatch = new SpriteBatch();
         random = new Random();
 
@@ -92,24 +95,14 @@ public class PlayScreen implements Screen {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
-        CustomInputProcessor inputProcessor = new CustomInputProcessor(stage, this);
-        hud = new Hud(spriteBatch, accountInformation);
+        CustomInputProcessor inputProcessor = new CustomInputProcessor(this);
+        hud = new Hud(spriteBatch, gameManager);
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputProcessor);
         inputMultiplexer.addProcessor(hud.getStage());
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         //BeamActor
-        frames = new Array<TextureRegion>();
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b1.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b2.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b3.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b4.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b5.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b6.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b7.png"))));
-        beamActor = new AnimatedActor(155,50, 32,270, 0.2f, frames);
-        beamActor.setVisible(false);
 
         //touchActor
         frames = new Array<TextureRegion>();
@@ -126,7 +119,7 @@ public class PlayScreen implements Screen {
         tapActor.setVisible(false);
 
         // Station //TODO a mettre dans une classe specifique pour gerer les amelio
-        station = new stationActor.Station(70,300,200,100,2f);
+        station = gameManager.initStationActor(70,300,200,100,2f);
         //TODO => j'ajoute dans une table pour add facilement des amelioration => creer object station direct avec partie amovibles
 
         // TODO: Mettre asset dans classe de chargement => splash screen
@@ -136,7 +129,7 @@ public class PlayScreen implements Screen {
         beamMaxSpeedImage = new Image(new Texture(Gdx.files.internal("sprites/bMaxSpeed.png")));
         beamMaxSpeedImage.setBounds(155,50, 32,270); // position de l'image
         beamMaxSpeedImage.setVisible(false);
-        stationBorderImage = new Image(new Texture(Gdx.files.internal("sprites/ship.png")));
+        stationBorderImage = new Image(new Texture(Gdx.files.internal("sprites/station/ship1_0.png")));
         stationBorderImage.setBounds(70,300,200,100);
         backgroundImage = new Image(new Texture(Gdx.files.internal("sprites/rock.png")));
         backgroundImageOverlay = new Image(new Texture(Gdx.files.internal("sprites/rock_overlay.png")));
@@ -151,7 +144,7 @@ public class PlayScreen implements Screen {
         // Ajout des objets dans les calques
         layer0GraphicObject.addActor(backgroundImage);
         layer0GraphicObject.addActor(backgroundImageOverlay);
-        layer1GraphicObject.addActor(beamActor);
+        layer1GraphicObject.addActor(station.getBeamActor());
         layer1GraphicObject.addActor(beamMaxSpeedImage);
         layer1GraphicObject.addActor(beamCriticalImage);
         layer1GraphicObject.addActor(tapActor);
@@ -159,6 +152,10 @@ public class PlayScreen implements Screen {
         layer2GraphicObject.addActor(station);
 
         layer2GraphicObject.addActor(mainMenuBar);
+
+        if (accountInformation.isFirstPlay()) {
+            displayTutorial();
+        }
     }
 
     @Override
@@ -209,14 +206,14 @@ public class PlayScreen implements Screen {
         goldLabel.addAction(Actions.moveTo(150+random.nextInt(100+textAnimMinX)-textAnimMinX,250,3f));
         lastTouch += Gdx.graphics.getDeltaTime();
         if (lastTouch >= 0.5f) {
-            beamActor.decreaseSpeed(0.05f);
+            station.getBeamActor().decreaseSpeed(0.05f);
             lastTouch=0f;
             consecutivTouch=0;
         } else {
             consecutivTouch++;
         }
         if (consecutivTouch >= 10) {
-            beamActor.increaseSpeed(0.05f);
+            station.getBeamActor().increaseSpeed(0.05f);
 //            beamActor.setWidth(beamActor.getWidth()+1);
 //            beamActor.setX(beamActor.getX()-1);
         }
@@ -224,18 +221,18 @@ public class PlayScreen implements Screen {
 
     /**
      * Animation du jeu au touche critique
+     * @param value: valeur du critique
      */
-    public void processCriticalHit() {
+    public void processCriticalHit(int value) {
         beamCriticalImage.clearActions();
         beamCriticalImage.addAction(Actions.sequence(
                 Actions.show(),
                 Actions.fadeIn(0.5f),
                 Actions.fadeOut(0.5f),
                 Actions.hide()));
-        accountInformation.increaseGoldCritical();
         hud.animateCritical();
 
-        goldLabel.setText("CRITICAL "+String.valueOf(accountInformation.getGenGold()));
+        goldLabel.setText("CRITICAL "+String.valueOf(value));
         goldLabel.setColor(Constants.CRITICAL_LABEL_COLOR);
     }
 
@@ -245,7 +242,7 @@ public class PlayScreen implements Screen {
     public void processNormalHit() {
         //TODO Isoler systeme gestion beam
         // TODO mep state
-        if (beamActor.getIdleAnimation().getFrameDuration() <= 0.04f) {
+        if (station.getBeamActor().getIdleAnimation().getFrameDuration() <= 0.04f) {
             beamMaxSpeedImage.clearActions();
             beamMaxSpeedImage.addAction(Actions.sequence(
                     Actions.show(),
@@ -253,12 +250,12 @@ public class PlayScreen implements Screen {
                     Actions.fadeOut(0.5f),
                     Actions.hide()));
         } else {
-        beamActor.clearActions();
-        beamActor.addAction(Actions.sequence(
-                Actions.show(),
-                Actions.fadeIn(0.5f),
-                Actions.fadeOut(0.5f),
-                Actions.hide()));
+            station.getBeamActor().clearActions();
+            station.getBeamActor().addAction(Actions.sequence(
+            Actions.show(),
+            Actions.fadeIn(0.5f),
+            Actions.fadeOut(0.5f),
+            Actions.hide()));
     }}
 
     /**
@@ -270,7 +267,7 @@ public class PlayScreen implements Screen {
         increaseGoldTimer += Gdx.graphics.getDeltaTime();
         stationAnimationTimer += Gdx.graphics.getDeltaTime();
         otherbeamTimer += Gdx.graphics.getDeltaTime();
-        switch (accountInformation.getCurrentState()) {
+        switch (gameManager.getCurrentState()) {
             case IN_GAME: Gdx.input.setInputProcessor(inputMultiplexer);
                 break;
             case UPGRADE:  Gdx.input.setInputProcessor(hud.getStage());
@@ -288,7 +285,7 @@ public class PlayScreen implements Screen {
         // Increase Gold
         if(increaseGoldTimer >= 1) {
             Gdx.app.debug("PlayScreen","Increasing Gold");
-            accountInformation.increaseGold();
+            gameManager.increaseGold();
             hud.setGold(accountInformation.getCurrentGold());
             increaseGoldTimer=0f;
         }
@@ -336,9 +333,14 @@ public class PlayScreen implements Screen {
 
     }
 
+    //TODO: a terminer
+    //afficher tuto en surimpression
+    private void displayTutorial(){
+    }
+
     @Override
     public void resize(int width, int height) {
-        Gdx.app.log("PlayScreen", "Resize occured w"+width+" h"+height);
+        Gdx.app.debug("PlayScreen", "Resize occured w"+width+" h"+height);
         viewport.update(width, height);
         hud.resize(width, height);
     }
@@ -357,12 +359,14 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-        Gdx.app.log("PlayScreen","dispose");
+        Gdx.app.debug("PlayScreen","dispose");
         spriteBatch.dispose();
+        Gdx.app.debug("PlayScreen","saveInformation");
         accountInformation.saveInformation();
     }
 
-    public AccountInformation getAccountInformation(){
-        return accountInformation;
+    public GameManager getGameManager() {
+        return gameManager;
     }
+
 }

@@ -19,6 +19,17 @@ public class StationUpgrade extends Actor {
     private TextureRegion texture;
 
 
+    /**
+     * TODO menage dans param
+     * @param stationId
+     * @param lvl
+     * @param posX
+     * @param posY
+     * @param width
+     * @param height
+     * @param cost
+     * @param sprite
+     */
     public StationUpgrade(int stationId, int lvl, int posX, int posY, int width, int height, int[] cost, String sprite) {
         this.stationId = stationId;
         this.lvl = lvl;
@@ -26,7 +37,7 @@ public class StationUpgrade extends Actor {
         this.posY = posY;
         this.cost = cost;
         this.setSize(width, height);
-        this.texture = new TextureRegion(new Texture(Gdx.files.internal("sprites/"+sprite)));
+        this.texture = new TextureRegion(new Texture(sprite));
     }
 
     public int getStationId() {

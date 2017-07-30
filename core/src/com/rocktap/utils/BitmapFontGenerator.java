@@ -3,7 +3,6 @@ package com.rocktap.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.rocktap.game.Constants;
 
 /**
  * Created by Skronak on 01/02/2017.

@@ -1,12 +1,8 @@
 package com.rocktap.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.rocktap.game.AccountInformation;
-import com.rocktap.game.Constants;
+import com.rocktap.utils.Constants;
+import com.rocktap.manager.GameManager;
 import com.rocktap.screen.PlayScreen;
 
 import java.util.Random;
@@ -16,16 +12,14 @@ import java.util.Random;
  */
 public class CustomInputProcessor implements InputProcessor {
 
-    private Stage stage;
     private Random random;
     private PlayScreen playScreen;
-    private AccountInformation accountInformation;
+    private GameManager gameManager;
 
-    public CustomInputProcessor(Stage stage, PlayScreen playScreen) {
-        this.stage = stage;
+    public CustomInputProcessor(PlayScreen playScreen) {
         this.playScreen = playScreen;
         this.random = new Random();
-        this.accountInformation = playScreen.getAccountInformation();
+        this.gameManager = playScreen.getGameManager();
     }
 
     @Override
@@ -48,11 +42,11 @@ public class CustomInputProcessor implements InputProcessor {
         int randCritical = random.nextInt(Constants.CRITICAL_CHANCE) + 1;
         playScreen.processHit();
         if (randCritical == 1) {
-            playScreen.processCriticalHit();
-            accountInformation.increaseGoldCritical();
+            gameManager.increaseGoldCritical();
+            playScreen.processCriticalHit(gameManager.getCriticalValue());
         } else {
+            gameManager.increaseGold();
             playScreen.processNormalHit();
-            accountInformation.increaseGold();
         }
         playScreen.processPointerHitAnimation(screenX, screenY);
         return false;

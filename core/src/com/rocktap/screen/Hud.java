@@ -23,9 +23,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rocktap.game.AccountInformation;
-import com.rocktap.game.Constants;
+import com.rocktap.manager.GameManager;
+import com.rocktap.utils.Constants;
 import com.rocktap.menu.UpgradeMenu;
-import com.rocktap.utils.GameState;
+import com.rocktap.game.GameState;
 
 /**
  * Created by Skronak on 11/12/2016.
@@ -40,7 +41,7 @@ public class Hud implements Disposable {
     BitmapFont font;
     com.rocktap.utils.BitmapFontGenerator generator;
     Table table;
-
+    private GameManager gameManager;
     private Texture upgradeButtonTexture;
     private Texture skillButtonTexture;
     private Texture achievButtonTexture;
@@ -51,11 +52,12 @@ public class Hud implements Disposable {
     private Button achievButton;
 
 
-    public Hud(SpriteBatch sb, AccountInformation accountInformation) {
+    public Hud(SpriteBatch sb, GameManager gameManager) {
         initButton();
 //        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        this.gameManager = gameManager;
         upgradeMenu = new UpgradeMenu();
-        this.accountInformation = accountInformation;
+        this.accountInformation = gameManager.getAccountInformation();
         OrthographicCamera camera = new OrthographicCamera();
         viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
         stage = new Stage(viewport, sb);
@@ -137,13 +139,16 @@ public class Hud implements Disposable {
 
     }
 
+    /**
+     * Modification du listener d'input en fonction de l'etat
+     */
     private void toggleUpgradeMenu() {
             if (upgradeMenu.getTable().isVisible()) {
                 upgradeMenu.getTable().setVisible(false);
-                accountInformation.setCurrentState(GameState.IN_GAME);
+                gameManager.setCurrentState(GameState.IN_GAME);
             } else {
                 upgradeMenu.getTable().setVisible(true);
-                accountInformation.setCurrentState(GameState.UPGRADE);
+                gameManager.setCurrentState(GameState.UPGRADE);
             }
     }
 

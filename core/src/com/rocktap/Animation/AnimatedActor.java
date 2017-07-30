@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Array;
  */
 public class AnimatedActor extends Actor {
 
-        private Animation idleAnimation;
+        private Animation animation;
         private float deltatime;
         private TextureRegion currentFrame;
 
@@ -23,8 +23,8 @@ public class AnimatedActor extends Actor {
             this.setWidth(width);
             this.setHeight(height);
             this.setPosition(posX, posY);
-            idleAnimation = new Animation(animSpeed, frames);
-            idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
+            animation = new Animation(animSpeed, frames);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
         }
 
         @Override
@@ -32,7 +32,7 @@ public class AnimatedActor extends Actor {
             super.draw(batch, parentAlpha);
             Color color = getColor();
             batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-            currentFrame = (TextureRegion) idleAnimation.getKeyFrame(deltatime, true);
+            currentFrame = (TextureRegion) animation.getKeyFrame(deltatime, true);
             batch.draw(currentFrame,getX(),getY(),getWidth(),getHeight());
         }
 
@@ -45,18 +45,18 @@ public class AnimatedActor extends Actor {
 
 
     public Animation getIdleAnimation() {
-        return idleAnimation;
+        return animation;
     }
 
     public void increaseSpeed(float value) {
             //if (idleAnimation.getFrameDuration() > 0.05f){
             //    Gdx.app.log("speed",String.valueOf(idleAnimation.getFrameDuration()));
-                idleAnimation.setFrameDuration(value);
+        animation.setFrameDuration(value);
             }
 
     public void decreaseSpeed(float value){
 //        if (idleAnimation.getFrameDuration() <= 0.2f){
 //            Gdx.app.log("speed",String.valueOf(idleAnimation.getFrameDuration()));
-            idleAnimation.setFrameDuration(value);
+        animation.setFrameDuration(value);
     }
 }

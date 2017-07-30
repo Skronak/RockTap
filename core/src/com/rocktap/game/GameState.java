@@ -1,4 +1,4 @@
-package com.rocktap.utils;
+package com.rocktap.game;
 
 /**
  * Created by Skronak on 19/02/2017.

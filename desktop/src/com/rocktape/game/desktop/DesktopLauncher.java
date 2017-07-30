@@ -2,7 +2,7 @@ package com.rocktape.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.rocktap.game.Constants;
+import com.rocktap.utils.Constants;
 import com.rocktap.game.RocktapeGame;
 
 public class DesktopLauncher {
