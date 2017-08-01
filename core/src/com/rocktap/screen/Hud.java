@@ -56,7 +56,7 @@ public class Hud implements Disposable {
         initButton();
 //        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         this.gameManager = gameManager;
-        upgradeMenu = new UpgradeMenu();
+        upgradeMenu = new UpgradeMenu(gameManager);
         this.accountInformation = gameManager.getAccountInformation();
         OrthographicCamera camera = new OrthographicCamera();
         viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
