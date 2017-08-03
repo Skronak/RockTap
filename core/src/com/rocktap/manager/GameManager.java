@@ -2,7 +2,7 @@ package com.rocktap.manager;
 
 import com.rocktap.game.AccountInformation;
 import com.rocktap.game.GameState;
-import com.rocktap.station.StationActor;
+import com.rocktap.entity.StationActor;
 
 /**
  * Created by Skronak on 30/07/2017.
@@ -16,12 +16,15 @@ public class GameManager {
 
     private StationActor stationActor;
 
+    private AssetManager assetManager;
+
     // Etat du jeu
     private GameState currentState;
 
     public GameManager(AccountInformation accountInformation) {
         this.accountInformation = accountInformation;
         currentState = GameState.IN_GAME;
+        assetManager = new AssetManager();
     }
 
     /**
@@ -57,6 +60,9 @@ public class GameManager {
         return (accountInformation.getGenGold() * accountInformation.getCriticalRate());
     }
 
+//*****************************************************
+//                  GETTER & SETTER
+// ****************************************************
     public GameState getCurrentState() {
         return currentState;
     }
@@ -71,5 +77,13 @@ public class GameManager {
 
     public void setAccountInformation(AccountInformation accountInformation) {
         this.accountInformation = accountInformation;
+    }
+
+    public StationActor getStationActor() {
+        return stationActor;
+    }
+
+    public void setStationActor(StationActor stationActor) {
+        this.stationActor = stationActor;
     }
 }

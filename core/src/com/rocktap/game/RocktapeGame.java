@@ -15,11 +15,11 @@ public class RocktapeGame extends Game {
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-//		splashScreen=new SplashScreen(this);
-//		setScreen(splashScreen);
+		splashScreen=new SplashScreen(this);
+		setScreen(splashScreen);
 
-		playScreen = new PlayScreen();
-		setScreen(playScreen);
+//		playScreen = new PlayScreen();
+//		setScreen(playScreen);
 	}
 
 	@Override

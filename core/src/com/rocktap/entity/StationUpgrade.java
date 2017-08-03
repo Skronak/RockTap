@@ -1,4 +1,4 @@
-package com.rocktap.station;
+package com.rocktap.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

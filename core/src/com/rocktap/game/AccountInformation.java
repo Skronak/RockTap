@@ -2,7 +2,7 @@ package com.rocktap.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.rocktap.station.StationActor;
+import com.rocktap.entity.StationActor;
 
 import java.sql.Timestamp;
 import java.text.ParseException;

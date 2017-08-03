@@ -31,7 +31,6 @@ public class CustomInputSkillListener extends ClickListener {
                 this.upgradeMenu.getDetailTitre().setText("Upgrade level: "+ this.upgradeMenu.getGameManager().getAccountInformation().getUpgradeLevel1());
                 if (this.upgradeMenu.getGameManager().getAccountInformation().getUpgradeLevel1()==1) {
                     this.upgradeMenu.getUpgradeButton1().getStyle().imageUp =(this.upgradeMenu.getUpgradeDrawable9());
-                    this.upgradeMenu.playUnlockSkillAnimation();
                 }
                 break;
             case 2:

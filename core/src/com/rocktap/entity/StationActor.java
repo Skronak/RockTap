@@ -1,4 +1,4 @@
-package com.rocktap.station;
+package com.rocktap.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,10 +11,7 @@ import com.rocktap.Animation.AnimatedActor;
 import com.rocktap.game.AccountInformation;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by Skronak on 23/07/2017.
@@ -72,6 +69,7 @@ public class StationActor extends Actor {
         }
         return stationUpgradeList;
     }
+
 
     /**
      * Initialisation du beamActor de la station

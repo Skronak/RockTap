@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rocktap.Animation.AnimatedActor;
@@ -25,7 +26,7 @@ import com.rocktap.utils.Constants;
 import com.rocktap.input.CustomInputProcessor;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.MainMenuBar;
-import com.rocktap.station.StationActor;
+import com.rocktap.entity.StationActor;
 
 import java.util.Random;
 
@@ -365,8 +366,19 @@ public class PlayScreen implements Screen {
         accountInformation.saveInformation();
     }
 
+//*****************************************************
+//                  GETTER & SETTER
+// ****************************************************
+
     public GameManager getGameManager() {
         return gameManager;
     }
 
+    public StationActor getStation() {
+        return station;
+    }
+
+    public void setStation(StationActor station) {
+        this.station = station;
+    }
 }
