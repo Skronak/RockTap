@@ -6,20 +6,30 @@ import com.badlogic.gdx.Gdx;
 import com.rocktap.screen.PlayScreen;
 import com.rocktap.screen.SplashScreen;
 
+/**
+ * classe Game de RockTap
+ */
 public class RocktapeGame extends Game {
 
-	PlayScreen playScreen;
-	SplashScreen splashScreen;
+	private PlayScreen playScreen;
+	private SplashScreen splashScreen;
+	private boolean devMode;
 
+	public RocktapeGame(boolean devMode) {
+		this.devMode = devMode;
+	}
 
 	@Override
 	public void create () {
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		splashScreen=new SplashScreen(this);
-		setScreen(splashScreen);
-
-//		playScreen = new PlayScreen();
-//		setScreen(playScreen);
+		if(devMode) {
+			Gdx.app.setLogLevel(Application.LOG_DEBUG);
+			playScreen = new PlayScreen();
+			setScreen(playScreen);
+		} else {
+			Gdx.app.setLogLevel(Application.LOG_ERROR);
+			splashScreen=new SplashScreen(this);
+			setScreen(splashScreen);
+		}
 	}
 
 	@Override

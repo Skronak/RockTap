@@ -36,7 +36,7 @@ public class StationActor extends Actor {
         this.animSpeed = animSpeed;
         this.setPosition(posX, posY);
         this.accountInformation = accountInformation;
-        this.upgradeList = initUpgrade();
+        this.upgradeList = loadUpgrade();
         beamActor = initBeam();
 
         frames = new Array<TextureRegion>();
@@ -52,22 +52,22 @@ public class StationActor extends Actor {
      * Generation des upgrade de la station
      * @return
      */
-    private List<StationUpgrade> initUpgrade() {
-        List<StationUpgrade> stationUpgradeList = new ArrayList<StationUpgrade>();
+    public List<StationUpgrade> loadUpgrade() {
+        upgradeList = new ArrayList<StationUpgrade>();
         int[] cost = {100,200,400,600,800,1200};
         if (accountInformation.getUpgradeLevel1()>0) {
             StationUpgrade stationUpgrade = new StationUpgrade(1,0,100, 94, 30, 25, cost, "sprites/upgrade/upgrade1.png");
-            stationUpgradeList.add(stationUpgrade);
+            upgradeList.add(stationUpgrade);
         }
         if (accountInformation.getUpgradeLevel2()>0) {
             StationUpgrade stationUpgrade = new StationUpgrade(1,0,80, -18, 42, 25, cost, "sprites/upgrade/upgrade2.png");
-            stationUpgradeList.add(stationUpgrade);
+            upgradeList.add(stationUpgrade);
         }
         if (accountInformation.getUpgradeLevel3()>0) {
             StationUpgrade stationUpgrade = new StationUpgrade(1,0,100, 94, 30, 25, cost, "sprites/upgrade/upgrade3.png");
-            stationUpgradeList.add(stationUpgrade);
+            upgradeList.add(stationUpgrade);
         }
-        return stationUpgradeList;
+        return upgradeList;
     }
 
 

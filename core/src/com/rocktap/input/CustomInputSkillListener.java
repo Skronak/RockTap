@@ -1,13 +1,8 @@
 package com.rocktap.input;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rocktap.menu.UpgradeMenu;
-import com.rocktap.utils.Constants;
 
 /**
  * Created by Skronak on 29/01/2017.
@@ -31,6 +26,7 @@ public class CustomInputSkillListener extends ClickListener {
                 this.upgradeMenu.getDetailTitre().setText("Upgrade level: "+ this.upgradeMenu.getGameManager().getAccountInformation().getUpgradeLevel1());
                 if (this.upgradeMenu.getGameManager().getAccountInformation().getUpgradeLevel1()==1) {
                     this.upgradeMenu.getUpgradeButton1().getStyle().imageUp =(this.upgradeMenu.getUpgradeDrawable9());
+                    this.upgradeMenu.getGameManager().getStationActor().loadUpgrade();
                 }
                 break;
             case 2:
@@ -38,6 +34,7 @@ public class CustomInputSkillListener extends ClickListener {
                 this.upgradeMenu.getDetailTitre().setText("Upgrade level: "+ this.upgradeMenu.getGameManager().getAccountInformation().getUpgradeLevel2());
                 if (this.upgradeMenu.getGameManager().getAccountInformation().getUpgradeLevel2()==1) {
                     this.upgradeMenu.getUpgradeButton2().getStyle().imageUp =(this.upgradeMenu.getUpgradeDrawable10());
+                    this.upgradeMenu.getGameManager().getStationActor().loadUpgrade();
                 }
                 break;
             case 3:
@@ -45,6 +42,7 @@ public class CustomInputSkillListener extends ClickListener {
                 this.upgradeMenu.getDetailTitre().setText("Upgrade level: "+ this.upgradeMenu.getGameManager().getAccountInformation().getUpgradeLevel3());
                 if (this.upgradeMenu.getGameManager().getAccountInformation().getUpgradeLevel3()==1) {
                     this.upgradeMenu.getUpgradeButton3().getStyle().imageUp =(this.upgradeMenu.getUpgradeDrawable11());
+                    this.upgradeMenu.getGameManager().getStationActor().loadUpgrade();
                 }
                 break;
             case 4:
@@ -52,6 +50,7 @@ public class CustomInputSkillListener extends ClickListener {
                 this.upgradeMenu.getDetailTitre().setText("Upgrade level: "+ this.upgradeMenu.getGameManager().getAccountInformation().getUpgradeLevel4());
                 if (this.upgradeMenu.getGameManager().getAccountInformation().getUpgradeLevel4()==1) {
                     this.upgradeMenu.getUpgradeButton4().getStyle().imageUp =(this.upgradeMenu.getUpgradeDrawable12());
+                    this.upgradeMenu.getGameManager().getStationActor().loadUpgrade();
                 }
                 break;
             default:

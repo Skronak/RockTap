@@ -1,41 +1,27 @@
 package com.rocktap.menu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.input.CustomInputSkillListener;
-import com.rocktap.manager.GameManager;
-import com.rocktap.utils.Constants;
 import com.rocktap.input.CustomInputUpgradeListener;
-import com.rocktap.utils.BitmapFontGenerator;
+import com.rocktap.manager.GameManager;
 
 /**
  * Created by Skronak on 01/02/2017.
  * Menu d'update
  * // TODO: super menu desactivant l'input listener, gerer un state?
  */
-public class UpgradeMenu {
-    private Table menutable;
-    private Skin skin;
-    BitmapFontGenerator generator;
-    BitmapFont font;
-    private GameManager gameManager;
+public class UpgradeMenu extends AbstractMenu {
     private Table upgradeTable;
-    private float menu_width;
-    private float menu_height;
     private Label detailGold;
     private Label detailDetail;
     private Label detailPower;
@@ -48,32 +34,11 @@ public class UpgradeMenu {
     private ImageButton upgradeButton1, upgradeButton2, upgradeButton3, upgradeButton4, upgradeButton5, upgradeButton6, upgradeButton7, upgradeButton8;
 
     public UpgradeMenu(GameManager gameManager) {
-        this.gameManager = gameManager;
-        initMenu();
+        super(gameManager);
+        customizeMenuTable();
     }
 
-    public void initMenu() {
-        menu_width = Constants.V_WIDTH - (Constants.UPDATE_MENU_PAD*2);
-        menu_height = Constants.V_HEIGHT - (Constants.UPDATE_MENU_PAD*3);
-        //Couleur de fond du menu
-        Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pm1.setColor(10,1,1,.2f);
-        pm1.fill();
-
-        // Text
-        generator = new BitmapFontGenerator();
-        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-        font = generator.getFont();
-        generator.dispose();
-
-        // Definition du menu
-        menutable = new Table();
-        menutable.setBackground((new TextureRegionDrawable(new TextureRegion(new Texture(pm1)))));
-        menutable.setBackground(new NinePatchDrawable(getNinePatch(("menu.png"))));
-        menutable.setWidth(menu_width);
-        menutable.setHeight(menu_height);
-        menutable.setPosition(Constants.UPDATE_MENU_PAD,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
-
+    public void customizeMenuTable() {
         // Contenu du menu
         menutable.add(new Label("UPGRADE",skin)).expandX().top().colspan(2).height(50);
         menutable.row();
@@ -81,8 +46,7 @@ public class UpgradeMenu {
         menutable.add(initUpgradeDetailsTable()).top().expand();
         menutable.debug();
         menutable.setVisible(false);
-
-     }
+    }
 
     public Table initUpgradeDetailsTable() {
         detailTitre = new Label("", skin);
@@ -214,20 +178,10 @@ public class UpgradeMenu {
         return pane;
     }
 
-    /**
-     * Definition du fond du menu
-     * @param fname
-     * @return
-     */
-    private NinePatch getNinePatch(String fname) {
-        // Get the image
-        final Texture t = new Texture(Gdx.files.internal(fname));
-        return new NinePatch( new TextureRegion(t, 1, 1 , t.getWidth() - 2, t.getHeight() - 2), 10, 10, 10, 10);
-    }
 
     public void playUnlockSkillAnimation() {
         Label goldLabel = new Label("hiddddt ", skin);
-        goldLabel.setPosition(150, 0);
+        this.getTable().add(goldLabel);
         goldLabel.addAction(Actions.sequence(
                 Actions.fadeIn(1f),
                 Actions.fadeOut(2f),
@@ -235,9 +189,6 @@ public class UpgradeMenu {
         ));
     }
 
-//*****************************************************
-//                  GETTER & SETTER
-// ****************************************************
     public Label getDetailGold() {
         return detailGold;
     }
@@ -278,24 +229,12 @@ public class UpgradeMenu {
         this.detailTitre = detailTitre;
     }
 
-    public Table getTable() {
-        return menutable;
-    }
-
     public int getCurrentSelection() {
         return currentSelection;
     }
 
     public void setCurrentSelection(int currentSelection) {
         this.currentSelection = currentSelection;
-    }
-
-    public GameManager getGameManager() {
-        return gameManager;
-    }
-
-    public void setGameManager(GameManager gameManager) {
-        this.gameManager = gameManager;
     }
 
     public Drawable getUpgradeDrawable1() {
