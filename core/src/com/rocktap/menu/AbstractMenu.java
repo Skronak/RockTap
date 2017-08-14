@@ -34,7 +34,7 @@ public abstract class AbstractMenu {
 
     public void initMenu() {
         menu_width = Constants.V_WIDTH - (Constants.UPDATE_MENU_PAD*2);
-        menu_height = Constants.V_HEIGHT - (Constants.UPDATE_MENU_PAD*3);
+        menu_height = Constants.V_HEIGHT - (Constants.UPDATE_MENU_PAD*6);
         //Couleur de fond du menu
         Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pm1.setColor(10,1,1,.2f);

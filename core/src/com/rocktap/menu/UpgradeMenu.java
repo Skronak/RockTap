@@ -3,7 +3,6 @@ package com.rocktap.menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -11,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.rocktap.input.CustomInputSkillListener;
-import com.rocktap.input.CustomInputUpgradeListener;
+import com.rocktap.input.InputUpgradeMenuButtonListener;
+import com.rocktap.input.InputUpgradeSkillButtonListener;
 import com.rocktap.manager.GameManager;
 
 /**
@@ -25,12 +24,12 @@ public class UpgradeMenu extends AbstractMenu {
     private Label detailGold;
     private Label detailDetail;
     private Label detailPower;
-    private Label detailProcessor;
+    private Label detailLevel;
     private Label detailTitre;
     // indique le skill actuellement selectionne
     private int currentSelection;
     private Drawable upgradeDrawable1, upgradeDrawable2, upgradeDrawable3, upgradeDrawable4, upgradeDrawable5, upgradeDrawable6, upgradeDrawable7, upgradeDrawable8,
-            upgradeDrawable9, upgradeDrawable10, upgradeDrawable11, upgradeDrawable12, upgradeDrawable13, upgradeDrawable14, upgradeDrawable15, upgradeDrawable16;
+            upgradeDrawable1_r, upgradeDrawable2_r, upgradeDrawable3_r, upgradeDrawable4_r, upgradeDrawable5_r, upgradeDrawable6_r, upgradeDrawable7_r, upgradeDrawable8_r;
     private ImageButton upgradeButton1, upgradeButton2, upgradeButton3, upgradeButton4, upgradeButton5, upgradeButton6, upgradeButton7, upgradeButton8;
 
     public UpgradeMenu(GameManager gameManager) {
@@ -55,14 +54,17 @@ public class UpgradeMenu extends AbstractMenu {
         detailDetail.pack();
         detailGold = new Label("", skin);
         detailPower= new Label("", skin);
-        detailProcessor= new Label("", skin);
+        detailLevel = new Label("", skin);
         TextButton upgraderButton = new TextButton("UPGRADER", skin);
-        CustomInputSkillListener customInputSkillListener = new CustomInputSkillListener(this);
+        InputUpgradeSkillButtonListener customInputSkillListener = new InputUpgradeSkillButtonListener(this);
         upgraderButton.addListener(customInputSkillListener);
         Table detailTable = new Table();
         detailTable.add(detailTitre).expand().top().height(50).width(100);
         detailTable.row();
         detailTable.add(detailDetail).left();
+        detailTable.row();
+        detailTable.add(new Label("LEVEL: ", skin)).left();
+        detailTable.add(detailLevel).width(50);
         detailTable.row();
         detailTable.add(new Label("GOLD GENERATION: ", skin)).left();
         detailTable.add(detailGold).width(50);
@@ -70,8 +72,6 @@ public class UpgradeMenu extends AbstractMenu {
         detailTable.add(new Label("POWER: ", skin)).left();
         detailTable.add(detailPower).width(50);
         detailTable.row();
-        detailTable.add(new Label("PROCESSOR: ", skin)).left();
-        detailTable.add(detailProcessor).width(50);
         detailTable.row();
         detailTable.add(upgraderButton).expandY().center();
 
@@ -84,80 +84,107 @@ public class UpgradeMenu extends AbstractMenu {
         ScrollPane pane = new ScrollPane(upgradeTable,paneStyle);
         pane.setScrollingDisabled(true, false);
 
-//        for(int i = 0; i < 15 ; i++) {
-//            TextButton tmp = new TextButton("", skin);
-//            tmp.setText(i + " UPGRADE");
-//            upgradeTable.add(tmp).expandX().fillX().pad(2).height(50);
-//            upgradeTable.row();
-//        }
-
         // Definition des boutons
-        // TODO: Donnes test a rempalcer par fichier
-        upgradeDrawable1 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o1_r.png"))));
-        upgradeDrawable2 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o2_r.png"))));
-        upgradeDrawable3 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o3_r.png"))));
-        upgradeDrawable4 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o4_r.png"))));
-        upgradeDrawable5 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o5_r.png"))));
-        upgradeDrawable6 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o6_r.png"))));
-        upgradeDrawable7 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o7_r.png"))));
-        upgradeDrawable8 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o8_r.png"))));
-        upgradeDrawable9 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o1.png"))));
-        upgradeDrawable10 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o2.png"))));
-        upgradeDrawable11 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o3.png"))));
-        upgradeDrawable12 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o4.png"))));
-        upgradeDrawable13 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o5.png"))));
-        upgradeDrawable14 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o6.png"))));
-        upgradeDrawable15 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o7.png"))));
-        upgradeDrawable16 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/o8.png"))));
-        if (gameManager.getAccountInformation().getUpgradeLevel1()==0) {
+        upgradeDrawable1 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(0).getIcon()))));
+        upgradeDrawable2 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(1).getIcon()))));
+        upgradeDrawable3 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(2).getIcon()))));
+        upgradeDrawable4 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(3).getIcon()))));
+        upgradeDrawable5 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(4).getIcon()))));
+        upgradeDrawable6 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(5).getIcon()))));
+        upgradeDrawable7 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(6).getIcon()))));
+        upgradeDrawable8 = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(7).getIcon()))));
+        upgradeDrawable1_r = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(0).getIconDisabled()))));
+        upgradeDrawable2_r = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(1).getIconDisabled()))));
+        upgradeDrawable3_r = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(2).getIconDisabled()))));
+        upgradeDrawable4_r = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(3).getIconDisabled()))));
+        upgradeDrawable5_r = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(4).getIconDisabled()))));
+        upgradeDrawable6_r = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(5).getIconDisabled()))));
+        upgradeDrawable7_r = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(6).getIconDisabled()))));
+        upgradeDrawable8_r = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(7).getIconDisabled()))));
+
+        // Initialisation etat bouton au commencement du jeu
+        if (gameManager.getGameInformation().getUpgradeLevel1()==0) {
+            upgradeButton1 = new ImageButton(upgradeDrawable1_r);
+        } else {
             upgradeButton1 = new ImageButton(upgradeDrawable1);
-        } else {
-            upgradeButton1 = new ImageButton(upgradeDrawable9);
         }
-        if (gameManager.getAccountInformation().getUpgradeLevel2()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevel2()==0) {
+            upgradeButton2 = new ImageButton(upgradeDrawable2_r);
+        } else {
             upgradeButton2 = new ImageButton(upgradeDrawable2);
-        } else {
-            upgradeButton2 = new ImageButton(upgradeDrawable10);
         }
-        if (gameManager.getAccountInformation().getUpgradeLevel3()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevel3()==0) {
+            upgradeButton3 = new ImageButton(upgradeDrawable3_r);
+        } else {
             upgradeButton3 = new ImageButton(upgradeDrawable3);
-        } else {
-            upgradeButton3 = new ImageButton(upgradeDrawable11);
         }
-        if (gameManager.getAccountInformation().getUpgradeLevel4()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevel4()==0) {
+            upgradeButton4 = new ImageButton(upgradeDrawable4_r);
+        } else {
             upgradeButton4 = new ImageButton(upgradeDrawable4);
-        } else {
-            upgradeButton4 = new ImageButton(upgradeDrawable12);
         }
-        if (gameManager.getAccountInformation().getUpgradeLevel5()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevel5()==0) {
+            upgradeButton5 = new ImageButton(upgradeDrawable5_r);
+        } else {
             upgradeButton5 = new ImageButton(upgradeDrawable5);
-        } else {
-            upgradeButton5 = new ImageButton(upgradeDrawable13);
         }
-        if (gameManager.getAccountInformation().getUpgradeLevel6()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevel6()==0) {
+            upgradeButton6 = new ImageButton(upgradeDrawable6_r);
+        } else {
             upgradeButton6 = new ImageButton(upgradeDrawable6);
-        } else {
-            upgradeButton6 = new ImageButton(upgradeDrawable14);
         }
-        if (gameManager.getAccountInformation().getUpgradeLevel7()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevel7()==0) {
+            upgradeButton7 = new ImageButton(upgradeDrawable7_r);
+        } else {
             upgradeButton7 = new ImageButton(upgradeDrawable7);
-        } else {
-            upgradeButton7 = new ImageButton(upgradeDrawable15);
         }
-        if (gameManager.getAccountInformation().getUpgradeLevel8()==0) {
-            upgradeButton8 = new ImageButton(upgradeDrawable8);
+        if (gameManager.getGameInformation().getUpgradeLevel8()==0) {
+            upgradeButton8 = new ImageButton(upgradeDrawable8_r);
         } else {
-            upgradeButton8 = new ImageButton(upgradeDrawable16);
+            upgradeButton8 = new ImageButton(upgradeDrawable8);
         }
 
-        CustomInputUpgradeListener customInputUpgradeProcessor1 = new CustomInputUpgradeListener(this,1,"GENERATEUR ION Lvl:","Amelioration du generateur a ION", "500","5","10");
-        CustomInputUpgradeListener customInputUpgradeProcessor2 = new CustomInputUpgradeListener(this,2,"PROCESSUS Lvl:","Optimisation des\n processus", "1500","45","0");
-        CustomInputUpgradeListener customInputUpgradeProcessor3 = new CustomInputUpgradeListener(this,3,"RAYON GAMMA Lvl:","Decouverte des\n rayons GAMMA", "1500","150","15");
-        CustomInputUpgradeListener customInputUpgradeProcessor4 = new CustomInputUpgradeListener(this,4,"REACTEUR Lvl:","Amelioration du\n reacteur", "700","10","10");
-        CustomInputUpgradeListener customInputUpgradeProcessor5 = new CustomInputUpgradeListener(this,5,"RAYON TRACTEUR Lvl:","Prototype de\n rayon tracteur", "4500","0","90");
-        CustomInputUpgradeListener customInputUpgradeProcessor6 = new CustomInputUpgradeListener(this,6,"TOXINES GRAV Lvl:","Nettoyage des\ntoxines gravitationnelles", "1000","500","100");
-        CustomInputUpgradeListener customInputUpgradeProcessor7 = new CustomInputUpgradeListener(this,7,"LASER Lvl:","Amelioration du\n Laser", "5500","5","10");
-        CustomInputUpgradeListener customInputUpgradeProcessor8 = new CustomInputUpgradeListener(this,8,"CODE Lvl:","Optimisation du\n code", "800","8","2");
+        // Ajout des listener
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor1 = new InputUpgradeMenuButtonListener(this,1,
+                gameManager.getAssetManager().getUpgradeFile().get(0).getTitle(),
+                gameManager.getAssetManager().getUpgradeFile().get(0).getDescription(),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(0).getCost()[0]),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(0).getGoldGen()[0]));
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor2 = new InputUpgradeMenuButtonListener(this,2,
+                gameManager.getAssetManager().getUpgradeFile().get(1).getTitle(),
+                gameManager.getAssetManager().getUpgradeFile().get(1).getDescription(),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(1).getCost()[0]),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(1).getGoldGen()[0]));
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor3 = new InputUpgradeMenuButtonListener(this,3,
+                gameManager.getAssetManager().getUpgradeFile().get(2).getTitle(),
+                gameManager.getAssetManager().getUpgradeFile().get(2).getDescription(),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(2).getCost()[0]),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(2).getGoldGen()[0]));
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor4 = new InputUpgradeMenuButtonListener(this,4,
+                gameManager.getAssetManager().getUpgradeFile().get(3).getTitle(),
+                gameManager.getAssetManager().getUpgradeFile().get(3).getDescription(),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(3).getCost()[0]),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(3).getGoldGen()[0]));
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor5 = new InputUpgradeMenuButtonListener(this,5,
+                gameManager.getAssetManager().getUpgradeFile().get(4).getTitle(),
+                gameManager.getAssetManager().getUpgradeFile().get(4).getDescription(),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(4).getCost()[0]),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(4).getGoldGen()[0]));
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor6 = new InputUpgradeMenuButtonListener(this,6,
+                gameManager.getAssetManager().getUpgradeFile().get(5).getTitle(),
+                gameManager.getAssetManager().getUpgradeFile().get(5).getDescription(),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(5).getCost()[0]),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(5).getGoldGen()[0]));
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor7 = new InputUpgradeMenuButtonListener(this,7,
+                gameManager.getAssetManager().getUpgradeFile().get(6).getTitle(),
+                gameManager.getAssetManager().getUpgradeFile().get(6).getDescription(),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(6).getCost()[0]),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(6).getGoldGen()[0]));
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor8 = new InputUpgradeMenuButtonListener(this,8,
+                gameManager.getAssetManager().getUpgradeFile().get(7).getTitle(),
+                gameManager.getAssetManager().getUpgradeFile().get(7).getDescription(),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(7).getCost()[0]),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(7).getGoldGen()[0]));
         upgradeButton1.addListener(customInputUpgradeProcessor1);
         upgradeButton2.addListener(customInputUpgradeProcessor2);
         upgradeButton3.addListener(customInputUpgradeProcessor3);
@@ -166,6 +193,8 @@ public class UpgradeMenu extends AbstractMenu {
         upgradeButton6.addListener(customInputUpgradeProcessor6);
         upgradeButton7.addListener(customInputUpgradeProcessor7);
         upgradeButton8.addListener(customInputUpgradeProcessor8);
+
+        // Ajout des boutons
         upgradeTable.add(upgradeButton1).pad(2).row();
         upgradeTable.add(upgradeButton2).pad(2).row();
         upgradeTable.add(upgradeButton3).pad(2).row();
@@ -178,17 +207,9 @@ public class UpgradeMenu extends AbstractMenu {
         return pane;
     }
 
-
-    public void playUnlockSkillAnimation() {
-        Label goldLabel = new Label("hiddddt ", skin);
-        this.getTable().add(goldLabel);
-        goldLabel.addAction(Actions.sequence(
-                Actions.fadeIn(1f),
-                Actions.fadeOut(2f),
-                Actions.removeActor(goldLabel)
-        ));
-    }
-
+//*****************************************************
+//                  GETTER & SETTER
+// ****************************************************
     public Label getDetailGold() {
         return detailGold;
     }
@@ -213,12 +234,12 @@ public class UpgradeMenu extends AbstractMenu {
         this.detailPower = detailPower;
     }
 
-    public Label getDetailProcessor() {
-        return detailProcessor;
+    public Label getDetailLevel() {
+        return detailLevel;
     }
 
-    public void setDetailProcessor(Label detailProcessor) {
-        this.detailProcessor = detailProcessor;
+    public void setDetailLevel(Label detailLevel) {
+        this.detailLevel = detailLevel;
     }
 
     public Label getDetailTitre() {
@@ -301,68 +322,68 @@ public class UpgradeMenu extends AbstractMenu {
         this.upgradeDrawable8 = upgradeDrawable8;
     }
 
-    public Drawable getUpgradeDrawable9() {
-        return upgradeDrawable9;
+    public Drawable getUpgradeDrawable1_r() {
+        return upgradeDrawable1_r;
     }
 
-    public void setUpgradeDrawable9(Drawable upgradeDrawable9) {
-        this.upgradeDrawable9 = upgradeDrawable9;
+    public void setUpgradeDrawable1_r(Drawable upgradeDrawable1_r) {
+        this.upgradeDrawable1_r = upgradeDrawable1_r;
     }
 
-    public Drawable getUpgradeDrawable10() {
-        return upgradeDrawable10;
+    public Drawable getUpgradeDrawable2_r() {
+        return upgradeDrawable2_r;
     }
 
-    public void setUpgradeDrawable10(Drawable upgradeDrawable10) {
-        this.upgradeDrawable10 = upgradeDrawable10;
+    public void setUpgradeDrawable2_r(Drawable upgradeDrawable2_r) {
+        this.upgradeDrawable2_r = upgradeDrawable2_r;
     }
 
-    public Drawable getUpgradeDrawable11() {
-        return upgradeDrawable11;
+    public Drawable getUpgradeDrawable3_r() {
+        return upgradeDrawable3_r;
     }
 
-    public void setUpgradeDrawable11(Drawable upgradeDrawable11) {
-        this.upgradeDrawable11 = upgradeDrawable11;
+    public void setUpgradeDrawable3_r(Drawable upgradeDrawable3_r) {
+        this.upgradeDrawable3_r = upgradeDrawable3_r;
     }
 
-    public Drawable getUpgradeDrawable12() {
-        return upgradeDrawable12;
+    public Drawable getUpgradeDrawable4_r() {
+        return upgradeDrawable4_r;
     }
 
-    public void setUpgradeDrawable12(Drawable upgradeDrawable12) {
-        this.upgradeDrawable12 = upgradeDrawable12;
+    public void setUpgradeDrawable4_r(Drawable upgradeDrawable4_r) {
+        this.upgradeDrawable4_r = upgradeDrawable4_r;
     }
 
-    public Drawable getUpgradeDrawable13() {
-        return upgradeDrawable13;
+    public Drawable getUpgradeDrawable5_r() {
+        return upgradeDrawable5_r;
     }
 
-    public void setUpgradeDrawable13(Drawable upgradeDrawable13) {
-        this.upgradeDrawable13 = upgradeDrawable13;
+    public void setUpgradeDrawable5_r(Drawable upgradeDrawable5_r) {
+        this.upgradeDrawable5_r = upgradeDrawable5_r;
     }
 
-    public Drawable getUpgradeDrawable14() {
-        return upgradeDrawable14;
+    public Drawable getUpgradeDrawable6_r() {
+        return upgradeDrawable6_r;
     }
 
-    public void setUpgradeDrawable14(Drawable upgradeDrawable14) {
-        this.upgradeDrawable14 = upgradeDrawable14;
+    public void setUpgradeDrawable6_r(Drawable upgradeDrawable6_r) {
+        this.upgradeDrawable6_r = upgradeDrawable6_r;
     }
 
-    public Drawable getUpgradeDrawable15() {
-        return upgradeDrawable15;
+    public Drawable getUpgradeDrawable7_r() {
+        return upgradeDrawable7_r;
     }
 
-    public void setUpgradeDrawable15(Drawable upgradeDrawable15) {
-        this.upgradeDrawable15 = upgradeDrawable15;
+    public void setUpgradeDrawable7_r(Drawable upgradeDrawable7_r) {
+        this.upgradeDrawable7_r = upgradeDrawable7_r;
     }
 
-    public Drawable getUpgradeDrawable16() {
-        return upgradeDrawable16;
+    public Drawable getUpgradeDrawable8_r() {
+        return upgradeDrawable8_r;
     }
 
-    public void setUpgradeDrawable16(Drawable upgradeDrawable16) {
-        this.upgradeDrawable16 = upgradeDrawable16;
+    public void setUpgradeDrawable8_r(Drawable upgradeDrawable8_r) {
+        this.upgradeDrawable8_r = upgradeDrawable8_r;
     }
 
     public ImageButton getUpgradeButton1() {

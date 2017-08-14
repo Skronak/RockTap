@@ -1,14 +1,15 @@
-package com.rocktap.game;
+package com.rocktap.utils;
 
 /**
  * Created by Skronak on 19/02/2017.
  */
 public enum GameState {
     //Objets directement construits
-    UPGRADE ("Upagrade"),
+    UPGRADE ("Upgrade"),
     IN_GAME ("Ingame"),
+    CREDIT ("Credit"),
     SETTINGS ("Settings"),
-    ACHIEVEMENT ("Achivement");
+    ACHIEVEMENT ("Achievement");
 
     private String state = "";
 

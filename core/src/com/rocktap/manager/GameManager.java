@@ -1,18 +1,18 @@
 package com.rocktap.manager;
 
-import com.rocktap.game.AccountInformation;
-import com.rocktap.game.GameState;
+import com.rocktap.entity.GameInformation;
 import com.rocktap.entity.StationActor;
+import com.rocktap.utils.GameState;
 
 /**
  * Created by Skronak on 30/07/2017.
  *
  * Classe de gestion globale du jeu
- * gerant le lien entre PlayScreen et accountInformation
+ * gerant le lien entre PlayScreen et gameInformation
  */
 public class GameManager {
     // Information persistentes
-    private AccountInformation accountInformation;
+    private GameInformation gameInformation;
 
     private StationActor stationActor;
 
@@ -21,8 +21,8 @@ public class GameManager {
     // Etat du jeu
     private GameState currentState;
 
-    public GameManager(AccountInformation accountInformation) {
-        this.accountInformation = accountInformation;
+    public GameManager(GameInformation gameInformation) {
+        this.gameInformation = gameInformation;
         currentState = GameState.IN_GAME;
         assetManager = new AssetManager();
     }
@@ -37,19 +37,19 @@ public class GameManager {
      * @return
      */
     public StationActor initStationActor(int posX, int posY, int width, int height, float animSpeed) {
-        stationActor = new StationActor(posX,posY,width,height,animSpeed,accountInformation);
+        stationActor = new StationActor(posX,posY,width,height,animSpeed, gameInformation);
         return stationActor;
     }
     /**
      * methode d'ajout d'or
      */
     public void increaseGold(){
-        accountInformation.setCurrentGold(accountInformation.getCurrentGold() + accountInformation.getGenGold());
+        gameInformation.setCurrentGold(gameInformation.getCurrentGold() + gameInformation.getGenGold());
     }
 
     // Methode d'ajout d'or lors d'un critique
     public void increaseGoldCritical() {
-        accountInformation.setCurrentGold(accountInformation.getCurrentGold() + getCriticalValue());
+        gameInformation.setCurrentGold(gameInformation.getCurrentGold() + getCriticalValue());
     }
 
     /**
@@ -57,7 +57,7 @@ public class GameManager {
      * @return
      */
     public int getCriticalValue(){
-        return (accountInformation.getGenGold() * accountInformation.getCriticalRate());
+        return (gameInformation.getGenGold() * gameInformation.getCriticalRate());
     }
 
 //*****************************************************
@@ -71,12 +71,12 @@ public class GameManager {
         this.currentState = currentState;
     }
 
-    public AccountInformation getAccountInformation() {
-        return accountInformation;
+    public GameInformation getGameInformation() {
+        return gameInformation;
     }
 
-    public void setAccountInformation(AccountInformation accountInformation) {
-        this.accountInformation = accountInformation;
+    public void setGameInformation(GameInformation gameInformation) {
+        this.gameInformation = gameInformation;
     }
 
     public StationActor getStationActor() {
@@ -85,5 +85,13 @@ public class GameManager {
 
     public void setStationActor(StationActor stationActor) {
         this.stationActor = stationActor;
+    }
+
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    public void setAssetManager(AssetManager assetManager) {
+        this.assetManager = assetManager;
     }
 }

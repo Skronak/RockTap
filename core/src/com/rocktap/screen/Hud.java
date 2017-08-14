@@ -22,12 +22,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.rocktap.game.AccountInformation;
+import com.rocktap.entity.GameInformation;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.AbstractMenu;
 import com.rocktap.menu.CreditMenu;
 import com.rocktap.menu.UpgradeMenu;
 import com.rocktap.utils.Constants;
+import com.rocktap.utils.GameState;
 
 /**
  * Created by Skronak on 11/12/2016.
@@ -35,7 +36,7 @@ import com.rocktap.utils.Constants;
 public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
-    private AccountInformation accountInformation;
+    private GameInformation gameInformation;
     private UpgradeMenu upgradeMenu;
     private CreditMenu creditMenu;
     private Label versionLabel;
@@ -63,7 +64,7 @@ public class Hud implements Disposable {
         this.gameManager = gameManager;
         upgradeMenu = new UpgradeMenu(gameManager);
         creditMenu = new CreditMenu(gameManager);
-        this.accountInformation = gameManager.getAccountInformation();
+        this.gameInformation = gameManager.getGameInformation();
         OrthographicCamera camera = new OrthographicCamera();
         viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
         stage = new Stage(viewport, sb);
@@ -134,15 +135,15 @@ public class Hud implements Disposable {
 
         InputListener buttonListenerDEV = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                gameManager.getAccountInformation().setUpgradeLevel1(0);
-                gameManager.getAccountInformation().setUpgradeLevel2(0);
-                gameManager.getAccountInformation().setUpgradeLevel3(0);
-                gameManager.getAccountInformation().setUpgradeLevel4(0);
-                gameManager.getAccountInformation().setUpgradeLevel5(0);
-                gameManager.getAccountInformation().setUpgradeLevel6(0);
-                gameManager.getAccountInformation().setUpgradeLevel7(0);
-                gameManager.getAccountInformation().setUpgradeLevel8(0);
-                gameManager.getAccountInformation().setStationId(1);
+                gameManager.getGameInformation().setUpgradeLevel1(0);
+                gameManager.getGameInformation().setUpgradeLevel2(0);
+                gameManager.getGameInformation().setUpgradeLevel3(0);
+                gameManager.getGameInformation().setUpgradeLevel4(0);
+                gameManager.getGameInformation().setUpgradeLevel5(0);
+                gameManager.getGameInformation().setUpgradeLevel6(0);
+                gameManager.getGameInformation().setUpgradeLevel7(0);
+                gameManager.getGameInformation().setUpgradeLevel8(0);
+                gameManager.getGameInformation().setStationId(1);
                 return false;
             }
         };
@@ -153,7 +154,7 @@ public class Hud implements Disposable {
         versionLabel = new Label(Constants.CURRENT_VERSION, new Label.LabelStyle(font, Color.WHITE));
         versionLabel.setFontScale(0.5f);
         versionLabel.setWrap(true);
-        scoreLabel = new Label(String.format("%d", accountInformation.getCurrentGold()), new Label.LabelStyle(font, Color.WHITE));
+        scoreLabel = new Label(String.format("%d", gameInformation.getCurrentGold()), new Label.LabelStyle(font, Color.WHITE));
         scoreLabel.setFontScale(2);
         table = new Table();
         table.top();
@@ -195,16 +196,20 @@ public class Hud implements Disposable {
         // Affiche le menu s'il n'est pas visible
         if (!menu.getTable().isVisible()) {
             menu.getTable().setVisible(true);
+            gameManager.setCurrentState(GameState.UPGRADE);
         } else {
             menu.getTable().setVisible(false);
+            gameManager.setCurrentState(GameState.IN_GAME);
         }
 
         // masque les autres menus
         if (menu instanceof CreditMenu ){
             upgradeMenu.getTable().setVisible(false);
+            gameManager.setCurrentState(GameState.CREDIT);
         }
         if (menu instanceof UpgradeMenu ){
             creditMenu.getTable().setVisible(false);
+            gameManager.setCurrentState(GameState.CREDIT);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.rocktap.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -17,16 +18,15 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rocktap.Animation.AnimatedActor;
-import com.rocktap.game.AccountInformation;
-import com.rocktap.utils.Constants;
+import com.rocktap.entity.GameInformation;
+import com.rocktap.entity.StationActor;
 import com.rocktap.input.CustomInputProcessor;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.MainMenuBar;
-import com.rocktap.entity.StationActor;
+import com.rocktap.utils.Constants;
 
 import java.util.Random;
 
@@ -50,12 +50,13 @@ public class PlayScreen implements Screen {
     private Viewport viewport;
     private Hud hud;
     private int textAnimMinX;
-    private AccountInformation accountInformation;
+    private GameInformation gameInformation;
     private com.rocktap.utils.BitmapFontGenerator generator;
     private Image beamCriticalImage;
     private Image beamMaxSpeedImage;
     private Image stationBorderImage;
     private Image backgroundImage;
+    private Image skyImage;
     private Image backgroundImageOverlay;
     private boolean stationAnimationUp; // indique si animation de montée ou descente
     private boolean backgroundImageOverlayIncrease; // indique si alpha augmente ou descend
@@ -84,8 +85,8 @@ public class PlayScreen implements Screen {
         generator = new com.rocktap.utils.BitmapFontGenerator();
         font = generator.getFont();
 
-        accountInformation = new AccountInformation();
-        gameManager = new GameManager(accountInformation);
+        gameInformation = new GameInformation();
+        gameManager = new GameManager(gameInformation);
         spriteBatch = new SpriteBatch();
         random = new Random();
 
@@ -132,8 +133,12 @@ public class PlayScreen implements Screen {
         beamMaxSpeedImage.setVisible(false);
         stationBorderImage = new Image(new Texture(Gdx.files.internal("sprites/station/ship1_0.png")));
         stationBorderImage.setBounds(70,300,200,100);
-        backgroundImage = new Image(new Texture(Gdx.files.internal("sprites/rock.png")));
-        backgroundImageOverlay = new Image(new Texture(Gdx.files.internal("sprites/rock_overlay.png")));
+//        backgroundImage = new Image(new Texture(Gdx.files.internal("sprites/rock.png")));
+        backgroundImage = new Image(new Texture(Gdx.files.internal("sprites/background/rockValley.png")));
+        skyImage = new Image(new Texture(Gdx.files.internal("sprites/background/sky.png")));
+        skyImage.scaleBy(2);
+
+//        backgroundImageOverlay = new Image(new Texture(Gdx.files.internal("sprites/rock_overlay.png")));
 
         mainMenuBar = new MainMenuBar();
 
@@ -143,8 +148,9 @@ public class PlayScreen implements Screen {
         stage.addActor(layer2GraphicObject);
 
         // Ajout des objets dans les calques
+        layer0GraphicObject.addActor(skyImage);
         layer0GraphicObject.addActor(backgroundImage);
-        layer0GraphicObject.addActor(backgroundImageOverlay);
+//        layer0GraphicObject.addActor(backgroundImageOverlay);
         layer1GraphicObject.addActor(station.getBeamActor());
         layer1GraphicObject.addActor(beamMaxSpeedImage);
         layer1GraphicObject.addActor(beamCriticalImage);
@@ -154,7 +160,7 @@ public class PlayScreen implements Screen {
 
         layer2GraphicObject.addActor(mainMenuBar);
 
-        if (accountInformation.isFirstPlay()) {
+        if (gameInformation.isFirstPlay()) {
             displayTutorial();
         }
     }
@@ -165,13 +171,29 @@ public class PlayScreen implements Screen {
 //        this.spriteBatch.setProjectionMatrix(camera.combined);
         updateLogic();
 //        spriteBatch.begin();
-        hud.setGold(accountInformation.getCurrentGold());
+        hud.setGold(gameInformation.getCurrentGold());
         stage.act();
 //        station.act(delta);
         stage.draw();
 //        spriteBatch.end();
         spriteBatch.setProjectionMatrix(hud.getStage().getCamera().combined);
         hud.draw();
+
+        //DEBUG
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            camera.zoom = 1;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            camera.zoom = 2;
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            camera.translate(-1f,0f);
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            camera.translate(1f,0f);
+        }
     }
 
     /**
@@ -196,7 +218,7 @@ public class PlayScreen implements Screen {
      * Animation du jeu au touche
      */
     public void processHit() {
-        goldLabel = new Label("hit "+String.valueOf(accountInformation.getGenGold()),new Label.LabelStyle(font, Constants.NORMAL_LABEL_COLOR));
+        goldLabel = new Label("hit "+String.valueOf(gameInformation.getGenGold()),new Label.LabelStyle(font, Constants.NORMAL_LABEL_COLOR));
         goldLabel.setPosition(150,0);
         layer2GraphicObject.addActor(goldLabel);
         goldLabel.addAction(Actions.sequence(
@@ -273,6 +295,8 @@ public class PlayScreen implements Screen {
                 break;
             case UPGRADE:  Gdx.input.setInputProcessor(hud.getStage());
                 break;
+            case CREDIT:  Gdx.input.setInputProcessor(hud.getStage());
+                break;
             default:
                 break;
         }
@@ -280,19 +304,20 @@ public class PlayScreen implements Screen {
         // Autosave
         if(autoSaveTimer >= Constants.DELAY_AUTOSAVE){
             Gdx.app.debug("PlayScreen","Saving");
-            accountInformation.saveInformation();
+            gameInformation.saveInformation();
             autoSaveTimer=0f;
         }
         // Increase Gold
         if(increaseGoldTimer >= 1) {
             Gdx.app.debug("PlayScreen","Increasing Gold");
             gameManager.increaseGold();
-            hud.setGold(accountInformation.getCurrentGold());
+            hud.setGold(gameInformation.getCurrentGold());
             increaseGoldTimer=0f;
         }
 
         // station animation
         if(stationAnimationTimer >= 0.5f) {
+/*
             if (backgroundImageOverlay.getColor().a >= 1f && backgroundImageOverlayIncrease) {
                 backgroundImageOverlayIncrease = false;
             }
@@ -305,7 +330,10 @@ public class PlayScreen implements Screen {
             } else {
                 backgroundImageOverlay.getColor().a = backgroundImageOverlay.getColor().a - 0.05f;
             }
-            if (station.getY() >= 308 && stationAnimationUp) {
+
+ */
+
+        if (station.getY() >= 308 && stationAnimationUp) {
                 stationAnimationUp = false;
             }
             if (station.getY() <= 302 && !stationAnimationUp) {
@@ -363,7 +391,7 @@ public class PlayScreen implements Screen {
         Gdx.app.debug("PlayScreen","dispose");
         spriteBatch.dispose();
         Gdx.app.debug("PlayScreen","saveInformation");
-        accountInformation.saveInformation();
+        gameInformation.saveInformation();
     }
 
 //*****************************************************

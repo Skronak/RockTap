@@ -1,8 +1,7 @@
-package com.rocktap.game;
+package com.rocktap.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.rocktap.entity.StationActor;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -14,7 +13,7 @@ import java.util.Date;
  *
  * Classe de l'etat du compte du Joueur
  */
-public class AccountInformation {
+public class GameInformation {
     // Total d'or
     private int currentGold;
     // dernier login
@@ -48,10 +47,10 @@ public class AccountInformation {
     // Station du joueur
     private StationActor station;
 
-    public AccountInformation() {
+    public GameInformation() {
         prefs = Gdx.app.getPreferences("rockTapPreferences");
         if (!prefs.contains("lastLogin")) {
-            Gdx.app.debug("AccountInformation","Initialisation du compte par defaut");
+            Gdx.app.debug("GameInformation","Initialisation du compte par defaut");
             currentGold = 0;
             criticalRate = 5;
             lastLogin = new Timestamp(System.currentTimeMillis());

@@ -1,6 +1,8 @@
 [
   {
     "id": "1",
+    "title": "Capteurs",
+    "description": "Amelioration des capteurs",
     "cost": [
       "500",
       "1500",
@@ -21,11 +23,14 @@
     "height": 2252,
     "posX": 1,
     "posY": 50,
-    "skin": "antenna.png",
-    "icon": "a1"
-  },
+    "sprite": "antenna.png",
+    "icon": "o1.png",
+    "iconDisabled" : "icon_disabled.png"
+	},
   {
     "id": "2",
+    "title": "Laser thermique",
+    "description": "Amelioration du laser ",
     "cost": [
       "500",
       "1500",
@@ -46,11 +51,14 @@
     "height": 2252,
     "posX": 1,
     "posY": 50,
-    "skin": "antenna.png",
-    "icon": "a1"
+    "sprite": "antenna.png",
+    "icon": "o2.png",
+    "iconDisabled" : "icon_disabled.png"
   },
   {
     "id": "3",
+    "title": "Bobine de tesla",
+    "description": "Amelioration de la bobine",
     "cost": [
       "500",
       "1500",
@@ -71,11 +79,14 @@
     "height": 2252,
     "posX": 1,
     "posY": 50,
-    "skin": "antenna.png",
-    "icon": "a1"
+    "sprite": "antenna.png",
+    "icon": "o3.png",
+    "iconDisabled" : "icon_disabled.png"
   },
   {
     "id": "4",
+    "title": "N/A",
+    "description": "N/A",
     "cost": [
       "500",
       "1500",
@@ -96,7 +107,120 @@
     "height": 2252,
     "posX": 1,
     "posY": 50,
-    "skin": "antenna.png",
-    "icon": "a1"
-  }
+    "sprite": "antenna.png",
+    "icon": "o4.png",
+    "iconDisabled" : "icon_disabled.png"
+  },
+  {
+    "id": "5",
+    "title": "N/A",
+    "description": "N/A",
+    "cost": [
+      "500",
+      "1500",
+      "2000",
+      "5000",
+      "1500",
+      "20000"
+    ],
+    "goldGen": [
+      "2",
+      "4",
+      "6",
+      "8",
+      "9",
+      "12"
+    ],
+    "width": 11259,
+    "height": 2252,
+    "posX": 1,
+    "posY": 50,
+    "sprite": "antenna.png",
+    "icon": "o5.png",
+    "iconDisabled" : "icon_disabled.png"
+  },
+  {
+    "id": "6",
+    "title": "N/A",
+    "description": "N/A",
+    "cost": [
+      "500",
+      "1500",
+      "2000",
+      "5000",
+      "1500",
+      "20000"
+    ],
+    "goldGen": [
+      "2",
+      "4",
+      "6",
+      "8",
+      "9",
+      "12"
+    ],
+    "width": 11259,
+    "height": 2252,
+    "posX": 1,
+    "posY": 50,
+    "sprite": "antenna.png",
+    "icon": "o6.png",
+    "iconDisabled" : "icon_disabled.png"
+  },
+  {
+    "id": "7",
+    "title": "N/A",
+    "description": "N/A",
+    "cost": [
+      "500",
+      "1500",
+      "2000",
+      "5000",
+      "1500",
+      "20000"
+    ],
+    "goldGen": [
+      "2",
+      "4",
+      "6",
+      "8",
+      "9",
+      "12"
+    ],
+    "width": 11259,
+    "height": 2252,
+    "posX": 1,
+    "posY": 50,
+    "sprite": "antenna.png",
+    "icon": "o7.png",
+    "iconDisabled" : "icon_disabled.png"
+  },
+  {
+    "id": "8",
+    "title": "N/A",
+    "description": "N/A",
+    "cost": [
+      "500",
+      "1500",
+      "2000",
+      "5000",
+      "1500",
+      "20000"
+    ],
+    "goldGen": [
+      "2",
+      "4",
+      "6",
+      "8",
+      "9",
+      "12"
+    ],
+    "width": 11259,
+    "height": 2252,
+    "posX": 1,
+    "posY": 50,
+    "sprite": "antenna.png",
+    "icon": "o8.png",
+    "iconDisabled" : "icon_disabled.png"
+	}
 ]
