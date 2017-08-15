@@ -135,14 +135,14 @@ public class Hud implements Disposable {
 
         InputListener buttonListenerDEV = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                gameManager.getGameInformation().setUpgradeLevel1(0);
-                gameManager.getGameInformation().setUpgradeLevel2(0);
-                gameManager.getGameInformation().setUpgradeLevel3(0);
-                gameManager.getGameInformation().setUpgradeLevel4(0);
-                gameManager.getGameInformation().setUpgradeLevel5(0);
-                gameManager.getGameInformation().setUpgradeLevel6(0);
-                gameManager.getGameInformation().setUpgradeLevel7(0);
-                gameManager.getGameInformation().setUpgradeLevel8(0);
+                gameManager.getGameInformation().getUpgradeLevelList().set(0, 0);
+                gameManager.getGameInformation().getUpgradeLevelList().set(1, 0);
+                gameManager.getGameInformation().getUpgradeLevelList().set(2, 0);
+                gameManager.getGameInformation().getUpgradeLevelList().set(3, 0);
+                gameManager.getGameInformation().getUpgradeLevelList().set(4, 0);
+                gameManager.getGameInformation().getUpgradeLevelList().set(5, 0);
+                gameManager.getGameInformation().getUpgradeLevelList().set(6, 0);
+                gameManager.getGameInformation().getUpgradeLevelList().set(7, 0);
                 gameManager.getGameInformation().setStationId(1);
                 return false;
             }
@@ -205,11 +205,9 @@ public class Hud implements Disposable {
         // masque les autres menus
         if (menu instanceof CreditMenu ){
             upgradeMenu.getTable().setVisible(false);
-            gameManager.setCurrentState(GameState.CREDIT);
         }
         if (menu instanceof UpgradeMenu ){
             creditMenu.getTable().setVisible(false);
-            gameManager.setCurrentState(GameState.CREDIT);
         }
     }
 

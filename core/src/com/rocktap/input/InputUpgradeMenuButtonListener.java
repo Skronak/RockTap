@@ -29,48 +29,7 @@ public class InputUpgradeMenuButtonListener extends ClickListener {
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
         // Indique a upgradeMenu qu'on a selectionne skill <idSelect>
         upgradeMenu.setCurrentSelection(idSelect);
-
-        // Set le level par default lorsqu'on selectionne le skill
-        switch (idSelect) {
-            case 1:
-                this.upgradeMenu.getDetailTitre().setText(titre + this.upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel1());
-                this.upgradeMenu.getDetailLevel().setText(String.valueOf(upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel1()));
-                break;
-            case 2:
-                this.upgradeMenu.getDetailTitre().setText(titre + this.upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel2());
-                this.upgradeMenu.getDetailLevel().setText(String.valueOf(upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel2()));
-                break;
-            case 3:
-                this.upgradeMenu.getDetailTitre().setText(titre + this.upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel3());
-                this.upgradeMenu.getDetailLevel().setText(String.valueOf(upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel3()));
-                break;
-            case 4:
-                this.upgradeMenu.getDetailTitre().setText(titre + this.upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel4());
-                this.upgradeMenu.getDetailLevel().setText(String.valueOf(upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel4()));
-                break;
-            case 5:
-                this.upgradeMenu.getDetailTitre().setText(titre + this.upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel5());
-                this.upgradeMenu.getDetailLevel().setText(String.valueOf(upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel5()));
-                break;
-            case 6:
-                this.upgradeMenu.getDetailTitre().setText(titre + this.upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel6());
-                this.upgradeMenu.getDetailLevel().setText(String.valueOf(upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel6()));
-                break;
-            case 7:
-                this.upgradeMenu.getDetailTitre().setText(titre + this.upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel7());
-                this.upgradeMenu.getDetailLevel().setText(String.valueOf(upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel7()));
-                break;
-            case 8:
-                this.upgradeMenu.getDetailTitre().setText(titre + this.upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel8());
-                this.upgradeMenu.getDetailLevel().setText(String.valueOf(upgradeMenu.getGameManager().getGameInformation().getUpgradeLevel8()));
-                break;
-            default:
-                break;
-        }
-        this.upgradeMenu.getDetailGold().setText(cost);
-        this.upgradeMenu.getDetailDetail().setText(detail);
-        this.upgradeMenu.getDetailPower().setText(power);
-
+        upgradeMenu.getUpgradeManager().updateUpgradeInformation(idSelect);
         return false;
     }
 

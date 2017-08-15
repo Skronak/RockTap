@@ -53,7 +53,6 @@ public abstract class AbstractMenu {
         menutable.setWidth(menu_width);
         menutable.setHeight(menu_height);
         menutable.setPosition(Constants.UPDATE_MENU_PAD,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
-
     }
 
     /**

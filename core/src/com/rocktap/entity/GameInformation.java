@@ -6,7 +6,9 @@ import com.badlogic.gdx.Preferences;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Skronak on 30/01/2017.
@@ -28,61 +30,50 @@ public class GameInformation {
     private boolean firstPlay;
     // id de station utilise
     private int stationId;
-    // niveau de l'upgrade1 de la station
-    private int upgradeLevel1;
-    // niveau de l'upgrade2 de la station
-    private int upgradeLevel2;
-    // niveau de l'upgrade3 de la station
-    private int upgradeLevel3;
-    // niveau de l'upgrade4 de la station
-    private int upgradeLevel4;
-    // niveau de l'upgrade5 de la station
-    private int upgradeLevel5;
-    // niveau de l'upgrade6 de la station
-    private int upgradeLevel6;
-    // niveau de l'upgrade7 de la station
-    private int upgradeLevel7;
-    // niveau de l'upgrade8 de la station
-    private int upgradeLevel8;
+    // liste des niveau d'upgrade du joueur pour faciliter son acces
+    private List<Integer> upgradeLevelList;
+
     // Station du joueur
     private StationActor station;
 
     public GameInformation() {
+        upgradeLevelList = new ArrayList<Integer>();
+
         prefs = Gdx.app.getPreferences("rockTapPreferences");
         if (!prefs.contains("lastLogin")) {
-            Gdx.app.debug("GameInformation","Initialisation du compte par defaut");
+            Gdx.app.debug("GameInformation", "Initialisation du compte par defaut");
             currentGold = 0;
             criticalRate = 5;
             lastLogin = new Timestamp(System.currentTimeMillis());
             genGold = 2;
             firstPlay = true;
             stationId = 1;
-            upgradeLevel1 = 0;
-            upgradeLevel2 = 0;
-            upgradeLevel3 = 0;
-            upgradeLevel4 = 0;
-            upgradeLevel5 = 0;
-            upgradeLevel6 = 0;
-            upgradeLevel7 = 0;
-            upgradeLevel8 = 0;
+            upgradeLevelList.add(0);
+            upgradeLevelList.add(0);
+            upgradeLevelList.add(0);
+            upgradeLevelList.add(0);
+            upgradeLevelList.add(0);
+            upgradeLevelList.add(0);
+            upgradeLevelList.add(0);
+            upgradeLevelList.add(0);
         } else {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
             currentGold = prefs.getInteger("currentGold");
             criticalRate = prefs.getInteger("criticalRate");
             genGold = prefs.getInteger("genGold");
             stationId = prefs.getInteger("stationId");
-            upgradeLevel1=prefs.getInteger("upgradeLevel1");
-            upgradeLevel2=prefs.getInteger("upgradeLevel2");
-            upgradeLevel3=prefs.getInteger("upgradeLevel3");
-            upgradeLevel4=prefs.getInteger("upgradeLevel4");
-            upgradeLevel5=prefs.getInteger("upgradeLevel5");
-            upgradeLevel6=prefs.getInteger("upgradeLevel6");
-            upgradeLevel7=prefs.getInteger("upgradeLevel7");
-            upgradeLevel8=prefs.getInteger("upgradeLevel8");
+            upgradeLevelList.add(prefs.getInteger("upgradeLevel1"));
+            upgradeLevelList.add(prefs.getInteger("upgradeLevel2"));
+            upgradeLevelList.add(prefs.getInteger("upgradeLevel3"));
+            upgradeLevelList.add(prefs.getInteger("upgradeLevel4"));
+            upgradeLevelList.add(prefs.getInteger("upgradeLevel5"));
+            upgradeLevelList.add(prefs.getInteger("upgradeLevel6"));
+            upgradeLevelList.add(prefs.getInteger("upgradeLevel7"));
+            upgradeLevelList.add(prefs.getInteger("upgradeLevel8"));
             try {
                 lastLogin = dateFormat.parse(prefs.getString("lastLogin"));
             } catch (ParseException e) {
-                Gdx.app.log("error",e.getMessage());
+                Gdx.app.log("error", e.getMessage());
             }
         }
     }
@@ -99,14 +90,14 @@ public class GameInformation {
         prefs.putInteger("genGold", genGold);
         prefs.putInteger("criticalRate", criticalRate);
         prefs.putInteger("stationId", stationId);
-        prefs.putInteger("upgradeLevel1", upgradeLevel1);
-        prefs.putInteger("upgradeLevel2", upgradeLevel2);
-        prefs.putInteger("upgradeLevel3", upgradeLevel3);
-        prefs.putInteger("upgradeLevel4", upgradeLevel4);
-        prefs.putInteger("upgradeLevel5", upgradeLevel5);
-        prefs.putInteger("upgradeLevel6", upgradeLevel6);
-        prefs.putInteger("upgradeLevel7", upgradeLevel7);
-        prefs.putInteger("upgradeLevel8", upgradeLevel8);
+        prefs.putInteger("upgradeLevel1", upgradeLevelList.get(0));
+        prefs.putInteger("upgradeLevel2", upgradeLevelList.get(1));
+        prefs.putInteger("upgradeLevel3", upgradeLevelList.get(2));
+        prefs.putInteger("upgradeLevel4", upgradeLevelList.get(3));
+        prefs.putInteger("upgradeLevel5", upgradeLevelList.get(4));
+        prefs.putInteger("upgradeLevel6", upgradeLevelList.get(5));
+        prefs.putInteger("upgradeLevel7", upgradeLevelList.get(6));
+        prefs.putInteger("upgradeLevel8", upgradeLevelList.get(7));
         prefs.flush();
     }
 
@@ -158,6 +149,14 @@ public class GameInformation {
         this.firstPlay = firstPlay;
     }
 
+    public List<Integer> getUpgradeLevelList() {
+        return upgradeLevelList;
+    }
+
+    public void setUpgradeLevelList(List<Integer> upgradeLevelList) {
+        this.upgradeLevelList = upgradeLevelList;
+    }
+
     public int getStationId() {
         return stationId;
     }
@@ -166,67 +165,4 @@ public class GameInformation {
         this.stationId = stationId;
     }
 
-    public int getUpgradeLevel1() {
-        return upgradeLevel1;
-    }
-
-    public void setUpgradeLevel1(int upgradeLevel1) {
-        this.upgradeLevel1 = upgradeLevel1;
-    }
-
-    public int getUpgradeLevel2() {
-        return upgradeLevel2;
-    }
-
-    public void setUpgradeLevel2(int upgradeLevel2) {
-        this.upgradeLevel2 = upgradeLevel2;
-    }
-
-    public int getUpgradeLevel3() {
-        return upgradeLevel3;
-    }
-
-    public void setUpgradeLevel3(int upgradeLevel3) {
-        this.upgradeLevel3 = upgradeLevel3;
-    }
-
-    public int getUpgradeLevel4() {
-        return upgradeLevel4;
-    }
-
-    public void setUpgradeLevel4(int upgradeLevel4) {
-        this.upgradeLevel4 = upgradeLevel4;
-    }
-
-    public int getUpgradeLevel5() {
-        return upgradeLevel5;
-    }
-
-    public void setUpgradeLevel5(int upgradeLevel5) {
-        this.upgradeLevel5 = upgradeLevel5;
-    }
-
-    public int getUpgradeLevel6() {
-        return upgradeLevel6;
-    }
-
-    public void setUpgradeLevel6(int upgradeLevel6) {
-        this.upgradeLevel6 = upgradeLevel6;
-    }
-
-    public int getUpgradeLevel7() {
-        return upgradeLevel7;
-    }
-
-    public void setUpgradeLevel7(int upgradeLevel7) {
-        this.upgradeLevel7 = upgradeLevel7;
-    }
-
-    public int getUpgradeLevel8() {
-        return upgradeLevel8;
-    }
-
-    public void setUpgradeLevel8(int upgradeLevel8) {
-        this.upgradeLevel8 = upgradeLevel8;
-    }
 }

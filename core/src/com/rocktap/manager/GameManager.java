@@ -37,7 +37,7 @@ public class GameManager {
      * @return
      */
     public StationActor initStationActor(int posX, int posY, int width, int height, float animSpeed) {
-        stationActor = new StationActor(posX,posY,width,height,animSpeed, gameInformation);
+        stationActor = new StationActor(posX,posY,width,height,animSpeed, this);
         return stationActor;
     }
     /**

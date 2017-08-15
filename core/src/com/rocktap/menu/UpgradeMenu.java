@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.input.InputUpgradeMenuButtonListener;
 import com.rocktap.input.InputUpgradeSkillButtonListener;
 import com.rocktap.manager.GameManager;
+import com.rocktap.manager.UpgradeManager;
 
 /**
  * Created by Skronak on 01/02/2017.
@@ -22,10 +23,11 @@ import com.rocktap.manager.GameManager;
 public class UpgradeMenu extends AbstractMenu {
     private Table upgradeTable;
     private Label detailGold;
-    private Label detailDetail;
-    private Label detailPower;
+    private Label detailDescription;
     private Label detailLevel;
     private Label detailTitre;
+    private UpgradeManager upgradeManager;
+
     // indique le skill actuellement selectionne
     private int currentSelection;
     private Drawable upgradeDrawable1, upgradeDrawable2, upgradeDrawable3, upgradeDrawable4, upgradeDrawable5, upgradeDrawable6, upgradeDrawable7, upgradeDrawable8,
@@ -34,6 +36,7 @@ public class UpgradeMenu extends AbstractMenu {
 
     public UpgradeMenu(GameManager gameManager) {
         super(gameManager);
+        this.upgradeManager = new UpgradeManager(this, gameManager);
         customizeMenuTable();
     }
 
@@ -43,17 +46,16 @@ public class UpgradeMenu extends AbstractMenu {
         menutable.row();
         menutable.add(initUpgradeButtonTable());
         menutable.add(initUpgradeDetailsTable()).top().expand();
-        menutable.debug();
+//        menutable.debug();
         menutable.setVisible(false);
     }
 
     public Table initUpgradeDetailsTable() {
         detailTitre = new Label("", skin);
-        detailDetail = new Label("DESCRIPTIF",skin);
-        detailDetail.setWrap(true);
-        detailDetail.pack();
+        detailDescription = new Label("DESCRIPTION",skin);
+        detailDescription.setWrap(true);
+        detailDescription.pack();
         detailGold = new Label("", skin);
-        detailPower= new Label("", skin);
         detailLevel = new Label("", skin);
         TextButton upgraderButton = new TextButton("UPGRADER", skin);
         InputUpgradeSkillButtonListener customInputSkillListener = new InputUpgradeSkillButtonListener(this);
@@ -61,7 +63,7 @@ public class UpgradeMenu extends AbstractMenu {
         Table detailTable = new Table();
         detailTable.add(detailTitre).expand().top().height(50).width(100);
         detailTable.row();
-        detailTable.add(detailDetail).left();
+        detailTable.add(detailDescription).left();
         detailTable.row();
         detailTable.add(new Label("LEVEL: ", skin)).left();
         detailTable.add(detailLevel).width(50);
@@ -69,11 +71,9 @@ public class UpgradeMenu extends AbstractMenu {
         detailTable.add(new Label("GOLD GENERATION: ", skin)).left();
         detailTable.add(detailGold).width(50);
         detailTable.row();
-        detailTable.add(new Label("POWER: ", skin)).left();
-        detailTable.add(detailPower).width(50);
-        detailTable.row();
         detailTable.row();
         detailTable.add(upgraderButton).expandY().center();
+        detailTable.debug();
 
         return detailTable;
     }
@@ -103,84 +103,84 @@ public class UpgradeMenu extends AbstractMenu {
         upgradeDrawable8_r = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/"+gameManager.getAssetManager().getUpgradeFile().get(7).getIconDisabled()))));
 
         // Initialisation etat bouton au commencement du jeu
-        if (gameManager.getGameInformation().getUpgradeLevel1()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevelList().get(0)==0) {
             upgradeButton1 = new ImageButton(upgradeDrawable1_r);
         } else {
             upgradeButton1 = new ImageButton(upgradeDrawable1);
         }
-        if (gameManager.getGameInformation().getUpgradeLevel2()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevelList().get(1)==0) {
             upgradeButton2 = new ImageButton(upgradeDrawable2_r);
         } else {
             upgradeButton2 = new ImageButton(upgradeDrawable2);
         }
-        if (gameManager.getGameInformation().getUpgradeLevel3()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevelList().get(2)==0) {
             upgradeButton3 = new ImageButton(upgradeDrawable3_r);
         } else {
             upgradeButton3 = new ImageButton(upgradeDrawable3);
         }
-        if (gameManager.getGameInformation().getUpgradeLevel4()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevelList().get(3)==0) {
             upgradeButton4 = new ImageButton(upgradeDrawable4_r);
         } else {
             upgradeButton4 = new ImageButton(upgradeDrawable4);
         }
-        if (gameManager.getGameInformation().getUpgradeLevel5()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevelList().get(4)==0) {
             upgradeButton5 = new ImageButton(upgradeDrawable5_r);
         } else {
             upgradeButton5 = new ImageButton(upgradeDrawable5);
         }
-        if (gameManager.getGameInformation().getUpgradeLevel6()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevelList().get(5)==0) {
             upgradeButton6 = new ImageButton(upgradeDrawable6_r);
         } else {
             upgradeButton6 = new ImageButton(upgradeDrawable6);
         }
-        if (gameManager.getGameInformation().getUpgradeLevel7()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevelList().get(6)==0) {
             upgradeButton7 = new ImageButton(upgradeDrawable7_r);
         } else {
             upgradeButton7 = new ImageButton(upgradeDrawable7);
         }
-        if (gameManager.getGameInformation().getUpgradeLevel8()==0) {
+        if (gameManager.getGameInformation().getUpgradeLevelList().get(7)==0) {
             upgradeButton8 = new ImageButton(upgradeDrawable8_r);
         } else {
             upgradeButton8 = new ImageButton(upgradeDrawable8);
         }
 
-        // Ajout des listener
-        InputUpgradeMenuButtonListener customInputUpgradeProcessor1 = new InputUpgradeMenuButtonListener(this,1,
+        // Ajout des listener sur les boutons du menu
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor1 = new InputUpgradeMenuButtonListener(this,0,
                 gameManager.getAssetManager().getUpgradeFile().get(0).getTitle(),
                 gameManager.getAssetManager().getUpgradeFile().get(0).getDescription(),
-                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(0).getCost()[0]),
+                String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(0).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(0)]),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(0).getGoldGen()[0]));
-        InputUpgradeMenuButtonListener customInputUpgradeProcessor2 = new InputUpgradeMenuButtonListener(this,2,
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor2 = new InputUpgradeMenuButtonListener(this,1,
                 gameManager.getAssetManager().getUpgradeFile().get(1).getTitle(),
                 gameManager.getAssetManager().getUpgradeFile().get(1).getDescription(),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(1).getCost()[0]),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(1).getGoldGen()[0]));
-        InputUpgradeMenuButtonListener customInputUpgradeProcessor3 = new InputUpgradeMenuButtonListener(this,3,
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor3 = new InputUpgradeMenuButtonListener(this,2,
                 gameManager.getAssetManager().getUpgradeFile().get(2).getTitle(),
                 gameManager.getAssetManager().getUpgradeFile().get(2).getDescription(),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(2).getCost()[0]),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(2).getGoldGen()[0]));
-        InputUpgradeMenuButtonListener customInputUpgradeProcessor4 = new InputUpgradeMenuButtonListener(this,4,
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor4 = new InputUpgradeMenuButtonListener(this,3,
                 gameManager.getAssetManager().getUpgradeFile().get(3).getTitle(),
                 gameManager.getAssetManager().getUpgradeFile().get(3).getDescription(),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(3).getCost()[0]),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(3).getGoldGen()[0]));
-        InputUpgradeMenuButtonListener customInputUpgradeProcessor5 = new InputUpgradeMenuButtonListener(this,5,
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor5 = new InputUpgradeMenuButtonListener(this,4,
                 gameManager.getAssetManager().getUpgradeFile().get(4).getTitle(),
                 gameManager.getAssetManager().getUpgradeFile().get(4).getDescription(),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(4).getCost()[0]),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(4).getGoldGen()[0]));
-        InputUpgradeMenuButtonListener customInputUpgradeProcessor6 = new InputUpgradeMenuButtonListener(this,6,
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor6 = new InputUpgradeMenuButtonListener(this,5,
                 gameManager.getAssetManager().getUpgradeFile().get(5).getTitle(),
                 gameManager.getAssetManager().getUpgradeFile().get(5).getDescription(),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(5).getCost()[0]),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(5).getGoldGen()[0]));
-        InputUpgradeMenuButtonListener customInputUpgradeProcessor7 = new InputUpgradeMenuButtonListener(this,7,
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor7 = new InputUpgradeMenuButtonListener(this,6,
                 gameManager.getAssetManager().getUpgradeFile().get(6).getTitle(),
                 gameManager.getAssetManager().getUpgradeFile().get(6).getDescription(),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(6).getCost()[0]),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(6).getGoldGen()[0]));
-        InputUpgradeMenuButtonListener customInputUpgradeProcessor8 = new InputUpgradeMenuButtonListener(this,8,
+        InputUpgradeMenuButtonListener customInputUpgradeProcessor8 = new InputUpgradeMenuButtonListener(this,7,
                 gameManager.getAssetManager().getUpgradeFile().get(7).getTitle(),
                 gameManager.getAssetManager().getUpgradeFile().get(7).getDescription(),
                 String.valueOf(gameManager.getAssetManager().getUpgradeFile().get(7).getCost()[0]),
@@ -218,20 +218,12 @@ public class UpgradeMenu extends AbstractMenu {
         this.detailGold = detailGold;
     }
 
-    public Label getDetailDetail() {
-        return detailDetail;
+    public Label getDetailDescription() {
+        return detailDescription;
     }
 
-    public void setDetailDetail(Label detailDetail) {
-        this.detailDetail = detailDetail;
-    }
-
-    public Label getDetailPower() {
-        return detailPower;
-    }
-
-    public void setDetailPower(Label detailPower) {
-        this.detailPower = detailPower;
+    public void setDetailDescription(Label detailDescription) {
+        this.detailDescription = detailDescription;
     }
 
     public Label getDetailLevel() {
@@ -448,5 +440,13 @@ public class UpgradeMenu extends AbstractMenu {
 
     public void setUpgradeButton8(ImageButton upgradeButton8) {
         this.upgradeButton8 = upgradeButton8;
+    }
+
+    public UpgradeManager getUpgradeManager() {
+        return upgradeManager;
+    }
+
+    public void setUpgradeManager(UpgradeManager upgradeManager) {
+        this.upgradeManager = upgradeManager;
     }
 }
