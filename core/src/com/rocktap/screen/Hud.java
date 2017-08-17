@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -30,6 +31,10 @@ import com.rocktap.menu.UpgradeMenu;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
 
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+
 /**
  * Created by Skronak on 11/12/2016.
  */
@@ -41,6 +46,7 @@ public class Hud implements Disposable {
     private CreditMenu creditMenu;
     private Label versionLabel;
     private Label scoreLabel;
+    private Label goldDecreaseLabel;
     BitmapFont font;
     com.rocktap.utils.BitmapFontGenerator generator;
     Table table;
@@ -57,10 +63,11 @@ public class Hud implements Disposable {
     private Button upgradeButton;
     private Button mapButton;
     private Button achievButton;
-
+    private NavigableMap<Long, String> suffixes = new TreeMap<Long, String> ();
 
     public Hud(SpriteBatch sb, GameManager gameManager) {
         initButton();
+        initGoldFormater();
         this.gameManager = gameManager;
         upgradeMenu = new UpgradeMenu(gameManager);
         creditMenu = new CreditMenu(gameManager);
@@ -74,7 +81,6 @@ public class Hud implements Disposable {
         font.setColor(Color.WHITE);
         initHud();
     }
-
 
     /**
      * Initialisation des bouton du playscreen
@@ -156,12 +162,20 @@ public class Hud implements Disposable {
         versionLabel.setWrap(true);
         scoreLabel = new Label(String.format("%d", gameInformation.getCurrentGold()), new Label.LabelStyle(font, Color.WHITE));
         scoreLabel.setFontScale(2);
+
+        goldDecreaseLabel = new Label("", new Label.LabelStyle(font, Color.RED));
+        goldDecreaseLabel.setVisible(false);
+        goldDecreaseLabel.setFontScale(2);
+        goldDecreaseLabel.setAlignment(1);
+        Stack stack = new Stack();
+        stack.add(scoreLabel);
+        stack.add(goldDecreaseLabel);
         table = new Table();
         table.top();
         table.setFillParent(true);
         table.row();
         table.add(versionLabel).expandX().align(Align.left).top();
-        table.add(scoreLabel).expandX().align(Align.right).colspan(3);
+        table.add(stack).expandX().align(Align.right).colspan(3);
         table.row();
         table.add(upgradeButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
         table.add(skillButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
@@ -172,6 +186,34 @@ public class Hud implements Disposable {
         stage.addActor(upgradeMenu.getTable());
         stage.addActor(creditMenu.getTable());
     }
+
+    /**
+     * Formater pour l'affichage de l'or
+     */
+    private void initGoldFormater(){
+        suffixes.put(1000L, "A");
+        suffixes.put(1000000L, "B");
+        suffixes.put(1000000000L, "C");
+        suffixes.put(1000000000000L, "D");
+        suffixes.put(1000000000000000L, "E");
+        suffixes.put(1000000000000000000L, "F");
+    }
+
+    public String format(long value) {
+        if (value == Long.MIN_VALUE) return format(Long.MIN_VALUE + 1);
+        if (value < 0) return "-" + format(-value);
+        if (value < 1000) return Long.toString(value); //deal with easy case
+
+        Map.Entry<Long, String> e = suffixes.floorEntry(value);
+        Long divideBy = e.getKey();
+        String suffix = e.getValue();
+
+        long truncated = value / (divideBy / 10); //the number part of the output times 10
+        boolean hasDecimal = truncated < 100 && (truncated / 10d) != (truncated / 10);
+        return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
+    }
+
+
 
     /**
      * Methode draw specifique
@@ -186,7 +228,22 @@ public class Hud implements Disposable {
                 Actions.color(Constants.CRITICAL_LABEL_COLOR),
                 Actions.color(Color.WHITE,0.5f)
         ));
+    }
 
+    public void animateDecreaseGold(int value) {
+        goldDecreaseLabel.setText("- " + value);
+//        goldDecreaseLabel.setPosition(150,0);
+        goldDecreaseLabel.clearActions();
+        goldDecreaseLabel.addAction(Actions.sequence(
+                Actions.show(),
+                Actions.fadeIn(0.5f),
+                Actions.fadeOut(1f),
+                Actions.hide()
+        ));
+        goldDecreaseLabel.addAction(Actions.sequence(
+                Actions.delay(0.5f),
+                Actions.moveTo(goldDecreaseLabel.getX(),goldDecreaseLabel.getY()-100,3f)
+        ));
     }
 
     /**
@@ -212,7 +269,8 @@ public class Hud implements Disposable {
     }
 
     public void setGold(int gold){
-        scoreLabel.setText(String.format("%d", gold));
+        scoreLabel.setText(format(gold));
+//        scoreLabel.setText(String.format("%d", gold));
     }
 
     public Stage getStage() {

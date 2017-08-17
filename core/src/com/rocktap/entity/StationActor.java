@@ -55,10 +55,12 @@ public class StationActor extends Actor {
      */
     public List<UpgradeActor> loadUpgrade() {
         this.upgradeList = new ArrayList<UpgradeActor>();
+        int y = 0;
         for (int i=0;i<gameManager.getGameInformation().getUpgradeLevelList().size();i++) {
             if (gameManager.getGameInformation().getUpgradeLevelList().get(i) > 0) {
                 upgradeList.add(gameManager.getAssetManager().getUpgradeFile().get(i));
-                upgradeList.get(i).setTextureRegion(new TextureRegion(new Texture(Gdx.files.internal(("sprites/upgrade/"+upgradeList.get(i).getSprite())))));
+                upgradeList.get(y).setTextureRegion(new TextureRegion(new Texture(Gdx.files.internal(("sprites/upgrade/"+upgradeList.get(y).getSprite())))));
+                y+=1;
             }
         }
         return upgradeList;
@@ -78,7 +80,7 @@ public class StationActor extends Actor {
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b5.png"))));
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b6.png"))));
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b7.png"))));
-        beamActor = new AnimatedActor(157,50, 28,270, 0.2f, frames);
+        beamActor = new AnimatedActor(157,50, 28,270, 0.2f, frames, Animation.PlayMode.LOOP);
         beamActor.setVisible(false);
         return beamActor;
     }

@@ -3,11 +3,7 @@ package com.rocktap.entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,7 +15,7 @@ public class GameInformation {
     // Total d'or
     private int currentGold;
     // dernier login
-    private Date lastLogin;
+    private Long lastLogin;
     // generation pasive d'or
     private int genGold;
     // multiplicateur d'or lors de critique
@@ -32,6 +28,8 @@ public class GameInformation {
     private int stationId;
     // liste des niveau d'upgrade du joueur pour faciliter son acces
     private List<Integer> upgradeLevelList;
+    // Currency (A=1, B=2, ... jusqua 9, AA=9+1
+    private int currency;
 
     // Station du joueur
     private StationActor station;
@@ -40,11 +38,12 @@ public class GameInformation {
         upgradeLevelList = new ArrayList<Integer>();
 
         prefs = Gdx.app.getPreferences("rockTapPreferences");
+
         if (!prefs.contains("lastLogin")) {
             Gdx.app.debug("GameInformation", "Initialisation du compte par defaut");
             currentGold = 0;
             criticalRate = 5;
-            lastLogin = new Timestamp(System.currentTimeMillis());
+            lastLogin = System.currentTimeMillis();
             genGold = 2;
             firstPlay = true;
             stationId = 1;
@@ -57,7 +56,6 @@ public class GameInformation {
             upgradeLevelList.add(0);
             upgradeLevelList.add(0);
         } else {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
             currentGold = prefs.getInteger("currentGold");
             criticalRate = prefs.getInteger("criticalRate");
             genGold = prefs.getInteger("genGold");
@@ -70,11 +68,7 @@ public class GameInformation {
             upgradeLevelList.add(prefs.getInteger("upgradeLevel6"));
             upgradeLevelList.add(prefs.getInteger("upgradeLevel7"));
             upgradeLevelList.add(prefs.getInteger("upgradeLevel8"));
-            try {
-                lastLogin = dateFormat.parse(prefs.getString("lastLogin"));
-            } catch (ParseException e) {
-                Gdx.app.log("error", e.getMessage());
-            }
+            lastLogin = prefs.getLong("lastLogin");
         }
     }
 
@@ -85,7 +79,7 @@ public class GameInformation {
      * TODO: gerer plusieurs type de sauvegarde
      */
     public void saveInformation() {
-        prefs.putString("lastLogin", String.valueOf(new Date()));
+        prefs.putLong("lastLogin", System.currentTimeMillis());
         prefs.putInteger("currentGold", currentGold);
         prefs.putInteger("genGold", genGold);
         prefs.putInteger("criticalRate", criticalRate);
@@ -109,12 +103,8 @@ public class GameInformation {
         this.currentGold = currentGold;
     }
 
-    public Date getLastLogin() {
+    public Long getLastLogin() {
         return lastLogin;
-    }
-
-    public void setLastLogin(Date lastLogin) {
-        this.lastLogin = lastLogin;
     }
 
     public int getGenGold() {

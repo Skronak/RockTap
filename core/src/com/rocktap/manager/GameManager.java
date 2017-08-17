@@ -2,6 +2,8 @@ package com.rocktap.manager;
 
 import com.rocktap.entity.GameInformation;
 import com.rocktap.entity.StationActor;
+import com.rocktap.screen.PlayScreen;
+import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
 
 /**
@@ -18,13 +20,16 @@ public class GameManager {
 
     private AssetManager assetManager;
 
+    private PlayScreen playScreen;
+
     // Etat du jeu
     private GameState currentState;
 
-    public GameManager(GameInformation gameInformation) {
+    public GameManager(GameInformation gameInformation, PlayScreen playScreen) {
         this.gameInformation = gameInformation;
         currentState = GameState.IN_GAME;
         assetManager = new AssetManager();
+        this.playScreen = playScreen;
     }
 
     /**
@@ -45,6 +50,15 @@ public class GameManager {
      */
     public void increaseGold(){
         gameInformation.setCurrentGold(gameInformation.getCurrentGold() + gameInformation.getGenGold());
+    }
+
+    public void calculateRestReward() {
+        long diff = System.currentTimeMillis() - gameInformation.getLastLogin();
+        float hours   = (diff / (1000*60*60));
+
+        if (hours >= Constants.DELAY_HOURS_REWARD) {
+            // Calculer reward afk
+        }
     }
 
     // Methode d'ajout d'or lors d'un critique
@@ -93,5 +107,13 @@ public class GameManager {
 
     public void setAssetManager(AssetManager assetManager) {
         this.assetManager = assetManager;
+    }
+
+    public PlayScreen getPlayScreen() {
+        return playScreen;
+    }
+
+    public void setPlayScreen(PlayScreen playScreen) {
+        this.playScreen = playScreen;
     }
 }

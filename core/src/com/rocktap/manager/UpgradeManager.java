@@ -60,7 +60,10 @@ public class UpgradeManager {
      */
     public void increaseUpgradeLevel(int idSelect) {
         if (isAvailable(idSelect)) {
-            gameManager.getGameInformation().setCurrentGold(gameManager.getGameInformation().getCurrentGold() - upgradeActorList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)]);
+            int costValue = upgradeActorList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
+            this.gameManager.getPlayScreen().getHud().animateDecreaseGold(costValue);
+
+            gameManager.getGameInformation().setCurrentGold(gameManager.getGameInformation().getCurrentGold() - costValue);
             gameManager.getGameInformation().getUpgradeLevelList().set(idSelect, gameManager.getGameInformation().getUpgradeLevelList().get(idSelect) + 1);
             this.calculateGoldGen();
             this.upgradeMenu.getGameManager().getStationActor().loadUpgrade();
@@ -107,6 +110,28 @@ public class UpgradeManager {
         this.upgradeMenu.getDetailLevel().setText(String.valueOf(upgradeMenu.getGameManager().getGameInformation().getUpgradeLevelList().get(idSelect)));
         this.upgradeMenu.getDetailGold().setText(String.valueOf(upgradeActorList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)]));
         this.upgradeMenu.getDetailDescription().setText(upgradeActorList.get(idSelect).getDescription());
+
+        // TODO mettre valeur directement ds JSON
+        int goldGen = upgradeActorList.get(idSelect).getGoldGen()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
+        int nbSquare=0;
+        if (goldGen < 5) {
+            nbSquare=1;
+        }else if (goldGen < 12) {
+            nbSquare=2;
+        }else if (goldGen < 20) {
+            nbSquare=3;
+        }else if (goldGen < 30) {
+            nbSquare = 4;
+        } else {
+            nbSquare = 5;
+        }
+        for (int i=0;i<this.upgradeMenu.getUpgradeCostTable().getCells().size;i++) {
+            if (i<nbSquare) {
+                this.upgradeMenu.getUpgradeCostTable().getCells().get(i).getActor().setVisible(true);
+            } else {
+                this.upgradeMenu.getUpgradeCostTable().getCells().get(i).getActor().setVisible(false);
+            }
+        }
     }
 
     public GameManager getGameManager() {

@@ -3,6 +3,7 @@ package com.rocktap.menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -22,11 +23,19 @@ import com.rocktap.manager.UpgradeManager;
  */
 public class UpgradeMenu extends AbstractMenu {
     private Table upgradeTable;
+    private Table upgradeCostTable;
     private Label detailGold;
     private Label detailDescription;
     private Label detailLevel;
     private Label detailTitre;
     private UpgradeManager upgradeManager;
+    private Texture squareTexture;
+    private Image squareImage1;
+    private Image squareImage2;
+    private Image squareImage3;
+    private Image squareImage4;
+    private Image squareImage5;
+
 
     // indique le skill actuellement selectionne
     private int currentSelection;
@@ -51,6 +60,24 @@ public class UpgradeMenu extends AbstractMenu {
     }
 
     public Table initUpgradeDetailsTable() {
+        // Initialisation des icon cost
+        squareTexture = new Texture(Gdx.files.internal("sprites/menu/square.png"));
+        squareImage1 = new Image(squareTexture);
+        squareImage1.setSize(10,10);
+        squareImage1.setY(-(squareImage1.getHeight()/2));
+        squareImage2 = new Image(squareTexture);
+        squareImage2.setSize(10,10);
+        squareImage2.setY(-(squareImage2.getHeight()/2));
+        squareImage3 = new Image(squareTexture);
+        squareImage3.setSize(10,10);
+        squareImage3.setY(-(squareImage3.getHeight()/2));
+        squareImage4 = new Image(squareTexture);
+        squareImage4.setSize(10,10);
+        squareImage4.setY(-(squareImage4.getHeight()/2));
+        squareImage5 = new Image(squareTexture);
+        squareImage5.setSize(10,10);
+        squareImage5.setY(-(squareImage5.getHeight()/2));
+
         detailTitre = new Label("", skin);
         detailDescription = new Label("DESCRIPTION",skin);
         detailDescription.setWrap(true);
@@ -61,6 +88,9 @@ public class UpgradeMenu extends AbstractMenu {
         InputUpgradeSkillButtonListener customInputSkillListener = new InputUpgradeSkillButtonListener(this);
         upgraderButton.addListener(customInputSkillListener);
         Table detailTable = new Table();
+
+        // Detail d'un module
+        upgradeCostTable = new Table();
         detailTable.add(detailTitre).expand().top().height(50).width(100);
         detailTable.row();
         detailTable.add(detailDescription).left();
@@ -68,12 +98,20 @@ public class UpgradeMenu extends AbstractMenu {
         detailTable.add(new Label("LEVEL: ", skin)).left();
         detailTable.add(detailLevel).width(50);
         detailTable.row();
-        detailTable.add(new Label("GOLD GENERATION: ", skin)).left();
+        detailTable.add(new Label("GEN GOLD: ", skin)).left();
+        detailTable.add(upgradeCostTable).width(50);
+        upgradeCostTable.add(squareImage1).width(10).height(10).padLeft(10);
+        upgradeCostTable.add(squareImage2).width(10).height(10).padLeft(5);
+        upgradeCostTable.add(squareImage3).width(10).height(10).padLeft(5);
+        upgradeCostTable.add(squareImage4).width(10).height(10).padLeft(5);
+        upgradeCostTable.add(squareImage5).width(10).height(10).padLeft(5);
+        detailTable.row();
+        detailTable.add(new Label("COST: ", skin)).left();
         detailTable.add(detailGold).width(50);
         detailTable.row();
         detailTable.row();
         detailTable.add(upgraderButton).expandY().center();
-        detailTable.debug();
+//        detailTable.debug();
 
         return detailTable;
     }
@@ -448,5 +486,13 @@ public class UpgradeMenu extends AbstractMenu {
 
     public void setUpgradeManager(UpgradeManager upgradeManager) {
         this.upgradeManager = upgradeManager;
+    }
+
+    public Table getUpgradeCostTable() {
+        return upgradeCostTable;
+    }
+
+    public void setUpgradeCostTable(Table upgradeCostTable) {
+        this.upgradeCostTable = upgradeCostTable;
     }
 }

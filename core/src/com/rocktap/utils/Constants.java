@@ -40,4 +40,16 @@ public class Constants {
 
     public static int PLAYSCREEN_MENU_BUTTON_HEIGHT = 50;
 
+    // Nombre d'heure minimum pour toucher la recompense de repos
+    public static int DELAY_HOURS_REWARD = 1;
+
+    // Difference de currency pour passer le cout en free
+    public static int UNLIMITED_CURRENCY_LIMIT = 6;
+
+    // Index de la lettre maximale atteignable
+    public static int CURRENCY_MAX_LETTER_INDEX= 9;
+
+    // nombre de digit qu'on conserve des gold du joueur
+    public static int GOLD_PLAYER_SIZE_STORAGE = 9;
+
 }

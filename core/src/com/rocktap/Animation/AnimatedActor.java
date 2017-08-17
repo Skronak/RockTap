@@ -1,8 +1,6 @@
 package com.rocktap.Animation;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,13 +16,13 @@ public class AnimatedActor extends Actor {
         private float deltatime;
         private TextureRegion currentFrame;
 
-        public AnimatedActor (int posX, int posY, int width, int height, float animSpeed, Array<TextureRegion> frames) {
+        public AnimatedActor (int posX, int posY, int width, int height, float animSpeed, Array<TextureRegion> frames, Animation.PlayMode playMode) {
             deltatime = 0;
             this.setWidth(width);
             this.setHeight(height);
             this.setPosition(posX, posY);
             animation = new Animation(animSpeed, frames);
-            animation.setPlayMode(Animation.PlayMode.LOOP);
+            animation.setPlayMode(playMode);
         }
 
         @Override

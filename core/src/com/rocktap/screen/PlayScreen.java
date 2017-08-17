@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -68,7 +69,9 @@ public class PlayScreen implements Screen {
     private StationActor station;
 
     private AnimatedActor tapActor;
+    private AnimatedActor rewardActor;
     private Array<TextureRegion> frames;
+    private Array<TextureRegion> frames2;
     private InputMultiplexer inputMultiplexer;
 
     @Override
@@ -86,9 +89,11 @@ public class PlayScreen implements Screen {
         font = generator.getFont();
 
         gameInformation = new GameInformation();
-        gameManager = new GameManager(gameInformation);
         spriteBatch = new SpriteBatch();
         random = new Random();
+        gameManager = new GameManager(gameInformation, this);
+        gameManager.calculateRestReward();
+        hud = new Hud(spriteBatch, gameManager);
 
         camera = new OrthographicCamera(Constants.V_WIDTH, Constants.V_HEIGHT);
         viewport = new StretchViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
@@ -97,8 +102,8 @@ public class PlayScreen implements Screen {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
+
         CustomInputProcessor inputProcessor = new CustomInputProcessor(this);
-        hud = new Hud(spriteBatch, gameManager);
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputProcessor);
         inputMultiplexer.addProcessor(hud.getStage());
@@ -117,8 +122,14 @@ public class PlayScreen implements Screen {
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c7.png"))));
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c8.png"))));
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c9.png"))));
-        tapActor = new AnimatedActor(0,0,20,20,0.1f,frames);
+        tapActor = new AnimatedActor(0,0,20,20,0.1f,frames, Animation.PlayMode.LOOP);
         tapActor.setVisible(false);
+        frames = new Array<TextureRegion>();
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/reward/chest1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/reward/chest1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/reward/chest1.png"))));
+        rewardActor =new AnimatedActor(0,0,20,20,0.1f,frames, Animation.PlayMode.NORMAL);
+        rewardActor.setVisible(false);
 
         // Station //TODO a mettre dans une classe specifique pour gerer les amelio
         station = gameManager.initStationActor(70,300,200,100,2f);
@@ -155,6 +166,7 @@ public class PlayScreen implements Screen {
         layer1GraphicObject.addActor(beamMaxSpeedImage);
         layer1GraphicObject.addActor(beamCriticalImage);
         layer1GraphicObject.addActor(tapActor);
+        layer2GraphicObject.addActor(rewardActor);
         layer2GraphicObject.addActor(stationBorderImage);
         layer2GraphicObject.addActor(station);
 
@@ -408,5 +420,9 @@ public class PlayScreen implements Screen {
 
     public void setStation(StationActor station) {
         this.station = station;
+    }
+
+    public Hud getHud() {
+        return hud;
     }
 }
