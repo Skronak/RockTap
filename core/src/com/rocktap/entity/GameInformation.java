@@ -12,12 +12,20 @@ import java.util.List;
  * Classe de l'etat du compte du Joueur
  */
 public class GameInformation {
-    // Total d'or
-    private int currentGold;
     // dernier login
     private Long lastLogin;
+    // Total d'or
+    private float currentGold;
     // generation pasive d'or
-    private int genGold;
+    private float genGoldPassive;
+    // generation active d'or
+    private float genGoldActive;
+    // Currency (A=1, B=2, ... jusqua 9, AA=9+1
+    private int currency;
+    // currency de gengoldPassive
+    private int genCurrencyPassive;
+    // currency de gengoldActive
+    private int genCurrencyActive;
     // multiplicateur d'or lors de critique
     private int criticalRate;
     // fichier de preference Android
@@ -28,11 +36,6 @@ public class GameInformation {
     private int stationId;
     // liste des niveau d'upgrade du joueur pour faciliter son acces
     private List<Integer> upgradeLevelList;
-    // Currency (A=1, B=2, ... jusqua 9, AA=9+1
-    private int currency;
-
-    // Station du joueur
-    private StationActor station;
 
     public GameInformation() {
         upgradeLevelList = new ArrayList<Integer>();
@@ -42,10 +45,13 @@ public class GameInformation {
         if (!prefs.contains("lastLogin")) {
             Gdx.app.debug("GameInformation", "Initialisation du compte par defaut");
             currentGold = 0;
+            currency = 0;
+            genGoldPassive = 2;
+            genGoldActive = 2;
+            genCurrencyPassive = 0;
+            genCurrencyActive = 0;
             criticalRate = 5;
-            lastLogin = System.currentTimeMillis();
-            genGold = 2;
-            firstPlay = true;
+
             stationId = 1;
             upgradeLevelList.add(0);
             upgradeLevelList.add(0);
@@ -55,10 +61,17 @@ public class GameInformation {
             upgradeLevelList.add(0);
             upgradeLevelList.add(0);
             upgradeLevelList.add(0);
+            lastLogin = System.currentTimeMillis();
+            firstPlay = true;
         } else {
-            currentGold = prefs.getInteger("currentGold");
+            currentGold = prefs.getFloat("currentGold");
+            currency = prefs.getInteger("currentCurrency");
+            genGoldActive = prefs.getFloat("genGoldActive");
+            genGoldPassive = prefs.getFloat("genGoldPassive");
+            genCurrencyPassive = prefs.getInteger("genCurrencyPassive");
+            genCurrencyActive = prefs.getInteger("genCurrencyActive");
             criticalRate = prefs.getInteger("criticalRate");
-            genGold = prefs.getInteger("genGold");
+
             stationId = prefs.getInteger("stationId");
             upgradeLevelList.add(prefs.getInteger("upgradeLevel1"));
             upgradeLevelList.add(prefs.getInteger("upgradeLevel2"));
@@ -79,10 +92,14 @@ public class GameInformation {
      * TODO: gerer plusieurs type de sauvegarde
      */
     public void saveInformation() {
-        prefs.putLong("lastLogin", System.currentTimeMillis());
-        prefs.putInteger("currentGold", currentGold);
-        prefs.putInteger("genGold", genGold);
+        prefs.putFloat("currentGold", currentGold);
+        prefs.putInteger("currentCurrency", currency);
+        prefs.putFloat("genGoldActive", genGoldActive);
+        prefs.putInteger("genCurrencyActive", genCurrencyActive);
+        prefs.putFloat("genGoldPassive", genGoldPassive);
+        prefs.putInteger("genCurrencyPassive", genCurrencyPassive);
         prefs.putInteger("criticalRate", criticalRate);
+
         prefs.putInteger("stationId", stationId);
         prefs.putInteger("upgradeLevel1", upgradeLevelList.get(0));
         prefs.putInteger("upgradeLevel2", upgradeLevelList.get(1));
@@ -92,35 +109,69 @@ public class GameInformation {
         prefs.putInteger("upgradeLevel6", upgradeLevelList.get(5));
         prefs.putInteger("upgradeLevel7", upgradeLevelList.get(6));
         prefs.putInteger("upgradeLevel8", upgradeLevelList.get(7));
+        prefs.putLong("lastLogin", System.currentTimeMillis());
+
         prefs.flush();
     }
 
-    public int getCurrentGold() {
-        return currentGold;
-    }
-
-    public void setCurrentGold(int currentGold) {
-        this.currentGold = currentGold;
-    }
+//*****************************************************
+//                  GETTER & SETTER
+// ****************************************************
 
     public Long getLastLogin() {
         return lastLogin;
     }
 
-    public int getGenGold() {
-        return genGold;
+    public void setLastLogin(Long lastLogin) {
+        this.lastLogin = lastLogin;
     }
 
-    public void setGenGold(int genGold) {
-        this.genGold = genGold;
+    public float getCurrentGold() {
+        return currentGold;
     }
 
-    public Preferences getPrefs() {
-        return prefs;
+    public void setCurrentGold(float currentGold) {
+        this.currentGold = currentGold;
     }
 
-    public void setPrefs(Preferences prefs) {
-        this.prefs = prefs;
+    public float getGenGoldPassive() {
+        return genGoldPassive;
+    }
+
+    public void setGenGoldPassive(float genGoldPassive) {
+        this.genGoldPassive = genGoldPassive;
+    }
+
+    public float getGenGoldActive() {
+        return genGoldActive;
+    }
+
+    public void setGenGoldActive(float genGoldActive) {
+        this.genGoldActive = genGoldActive;
+    }
+
+    public int getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(int currency) {
+        this.currency = currency;
+    }
+
+    public int getGenCurrencyPassive() {
+        return genCurrencyPassive;
+    }
+
+    public void setGenCurrencyPassive(int genCurrencyPassive) {
+        this.genCurrencyPassive = genCurrencyPassive;
+    }
+
+    public int getGenCurrencyActive() {
+        return genCurrencyActive;
+    }
+
+    public void setGenCurrencyActive(int genCurrencyActive) {
+        this.genCurrencyActive = genCurrencyActive;
     }
 
     public int getCriticalRate() {
@@ -131,20 +182,20 @@ public class GameInformation {
         this.criticalRate = criticalRate;
     }
 
+    public Preferences getPrefs() {
+        return prefs;
+    }
+
+    public void setPrefs(Preferences prefs) {
+        this.prefs = prefs;
+    }
+
     public boolean isFirstPlay() {
         return firstPlay;
     }
 
     public void setFirstPlay(boolean firstPlay) {
         this.firstPlay = firstPlay;
-    }
-
-    public List<Integer> getUpgradeLevelList() {
-        return upgradeLevelList;
-    }
-
-    public void setUpgradeLevelList(List<Integer> upgradeLevelList) {
-        this.upgradeLevelList = upgradeLevelList;
     }
 
     public int getStationId() {
@@ -155,4 +206,11 @@ public class GameInformation {
         this.stationId = stationId;
     }
 
+    public List<Integer> getUpgradeLevelList() {
+        return upgradeLevelList;
+    }
+
+    public void setUpgradeLevelList(List<Integer> upgradeLevelList) {
+        this.upgradeLevelList = upgradeLevelList;
+    }
 }

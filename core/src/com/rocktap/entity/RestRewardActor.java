@@ -20,7 +20,7 @@ public class RestRewardActor extends Actor {
     private float deltatime;
     private int width;
     private int height;
-    private List<UpgradeActor> upgradeList;
+    private List<ModuleActor> upgradeList;
     private float animSpeed;
     private TextureRegion currentFrame;
     private TextureRegion textureRegion;

@@ -2,7 +2,7 @@ package com.rocktap.input;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.rocktap.menu.UpgradeMenu;
+import com.rocktap.menu.ModuleMenu;
 
 /**
  * Created by Skronak on 29/01/2017.
@@ -12,12 +12,12 @@ import com.rocktap.menu.UpgradeMenu;
  */
 public class InputUpgradeMenuButtonListener extends ClickListener {
 
-    private UpgradeMenu upgradeMenu;
+    private ModuleMenu moduleMenu;
     private String detail, cost, power, titre;
     private int idSelect;
 
-    public InputUpgradeMenuButtonListener(UpgradeMenu upgradeMenu, int idSelect, String titre, String detail, String cost, String power) {
-        this.upgradeMenu = upgradeMenu;
+    public InputUpgradeMenuButtonListener(ModuleMenu moduleMenu, int idSelect, String titre, String detail, String cost, String power) {
+        this.moduleMenu = moduleMenu;
         this.idSelect = idSelect;
         this.detail = detail;
         this.cost = cost;
@@ -27,9 +27,9 @@ public class InputUpgradeMenuButtonListener extends ClickListener {
 
     @Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-        // Indique a upgradeMenu qu'on a selectionne skill <idSelect>
-        upgradeMenu.setCurrentSelection(idSelect);
-        upgradeMenu.getUpgradeManager().updateUpgradeInformation(idSelect);
+        // Indique a moduleMenu qu'on a selectionne skill <idSelect>
+        moduleMenu.setCurrentSelection(idSelect);
+        moduleMenu.getModuleManager().updateUpgradeInformation(idSelect);
         return false;
     }
 

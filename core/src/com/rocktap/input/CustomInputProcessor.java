@@ -1,9 +1,9 @@
 package com.rocktap.input;
 
 import com.badlogic.gdx.InputProcessor;
-import com.rocktap.utils.Constants;
 import com.rocktap.manager.GameManager;
 import com.rocktap.screen.PlayScreen;
+import com.rocktap.utils.Constants;
 
 import java.util.Random;
 
@@ -46,7 +46,7 @@ public class CustomInputProcessor implements InputProcessor {
             gameManager.increaseGoldCritical();
             playScreen.processCriticalHit(gameManager.getCriticalValue());
         } else {
-            gameManager.increaseGold();
+            gameManager.increaseGoldActive();
             playScreen.processNormalHit();
         }
         playScreen.processPointerHitAnimation(screenX, screenY);

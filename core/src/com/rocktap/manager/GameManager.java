@@ -5,6 +5,8 @@ import com.rocktap.entity.StationActor;
 import com.rocktap.screen.PlayScreen;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
+import com.rocktap.utils.LargeMath;
+import com.rocktap.utils.ValueDTO;
 
 /**
  * Created by Skronak on 30/07/2017.
@@ -22,6 +24,8 @@ public class GameManager {
 
     private PlayScreen playScreen;
 
+    private LargeMath largeMath;
+
     // Etat du jeu
     private GameState currentState;
 
@@ -30,6 +34,7 @@ public class GameManager {
         currentState = GameState.IN_GAME;
         assetManager = new AssetManager();
         this.playScreen = playScreen;
+        largeMath = new LargeMath(gameInformation);
     }
 
     /**
@@ -46,10 +51,23 @@ public class GameManager {
         return stationActor;
     }
     /**
-     * methode d'ajout d'or
+     * methode d'ajout d'or au tap
      */
-    public void increaseGold(){
-        gameInformation.setCurrentGold(gameInformation.getCurrentGold() + gameInformation.getGenGold());
+    public void increaseGoldActive(){
+        ValueDTO newValue = largeMath.increaseValue(gameInformation.getCurrentGold(), gameInformation.getCurrency(), gameInformation.getGenGoldActive(), gameInformation.getGenCurrencyActive());
+        gameInformation.setCurrentGold(newValue.getValue());
+        gameInformation.setCurrency(newValue.getCurrency());
+        largeMath.formatGameInformation();
+    }
+
+    /**
+     * Ajout d'or passif
+     */
+    public void increaseGoldPassive(){
+        ValueDTO newValue = largeMath.increaseValue(gameInformation.getCurrentGold(), gameInformation.getCurrency(), gameInformation.getGenGoldActive(), gameInformation.getGenCurrencyActive());
+        gameInformation.setCurrentGold(newValue.getValue());
+        gameInformation.setCurrency(newValue.getCurrency());
+        largeMath.formatGameInformation();
     }
 
     public void calculateRestReward() {
@@ -63,15 +81,15 @@ public class GameManager {
 
     // Methode d'ajout d'or lors d'un critique
     public void increaseGoldCritical() {
-        gameInformation.setCurrentGold(gameInformation.getCurrentGold() + getCriticalValue());
+//        gameInformation.setCurrentGold(gameInformation.getCurrentGold() + getCriticalValue());
     }
 
     /**
      * Value d'un coup critique
      * @return
      */
-    public int getCriticalValue(){
-        return (gameInformation.getGenGold() * gameInformation.getCriticalRate());
+    public float getCriticalValue(){
+        return (gameInformation.getGenGoldActive() * gameInformation.getCriticalRate());
     }
 
 //*****************************************************
@@ -115,5 +133,13 @@ public class GameManager {
 
     public void setPlayScreen(PlayScreen playScreen) {
         this.playScreen = playScreen;
+    }
+
+    public LargeMath getLargeMath() {
+        return largeMath;
+    }
+
+    public void setLargeMath(LargeMath largeMath) {
+        this.largeMath = largeMath;
     }
 }

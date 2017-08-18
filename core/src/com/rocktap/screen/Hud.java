@@ -27,13 +27,10 @@ import com.rocktap.entity.GameInformation;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.AbstractMenu;
 import com.rocktap.menu.CreditMenu;
-import com.rocktap.menu.UpgradeMenu;
+import com.rocktap.menu.ModuleMenu;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
-
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import com.rocktap.utils.LargeMath;
 
 /**
  * Created by Skronak on 11/12/2016.
@@ -42,7 +39,7 @@ public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
     private GameInformation gameInformation;
-    private UpgradeMenu upgradeMenu;
+    private ModuleMenu moduleMenu;
     private CreditMenu creditMenu;
     private Label versionLabel;
     private Label scoreLabel;
@@ -63,13 +60,13 @@ public class Hud implements Disposable {
     private Button upgradeButton;
     private Button mapButton;
     private Button achievButton;
-    private NavigableMap<Long, String> suffixes = new TreeMap<Long, String> ();
+    private LargeMath largeMath;
 
     public Hud(SpriteBatch sb, GameManager gameManager) {
+        largeMath = gameManager.getLargeMath();
         initButton();
-        initGoldFormater();
         this.gameManager = gameManager;
-        upgradeMenu = new UpgradeMenu(gameManager);
+        moduleMenu = new ModuleMenu(gameManager);
         creditMenu = new CreditMenu(gameManager);
         this.gameInformation = gameManager.getGameInformation();
         OrthographicCamera camera = new OrthographicCamera();
@@ -87,7 +84,6 @@ public class Hud implements Disposable {
      * TODO gerer la taille des images des boutons
      */
     private void initButton() {
-
         upgradeButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b2.png"));
         skillButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b1.png"));
         achievButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b3.png"));
@@ -124,7 +120,7 @@ public class Hud implements Disposable {
         // Declaration des listener
         InputListener buttonListener = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                toggleMenu(upgradeMenu);
+                toggleMenu(moduleMenu);
                 return false;
             }
         };
@@ -160,7 +156,8 @@ public class Hud implements Disposable {
         versionLabel = new Label(Constants.CURRENT_VERSION, new Label.LabelStyle(font, Color.WHITE));
         versionLabel.setFontScale(0.5f);
         versionLabel.setWrap(true);
-        scoreLabel = new Label(String.format("%d", gameInformation.getCurrentGold()), new Label.LabelStyle(font, Color.WHITE));
+        scoreLabel = new Label(largeMath.getDisplayValue(gameInformation.getCurrentGold(), gameInformation.getCurrency()), new Label.LabelStyle(font, Color.WHITE));
+        scoreLabel.setAlignment(Align.right);
         scoreLabel.setFontScale(2);
 
         goldDecreaseLabel = new Label("", new Label.LabelStyle(font, Color.RED));
@@ -183,37 +180,9 @@ public class Hud implements Disposable {
         table.add(achievButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
         stage.addActor(table);
 
-        stage.addActor(upgradeMenu.getTable());
+        stage.addActor(moduleMenu.getTable());
         stage.addActor(creditMenu.getTable());
     }
-
-    /**
-     * Formater pour l'affichage de l'or
-     */
-    private void initGoldFormater(){
-        suffixes.put(1000L, "A");
-        suffixes.put(1000000L, "B");
-        suffixes.put(1000000000L, "C");
-        suffixes.put(1000000000000L, "D");
-        suffixes.put(1000000000000000L, "E");
-        suffixes.put(1000000000000000000L, "F");
-    }
-
-    public String format(long value) {
-        if (value == Long.MIN_VALUE) return format(Long.MIN_VALUE + 1);
-        if (value < 0) return "-" + format(-value);
-        if (value < 1000) return Long.toString(value); //deal with easy case
-
-        Map.Entry<Long, String> e = suffixes.floorEntry(value);
-        Long divideBy = e.getKey();
-        String suffix = e.getValue();
-
-        long truncated = value / (divideBy / 10); //the number part of the output times 10
-        boolean hasDecimal = truncated < 100 && (truncated / 10d) != (truncated / 10);
-        return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
-    }
-
-
 
     /**
      * Methode draw specifique
@@ -230,7 +199,7 @@ public class Hud implements Disposable {
         ));
     }
 
-    public void animateDecreaseGold(int value) {
+    public void animateDecreaseGold(float value) {
         goldDecreaseLabel.setText("- " + value);
 //        goldDecreaseLabel.setPosition(150,0);
         goldDecreaseLabel.clearActions();
@@ -261,16 +230,17 @@ public class Hud implements Disposable {
 
         // masque les autres menus
         if (menu instanceof CreditMenu ){
-            upgradeMenu.getTable().setVisible(false);
+            moduleMenu.getTable().setVisible(false);
         }
-        if (menu instanceof UpgradeMenu ){
+        if (menu instanceof ModuleMenu){
             creditMenu.getTable().setVisible(false);
         }
     }
 
-    public void setGold(int gold){
-        scoreLabel.setText(format(gold));
-//        scoreLabel.setText(String.format("%d", gold));
+    // Met a jour l'affichage de l'or
+    public void updateGoldLabel(){
+        String scoreAffichage = largeMath.getDisplayValue(gameInformation.getCurrentGold(), gameInformation.getCurrency());
+        scoreLabel.setText(scoreAffichage);
     }
 
     public Stage getStage() {

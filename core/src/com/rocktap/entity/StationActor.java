@@ -23,7 +23,7 @@ public class StationActor extends Actor {
     private float deltatime;
     private int width;
     private int height;
-    private List<UpgradeActor> upgradeList;
+    private List<ModuleActor> upgradeList;
     private float animSpeed;
     private TextureRegion currentFrame;
     private AnimatedActor beamActor;
@@ -53,8 +53,8 @@ public class StationActor extends Actor {
      * Generation des upgrade de la station
      * @return
      */
-    public List<UpgradeActor> loadUpgrade() {
-        this.upgradeList = new ArrayList<UpgradeActor>();
+    public List<ModuleActor> loadUpgrade() {
+        this.upgradeList = new ArrayList<ModuleActor>();
         int y = 0;
         for (int i=0;i<gameManager.getGameInformation().getUpgradeLevelList().size();i++) {
             if (gameManager.getGameInformation().getUpgradeLevelList().get(i) > 0) {

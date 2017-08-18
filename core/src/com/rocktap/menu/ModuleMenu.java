@@ -14,21 +14,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.input.InputUpgradeMenuButtonListener;
 import com.rocktap.input.InputUpgradeSkillButtonListener;
 import com.rocktap.manager.GameManager;
-import com.rocktap.manager.UpgradeManager;
+import com.rocktap.manager.ModuleManager;
 
 /**
  * Created by Skronak on 01/02/2017.
  * Menu d'update
  * // TODO: super menu desactivant l'input listener, gerer un state?
  */
-public class UpgradeMenu extends AbstractMenu {
+public class ModuleMenu extends AbstractMenu {
     private Table upgradeTable;
     private Table upgradeCostTable;
     private Label detailGold;
     private Label detailDescription;
     private Label detailLevel;
     private Label detailTitre;
-    private UpgradeManager upgradeManager;
+    private ModuleManager moduleManager;
     private Texture squareTexture;
     private Image squareImage1;
     private Image squareImage2;
@@ -43,9 +43,9 @@ public class UpgradeMenu extends AbstractMenu {
             upgradeDrawable1_r, upgradeDrawable2_r, upgradeDrawable3_r, upgradeDrawable4_r, upgradeDrawable5_r, upgradeDrawable6_r, upgradeDrawable7_r, upgradeDrawable8_r;
     private ImageButton upgradeButton1, upgradeButton2, upgradeButton3, upgradeButton4, upgradeButton5, upgradeButton6, upgradeButton7, upgradeButton8;
 
-    public UpgradeMenu(GameManager gameManager) {
+    public ModuleMenu(GameManager gameManager) {
         super(gameManager);
-        this.upgradeManager = new UpgradeManager(this, gameManager);
+        this.moduleManager = new ModuleManager(this, gameManager);
         customizeMenuTable();
     }
 
@@ -480,12 +480,12 @@ public class UpgradeMenu extends AbstractMenu {
         this.upgradeButton8 = upgradeButton8;
     }
 
-    public UpgradeManager getUpgradeManager() {
-        return upgradeManager;
+    public ModuleManager getModuleManager() {
+        return moduleManager;
     }
 
-    public void setUpgradeManager(UpgradeManager upgradeManager) {
-        this.upgradeManager = upgradeManager;
+    public void setModuleManager(ModuleManager moduleManager) {
+        this.moduleManager = moduleManager;
     }
 
     public Table getUpgradeCostTable() {

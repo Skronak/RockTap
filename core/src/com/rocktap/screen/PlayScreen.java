@@ -183,7 +183,7 @@ public class PlayScreen implements Screen {
 //        this.spriteBatch.setProjectionMatrix(camera.combined);
         updateLogic();
 //        spriteBatch.begin();
-        hud.setGold(gameInformation.getCurrentGold());
+        hud.updateGoldLabel();
         stage.act();
 //        station.act(delta);
         stage.draw();
@@ -230,7 +230,7 @@ public class PlayScreen implements Screen {
      * Animation du jeu au touche
      */
     public void processHit() {
-        goldLabel = new Label("hit "+String.valueOf(gameInformation.getGenGold()),new Label.LabelStyle(font, Constants.NORMAL_LABEL_COLOR));
+        goldLabel = new Label(gameManager.getLargeMath().getDisplayValue(gameInformation.getGenGoldActive(), gameInformation.getGenCurrencyActive()),new Label.LabelStyle(font, Constants.NORMAL_LABEL_COLOR));
         goldLabel.setPosition(150,0);
         layer2GraphicObject.addActor(goldLabel);
         goldLabel.addAction(Actions.sequence(
@@ -258,7 +258,7 @@ public class PlayScreen implements Screen {
      * Animation du jeu au touche critique
      * @param value: valeur du critique
      */
-    public void processCriticalHit(int value) {
+    public void processCriticalHit(float value) {
         beamCriticalImage.clearActions();
         beamCriticalImage.addAction(Actions.sequence(
                 Actions.show(),
@@ -322,8 +322,8 @@ public class PlayScreen implements Screen {
         // Increase Gold
         if(increaseGoldTimer >= 1) {
             Gdx.app.debug("PlayScreen","Increasing Gold");
-            gameManager.increaseGold();
-            hud.setGold(gameInformation.getCurrentGold());
+//TODO            gameManager.increaseGoldPassive();
+            hud.updateGoldLabel();
             increaseGoldTimer=0f;
         }
 
@@ -403,7 +403,9 @@ public class PlayScreen implements Screen {
         Gdx.app.debug("PlayScreen","dispose");
         spriteBatch.dispose();
         Gdx.app.debug("PlayScreen","saveInformation");
+        gameManager.getLargeMath().formatGameInformation();
         gameInformation.saveInformation();
+
     }
 
 //*****************************************************

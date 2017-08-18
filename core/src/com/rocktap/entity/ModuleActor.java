@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Created by Skronak on 17/07/2017.
  *
  */
-public class UpgradeActor {
+public class ModuleActor {
 
     private int id;
     private String title;
@@ -35,7 +35,7 @@ public class UpgradeActor {
      * @param cost
      * @param sprite
      */
-    public UpgradeActor(int stationId, int lvl, int posX, int posY, int width, int height, int[] cost, String sprite) {
+    public ModuleActor(int stationId, int lvl, int posX, int posY, int width, int height, int[] cost, String sprite) {
         this.id = stationId;
         this.lvl = lvl;
         this.posX = posX;
@@ -46,7 +46,7 @@ public class UpgradeActor {
         this.textureRegion = new TextureRegion(new Texture(sprite));
     }
 
-    public UpgradeActor(){
+    public ModuleActor(){
 
     }
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * Created by Skronak on 12/02/2017.
+ * TODO: USELESS POUR L'INSTANT
  */
 public class MenuButton {
     private Sprite skin;
