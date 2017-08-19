@@ -1,5 +1,7 @@
 package com.rocktap.input;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.rocktap.manager.GameManager;
 import com.rocktap.screen.PlayScreen;
@@ -25,6 +27,8 @@ public class CustomInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+        if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK) )
+            Gdx.app.debug("Closing application", "close");
         return false;
     }
 

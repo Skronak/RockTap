@@ -111,18 +111,16 @@ public class PlayScreen implements Screen {
 
         //BeamActor
 
-        //touchActor
+        //tapActor
         frames = new Array<TextureRegion>();
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c1.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c2.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c3.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c4.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c5.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c6.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c7.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c8.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/c9.png"))));
-        tapActor = new AnimatedActor(0,0,20,20,0.1f,frames, Animation.PlayMode.LOOP);
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/tap/tap1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/tap/tap2.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/tap/tap3.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/tap/tap4.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/tap/tap5.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/tap/tap6.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/tap/tap7.png"))));
+        tapActor = new AnimatedActor(0,0,20,20,0.09f,frames, Animation.PlayMode.REVERSED);
         tapActor.setVisible(false);
         frames = new Array<TextureRegion>();
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/reward/chest1.png"))));
@@ -132,22 +130,24 @@ public class PlayScreen implements Screen {
         rewardActor.setVisible(false);
 
         // Station //TODO a mettre dans une classe specifique pour gerer les amelio
-        station = gameManager.initStationActor(70,300,200,100,2f);
+        station = gameManager.initStationActor(70,400,200,100,2f);
         //TODO => j'ajoute dans une table pour add facilement des amelioration => creer object station direct avec partie amovibles
 
         // TODO: Mettre asset dans classe de chargement => splash screen
         beamCriticalImage = new Image(new Texture(Gdx.files.internal("sprites/beamCritical.png")));
-        beamCriticalImage.setBounds(155,50, 32,270); // position de l'image
+        beamCriticalImage.setBounds(155,50, 32,station.getY()-30); // position de l'image
         beamCriticalImage.setVisible(false);
         beamMaxSpeedImage = new Image(new Texture(Gdx.files.internal("sprites/bMaxSpeed.png")));
-        beamMaxSpeedImage.setBounds(155,50, 32,270); // position de l'image
+        beamMaxSpeedImage.setBounds(155,50, 32,station.getY()-30); // position de l'image
         beamMaxSpeedImage.setVisible(false);
-        stationBorderImage = new Image(new Texture(Gdx.files.internal("sprites/station/ship1_0.png")));
-        stationBorderImage.setBounds(70,300,200,100);
+        stationBorderImage = new Image(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_0.png")));
+        stationBorderImage.setBounds(70,400,200,100);
 //        backgroundImage = new Image(new Texture(Gdx.files.internal("sprites/rock.png")));
         backgroundImage = new Image(new Texture(Gdx.files.internal("sprites/background/rockValley.png")));
+        backgroundImage.setScale(0.6f,0.6f);
+        backgroundImage.setPosition(-130, backgroundImage.getY());
         skyImage = new Image(new Texture(Gdx.files.internal("sprites/background/sky.png")));
-        skyImage.scaleBy(2);
+        skyImage.scaleBy(0.4f);
 
 //        backgroundImageOverlay = new Image(new Texture(Gdx.files.internal("sprites/rock_overlay.png")));
 
@@ -215,6 +215,7 @@ public class PlayScreen implements Screen {
      */
     public void processPointerHitAnimation(int positionX, int positionY) {
         tapActor.clearActions();
+        tapActor.setDeltatime(0);
         Vector3 position2World = camera.unproject(new Vector3(positionX, positionY,0));
         tapActor.setColor(Color.WHITE);
         tapActor.setPosition(position2World.x- ((int)tapActor.getWidth()/2),( (int) position2World.y-tapActor.getHeight()/2));//TODO a calculer autrepart
@@ -321,8 +322,9 @@ public class PlayScreen implements Screen {
         }
         // Increase Gold
         if(increaseGoldTimer >= 1) {
-            Gdx.app.debug("PlayScreen","Increasing Gold");
-//TODO            gameManager.increaseGoldPassive();
+            gameManager.increaseGoldPassive();
+            Gdx.app.debug("PlayScreen","Increasing Gold by "+gameInformation.getGenCurrencyPassive()+" val "+gameInformation.getGenGoldPassive());
+            gameManager.increaseGoldPassive();
             hud.updateGoldLabel();
             increaseGoldTimer=0f;
         }
@@ -345,10 +347,10 @@ public class PlayScreen implements Screen {
 
  */
 
-        if (station.getY() >= 308 && stationAnimationUp) {
+        if (station.getY() >= Constants.STATION_ANIMATION_MAX_ALTITUDE && stationAnimationUp) {
                 stationAnimationUp = false;
             }
-            if (station.getY() <= 302 && !stationAnimationUp) {
+            if (station.getY() <= Constants.STATION_ANIMATION_MIN_ALTITUDE && !stationAnimationUp) {
                 stationAnimationUp = true;
             }
 

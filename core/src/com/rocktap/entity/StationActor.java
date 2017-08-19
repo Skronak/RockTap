@@ -23,7 +23,7 @@ public class StationActor extends Actor {
     private float deltatime;
     private int width;
     private int height;
-    private List<ModuleActor> upgradeList;
+    private List<ModuleEntity> upgradeList;
     private float animSpeed;
     private TextureRegion currentFrame;
     private AnimatedActor beamActor;
@@ -53,8 +53,8 @@ public class StationActor extends Actor {
      * Generation des upgrade de la station
      * @return
      */
-    public List<ModuleActor> loadUpgrade() {
-        this.upgradeList = new ArrayList<ModuleActor>();
+    public List<ModuleEntity> loadUpgrade() {
+        this.upgradeList = new ArrayList<ModuleEntity>();
         int y = 0;
         for (int i=0;i<gameManager.getGameInformation().getUpgradeLevelList().size();i++) {
             if (gameManager.getGameInformation().getUpgradeLevelList().get(i) > 0) {
@@ -80,7 +80,7 @@ public class StationActor extends Actor {
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b5.png"))));
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b6.png"))));
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b7.png"))));
-        beamActor = new AnimatedActor(157,50, 28,270, 0.2f, frames, Animation.PlayMode.LOOP);
+        beamActor = new AnimatedActor(157,50, 28,(int)this.getY()-30, 0.2f, frames, Animation.PlayMode.LOOP);
         beamActor.setVisible(false);
         return beamActor;
     }

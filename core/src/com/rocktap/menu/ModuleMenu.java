@@ -36,7 +36,6 @@ public class ModuleMenu extends AbstractMenu {
     private Image squareImage4;
     private Image squareImage5;
 
-
     // indique le skill actuellement selectionne
     private int currentSelection;
     private Drawable upgradeDrawable1, upgradeDrawable2, upgradeDrawable3, upgradeDrawable4, upgradeDrawable5, upgradeDrawable6, upgradeDrawable7, upgradeDrawable8,
@@ -47,6 +46,9 @@ public class ModuleMenu extends AbstractMenu {
         super(gameManager);
         this.moduleManager = new ModuleManager(this, gameManager);
         customizeMenuTable();
+        // selection 1 module par defaut
+        currentSelection=1;
+        moduleManager.updateUpgradeInformation(currentSelection);
     }
 
     public void customizeMenuTable() {

@@ -86,7 +86,7 @@ public class LargeMath {
         return new ValueDTO(valueRes, maxCurrency);
     }
 
-    public ValueDTO decreaseValue(float  firstValue, int firstCurrency, float secValue, int secCurrency) {
+    public ValueDTO decreaseValue(float firstValue, int firstCurrency, float secValue, int secCurrency) {
         float newValue=firstValue;
         int currencyDifference = firstCurrency - secCurrency ;
         int maxCurrency = Math.max(firstCurrency, secCurrency);

@@ -47,14 +47,14 @@ public class AnimatedActor extends Actor {
     }
 
     public void increaseSpeed(float value) {
-            //if (idleAnimation.getFrameDuration() > 0.05f){
-            //    Gdx.app.log("speed",String.valueOf(idleAnimation.getFrameDuration()));
         animation.setFrameDuration(value);
             }
 
     public void decreaseSpeed(float value){
-//        if (idleAnimation.getFrameDuration() <= 0.2f){
-//            Gdx.app.log("speed",String.valueOf(idleAnimation.getFrameDuration()));
         animation.setFrameDuration(value);
+    }
+
+    public void setDeltatime(float deltatime) {
+        this.deltatime = deltatime;
     }
 }

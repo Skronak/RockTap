@@ -7,13 +7,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Created by Skronak on 17/07/2017.
  *
  */
-public class ModuleActor {
+public class ModuleEntity {
 
     private int id;
     private String title;
     private String description;
-    private int[] cost;
-    private int[] goldGen;
+    private float[] cost;
+    private int[] currency;
+    private float[] goldGen;
+    private int[] currGen;
     private int lvl;
     private float posX;
     private float posY;
@@ -35,7 +37,7 @@ public class ModuleActor {
      * @param cost
      * @param sprite
      */
-    public ModuleActor(int stationId, int lvl, int posX, int posY, int width, int height, int[] cost, String sprite) {
+    public ModuleEntity(int stationId, int lvl, int posX, int posY, int width, int height, float[] cost, String sprite) {
         this.id = stationId;
         this.lvl = lvl;
         this.posX = posX;
@@ -46,9 +48,13 @@ public class ModuleActor {
         this.textureRegion = new TextureRegion(new Texture(sprite));
     }
 
-    public ModuleActor(){
+    public ModuleEntity(){
 
     }
+
+//*****************************************************
+//                  GETTER & SETTER
+// ****************************************************
 
     public int getId() {
         return id;
@@ -72,6 +78,38 @@ public class ModuleActor {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public float[] getCost() {
+        return cost;
+    }
+
+    public void setCost(float[] cost) {
+        this.cost = cost;
+    }
+
+    public int[] getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(int[] currency) {
+        this.currency = currency;
+    }
+
+    public float[] getGoldGen() {
+        return goldGen;
+    }
+
+    public void setGoldGen(float[] goldGen) {
+        this.goldGen = goldGen;
+    }
+
+    public int[] getCurrGen() {
+        return currGen;
+    }
+
+    public void setCurrGen(int[] currGen) {
+        this.currGen = currGen;
     }
 
     public int getLvl() {
@@ -98,12 +136,12 @@ public class ModuleActor {
         this.posY = posY;
     }
 
-    public int[] getCost() {
-        return cost;
+    public TextureRegion getTextureRegion() {
+        return textureRegion;
     }
 
-    public void setCost(int[] cost) {
-        this.cost = cost;
+    public void setTextureRegion(TextureRegion textureRegion) {
+        this.textureRegion = textureRegion;
     }
 
     public String getSprite() {
@@ -130,14 +168,6 @@ public class ModuleActor {
         this.iconDisabled = iconDisabled;
     }
 
-    public int[] getGoldGen() {
-        return goldGen;
-    }
-
-    public void setGoldGen(int[] goldGen) {
-        this.goldGen = goldGen;
-    }
-
     public float getWidth() {
         return width;
     }
@@ -152,13 +182,5 @@ public class ModuleActor {
 
     public void setHeight(float height) {
         this.height = height;
-    }
-
-    public TextureRegion getTextureRegion() {
-        return textureRegion;
-    }
-
-    public void setTextureRegion(TextureRegion textureRegion) {
-        this.textureRegion = textureRegion;
     }
 }

@@ -38,7 +38,7 @@ public class Constants {
 
     public static float UPDATE_MENU_PAD = V_WIDTH/20;
 
-    public static int PLAYSCREEN_MENU_BUTTON_HEIGHT = 50;
+    public static int PLAYSCREEN_MENU_BUTTON_HEIGHT = 60;
 
     // Nombre d'heure minimum pour toucher la recompense de repos
     public static int DELAY_HOURS_REWARD = 1;
@@ -51,5 +51,9 @@ public class Constants {
 
     // nombre de digit qu'on conserve des gold du joueur
     public static int GOLD_PLAYER_SIZE_STORAGE = 9;
+
+    public static int STATION_ANIMATION_MAX_ALTITUDE = 408; //308
+
+    public static int STATION_ANIMATION_MIN_ALTITUDE = 402;//302
 
 }

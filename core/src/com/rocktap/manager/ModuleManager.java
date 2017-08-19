@@ -1,7 +1,8 @@
 package com.rocktap.manager;
 
-import com.rocktap.entity.ModuleActor;
+import com.rocktap.entity.ModuleEntity;
 import com.rocktap.menu.ModuleMenu;
+import com.rocktap.utils.ValueDTO;
 
 import java.util.List;
 
@@ -13,29 +14,32 @@ public class ModuleManager {
 
     private GameManager gameManager;
     private ModuleMenu moduleMenu;
-    private List<ModuleActor> moduleActorList;
+    private List<ModuleEntity> moduleEntityList;
 
     public ModuleManager(ModuleMenu moduleMenu, GameManager gameManager) {
         this.moduleMenu = moduleMenu;
         this.gameManager = gameManager;
-        this.moduleActorList = gameManager.getAssetManager().getUpgradeFile();
+        this.moduleEntityList = gameManager.getAssetManager().getUpgradeFile();
 
         this.calculateGoldGen();
 
     }
 
     /**
-     * Recalcule le goldGen en fonction
+     * Recalcule le goldGen global en fonction
      * du niveau des updates
      */
     public void calculateGoldGen(){
-        int goldGen = 0;
+        float goldGen = 0;
+        int currGen = 0;
         for (int i=0;i<gameManager.getGameInformation().getUpgradeLevelList().size();i++) {
             if (gameManager.getGameInformation().getUpgradeLevelList().get(i) > 0) {
-                goldGen += moduleActorList.get(i).getGoldGen()[getGameManager().getGameInformation().getUpgradeLevelList().get(i)];
+                goldGen += moduleEntityList.get(i).getGoldGen()[getGameManager().getGameInformation().getUpgradeLevelList().get(i)];
+                currGen += moduleEntityList.get(i).getCurrency()[getGameManager().getGameInformation().getUpgradeLevelList().get(i)];
             }
         }
         gameManager.getGameInformation().setGenGoldPassive(goldGen);
+        gameManager.getGameInformation().setGenCurrencyActive(currGen);
     }
 
     /**
@@ -44,22 +48,30 @@ public class ModuleManager {
      * @return
      */
     public boolean isAvailable (int idSelect) {
-        if (gameManager.getGameInformation().getCurrentGold() >= moduleActorList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)] && gameManager.getGameInformation().getUpgradeLevelList().get(idSelect) < moduleActorList.get(idSelect).getCost().length -1 ) {
+        if (((gameManager.getGameInformation().getCurrency() > moduleEntityList.get(idSelect).getCurrency()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)])
+                || (gameManager.getGameInformation().getCurrency() == moduleEntityList.get(idSelect).getCurrency()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)]
+                && gameManager.getGameInformation().getCurrentGold() >= moduleEntityList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)]))
+           && (gameManager.getGameInformation().getUpgradeLevelList().get(idSelect) < moduleEntityList.get(idSelect).getCurrency().length - 1)) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     /**
-     * Augmente le niveau d'un upgrade
+     * Augmente le niveau d'un module
      * @param idSelect
      */
     public void increaseUpgradeLevel(int idSelect) {
         if (isAvailable(idSelect)) {
-            float costValue = moduleActorList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
+            float costValue = moduleEntityList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
+            int currencyValue = moduleEntityList.get(idSelect).getCurrency()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
             this.gameManager.getPlayScreen().getHud().animateDecreaseGold(costValue);
 
-            gameManager.getGameInformation().setCurrentGold(gameManager.getGameInformation().getCurrentGold() - costValue);
+            ValueDTO newValue = gameManager.getLargeMath().decreaseValue(gameManager.getGameInformation().getCurrentGold(),gameManager.getGameInformation().getCurrency(),costValue, currencyValue);
+            this.gameManager.getGameInformation().setCurrentGold(newValue.getValue());
+            this.gameManager.getGameInformation().setCurrency(newValue.getCurrency());
+
             gameManager.getGameInformation().getUpgradeLevelList().set(idSelect, gameManager.getGameInformation().getUpgradeLevelList().get(idSelect) + 1);
             this.calculateGoldGen();
             this.moduleMenu.getGameManager().getStationActor().loadUpgrade();
@@ -102,13 +114,14 @@ public class ModuleManager {
      * @param idSelect
      */
     public void updateUpgradeInformation(int idSelect) {
-        this.moduleMenu.getDetailTitre().setText(moduleActorList.get(idSelect).getTitle());
+        this.moduleMenu.getDetailTitre().setText(moduleEntityList.get(idSelect).getTitle());
         this.moduleMenu.getDetailLevel().setText(String.valueOf(moduleMenu.getGameManager().getGameInformation().getUpgradeLevelList().get(idSelect)));
-        this.moduleMenu.getDetailGold().setText(String.valueOf(moduleActorList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)]));
-        this.moduleMenu.getDetailDescription().setText(moduleActorList.get(idSelect).getDescription());
+        this.moduleMenu.getDetailGold().setText(String.valueOf(moduleEntityList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)]));
+        this.moduleMenu.getDetailDescription().setText(moduleEntityList.get(idSelect).getDescription());
 
         // TODO mettre valeur directement ds JSON
-        int goldGen = moduleActorList.get(idSelect).getGoldGen()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
+        float goldGen = moduleEntityList.get(idSelect).getGoldGen()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
+        int currGen = moduleEntityList.get(idSelect).getCurrency()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
         int nbSquare=0;
         if (goldGen < 5) {
             nbSquare=1;

@@ -2,7 +2,7 @@ package com.rocktap.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
-import com.rocktap.entity.ModuleActor;
+import com.rocktap.entity.ModuleEntity;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class AssetManager {
     private Json json;
 
-    private ArrayList<ModuleActor> upgradeFile;
+    private ArrayList<ModuleEntity> upgradeFile;
 
     public AssetManager() {
         this.json = new Json();
@@ -23,16 +23,16 @@ public class AssetManager {
     }
 
     public void loadUpgradeFile(){
-        upgradeFile = new ArrayList<ModuleActor>();
-        upgradeFile = json.fromJson(ArrayList.class, ModuleActor.class, Gdx.files.internal("json/upgradeModule.json"));
+        upgradeFile = new ArrayList<ModuleEntity>();
+        upgradeFile = json.fromJson(ArrayList.class, ModuleEntity.class, Gdx.files.internal("json/upgradeModule.json"));
         Gdx.app.log("AssetManager","Chargement asset termine");
     }
 
-    public ArrayList<ModuleActor> getUpgradeFile() {
+    public ArrayList<ModuleEntity> getUpgradeFile() {
         return upgradeFile;
     }
 
-    public void setUpgradeFile(ArrayList<ModuleActor> upgradeFile) {
+    public void setUpgradeFile(ArrayList<ModuleEntity> upgradeFile) {
         this.upgradeFile = upgradeFile;
     }
 }
