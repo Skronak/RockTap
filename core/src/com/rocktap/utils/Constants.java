@@ -43,6 +43,9 @@ public class Constants {
     // Nombre d'heure minimum pour toucher la recompense de repos
     public static int DELAY_HOURS_REWARD = 1;
 
+    // Delai avant de generer de l'or automatiquement
+    public static int DELAY_GENGOLD_PASSIV = 2;
+
     // Difference de currency pour passer le cout en free
     public static int UNLIMITED_CURRENCY_LIMIT = 9;
 

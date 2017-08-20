@@ -57,15 +57,23 @@ public class LargeMath {
         return currencyString;
     }
 
+    /**
+     * TODO a revoir : cas possibles
+     * @param firstValue
+     * @param firstCurrency
+     * @param secValue
+     * @param secCurrency
+     * @return
+     */
     public ValueDTO increaseValue(Float  firstValue, int firstCurrency, Float secValue, int secCurrency) {
         float newValue=firstValue;
         int currencyDifference = firstCurrency - secCurrency ;
         int maxCurrency = Math.max(firstCurrency, secCurrency);
 
-        if (currencyDifference >= Constants.UNLIMITED_CURRENCY_LIMIT) {
+        if (currencyDifference >= Constants.UNLIMITED_CURRENCY_LIMIT && firstValue > secValue) {
             Gdx.app.debug("LargeMath", "Non significative value " + newValue + " currencyDif " + currencyDifference);
             return new ValueDTO(newValue, firstCurrency);
-        } else if (currencyDifference <= -Constants.UNLIMITED_CURRENCY_LIMIT) {
+        } else if (currencyDifference <= -Constants.UNLIMITED_CURRENCY_LIMIT && firstValue < secValue) {
             Gdx.app.debug("LargeMath", "Non significative value " + newValue + " currencyDif " + currencyDifference);
             return new ValueDTO(secValue, secCurrency);
         }
@@ -92,21 +100,28 @@ public class LargeMath {
         int maxCurrency = Math.max(firstCurrency, secCurrency);
 
         if (currencyDifference >= Constants.UNLIMITED_CURRENCY_LIMIT) {
-            System.out.println("Non significative value" + newValue);
+            Gdx.app.debug("LargeMath", "Non significative value " + newValue + " currencyDif " + currencyDifference);
             return new ValueDTO(newValue, firstCurrency);
         } else if (currencyDifference <= -Constants.UNLIMITED_CURRENCY_LIMIT) {
-            System.out.println("Non significative value" + newValue);
+            Gdx.app.debug("LargeMath", "Non significative value " + newValue + " currencyDif " + currencyDifference);
             return new ValueDTO(secValue, secCurrency);
         }
-
         if (currencyDifference == 0) {
             return new ValueDTO(firstValue - secValue, firstCurrency);
         }
 
-        Float valueRes= (float) ((firstValue * Math.pow(1000, Double.valueOf(firstCurrency))) - (secValue * Math.pow(1000, Double.valueOf(secCurrency))));
+        float valueRes=0;
+        // cas firstValue > secValue
+        if (maxCurrency==firstCurrency) {
+            valueRes=(float) ((firstValue * Math.pow(1000, Double.valueOf(currencyDifference))) - (secValue));
+            valueRes = (float) (valueRes / Math.pow(1000, Double.valueOf(currencyDifference)));
+        } else {
+            valueRes=(float) ((firstValue) - (secValue * Math.pow(1000, Double.valueOf(currencyDifference))));
+            valueRes = (float) (valueRes / Math.pow(1000, Double.valueOf(currencyDifference)));
+        }
+
         return new ValueDTO(valueRes, maxCurrency);
     }
-
     /**
      * Format les valeurs de gameInformation pour
      * la sauvegarde
@@ -121,6 +136,7 @@ public class LargeMath {
         }
         gameInformation.setCurrentGold(value);
         gameInformation.setCurrency(currency);
+        //TODO formater pour que virgule ne passe pas la limite du systeme
     }
 
     /**

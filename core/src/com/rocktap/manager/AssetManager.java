@@ -10,8 +10,8 @@ import java.util.ArrayList;
  * Created by Skronak on 02/08/2017.
  *
  * Classe de chargement des assets du jeu
+ * TODO Utiliser atlas
  */
-
 public class AssetManager {
     private Json json;
 
@@ -28,11 +28,12 @@ public class AssetManager {
         Gdx.app.log("AssetManager","Chargement asset termine");
     }
 
+//*****************************************************
+//                  GETTER & SETTER
+// ****************************************************
+
     public ArrayList<ModuleEntity> getUpgradeFile() {
         return upgradeFile;
     }
 
-    public void setUpgradeFile(ArrayList<ModuleEntity> upgradeFile) {
-        this.upgradeFile = upgradeFile;
-    }
 }

@@ -31,6 +31,7 @@ import com.rocktap.menu.ModuleMenu;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
 import com.rocktap.utils.LargeMath;
+import com.rocktap.utils.ValueDTO;
 
 /**
  * Created by Skronak on 11/12/2016.
@@ -199,9 +200,9 @@ public class Hud implements Disposable {
         ));
     }
 
-    public void animateDecreaseGold(float value) {
-        goldDecreaseLabel.setText("- " + value);
-//        goldDecreaseLabel.setPosition(150,0);
+    public void animateDecreaseGold(ValueDTO valueDto) {
+        String text = this.gameManager.getLargeMath().getDisplayValue(valueDto.getValue(), valueDto.getCurrency());
+        goldDecreaseLabel.setText("- " + text);
         goldDecreaseLabel.clearActions();
         goldDecreaseLabel.addAction(Actions.sequence(
                 Actions.show(),

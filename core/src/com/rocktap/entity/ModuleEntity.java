@@ -1,21 +1,22 @@
 package com.rocktap.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.rocktap.utils.ValueDTO;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Skronak on 17/07/2017.
  *
  */
-public class ModuleEntity {
+public class ModuleEntity implements Serializable {
 
     private int id;
     private String title;
     private String description;
-    private float[] cost;
-    private int[] currency;
-    private float[] goldGen;
-    private int[] currGen;
+    private ArrayList<ValueDTO> cost;
+    private ArrayList<ValueDTO> generation;
     private int lvl;
     private float posX;
     private float posY;
@@ -26,35 +27,13 @@ public class ModuleEntity {
     private float width;
     private float height;
 
-    /**
-     * TODO menage dans param
-     * @param stationId
-     * @param lvl
-     * @param posX
-     * @param posY
-     * @param width
-     * @param height
-     * @param cost
-     * @param sprite
-     */
-    public ModuleEntity(int stationId, int lvl, int posX, int posY, int width, int height, float[] cost, String sprite) {
-        this.id = stationId;
-        this.lvl = lvl;
-        this.posX = posX;
-        this.posY = posY;
-        this.cost = cost;
-        this.height = height;
-        this.width = width;
-        this.textureRegion = new TextureRegion(new Texture(sprite));
-    }
-
-    public ModuleEntity(){
-
+    public ModuleEntity() {
     }
 
 //*****************************************************
 //                  GETTER & SETTER
 // ****************************************************
+
 
     public int getId() {
         return id;
@@ -80,36 +59,20 @@ public class ModuleEntity {
         this.description = description;
     }
 
-    public float[] getCost() {
+    public ArrayList<ValueDTO> getCost() {
         return cost;
     }
 
-    public void setCost(float[] cost) {
+    public void setCost(ArrayList<ValueDTO> cost) {
         this.cost = cost;
     }
 
-    public int[] getCurrency() {
-        return currency;
+    public ArrayList<ValueDTO> getGeneration() {
+        return generation;
     }
 
-    public void setCurrency(int[] currency) {
-        this.currency = currency;
-    }
-
-    public float[] getGoldGen() {
-        return goldGen;
-    }
-
-    public void setGoldGen(float[] goldGen) {
-        this.goldGen = goldGen;
-    }
-
-    public int[] getCurrGen() {
-        return currGen;
-    }
-
-    public void setCurrGen(int[] currGen) {
-        this.currGen = currGen;
+    public void setGeneration(ArrayList<ValueDTO> generation) {
+        this.generation = generation;
     }
 
     public int getLvl() {

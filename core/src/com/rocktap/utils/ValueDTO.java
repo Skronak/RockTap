@@ -12,6 +12,8 @@ public class ValueDTO {
     // currency
     private int currency;
 
+    public ValueDTO(){}
+
     public ValueDTO(float value, int currency) {
         this.value = value;
         this.currency = currency;

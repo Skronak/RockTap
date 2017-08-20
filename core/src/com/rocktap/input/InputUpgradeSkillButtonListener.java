@@ -19,7 +19,7 @@ public class InputUpgradeSkillButtonListener extends ClickListener {
     @Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
         this.moduleMenu.getModuleManager().increaseUpgradeLevel(moduleMenu.getCurrentSelection());
-        this.moduleMenu.getModuleManager().updateUpgradeInformation(moduleMenu.getCurrentSelection());
+        this.moduleMenu.getModuleManager().updateModuleInformation(moduleMenu.getCurrentSelection());
         this.moduleMenu.getGameManager().getGameInformation().saveInformation();
     return false;
 

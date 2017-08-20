@@ -28,6 +28,7 @@ import com.rocktap.input.CustomInputProcessor;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.MainMenuBar;
 import com.rocktap.utils.Constants;
+import com.rocktap.utils.ScrollingBackground;
 
 import java.util.Random;
 
@@ -67,6 +68,7 @@ public class PlayScreen implements Screen {
     private MainMenuBar mainMenuBar;
     private Label goldLabel;
     private StationActor station;
+    private ScrollingBackground scrollingBackground;
 
     private AnimatedActor tapActor;
     private AnimatedActor rewardActor;
@@ -102,14 +104,11 @@ public class PlayScreen implements Screen {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
-
         CustomInputProcessor inputProcessor = new CustomInputProcessor(this);
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputProcessor);
         inputMultiplexer.addProcessor(hud.getStage());
         Gdx.input.setInputProcessor(inputMultiplexer);
-
-        //BeamActor
 
         //tapActor
         frames = new Array<TextureRegion>();
@@ -149,6 +148,7 @@ public class PlayScreen implements Screen {
         skyImage = new Image(new Texture(Gdx.files.internal("sprites/background/sky.png")));
         skyImage.scaleBy(0.4f);
 
+        scrollingBackground = new ScrollingBackground();
 //        backgroundImageOverlay = new Image(new Texture(Gdx.files.internal("sprites/rock_overlay.png")));
 
         mainMenuBar = new MainMenuBar();
@@ -160,6 +160,7 @@ public class PlayScreen implements Screen {
 
         // Ajout des objets dans les calques
         layer0GraphicObject.addActor(skyImage);
+        layer0GraphicObject.addActor(scrollingBackground);
         layer0GraphicObject.addActor(backgroundImage);
 //        layer0GraphicObject.addActor(backgroundImageOverlay);
         layer1GraphicObject.addActor(station.getBeamActor());
@@ -321,9 +322,9 @@ public class PlayScreen implements Screen {
             autoSaveTimer=0f;
         }
         // Increase Gold
-        if(increaseGoldTimer >= 1) {
+        if(increaseGoldTimer >= Constants.DELAY_GENGOLD_PASSIV) {
             gameManager.increaseGoldPassive();
-            Gdx.app.debug("PlayScreen","Increasing Gold by "+gameInformation.getGenCurrencyPassive()+" val "+gameInformation.getGenGoldPassive());
+            Gdx.app.debug("PlayScreen","Increasing Gold by "+gameInformation.getGenGoldPassive()+" val "+gameInformation.getGenCurrencyPassive());
             gameManager.increaseGoldPassive();
             hud.updateGoldLabel();
             increaseGoldTimer=0f;
@@ -344,7 +345,6 @@ public class PlayScreen implements Screen {
             } else {
                 backgroundImageOverlay.getColor().a = backgroundImageOverlay.getColor().a - 0.05f;
             }
-
  */
 
         if (station.getY() >= Constants.STATION_ANIMATION_MAX_ALTITUDE && stationAnimationUp) {

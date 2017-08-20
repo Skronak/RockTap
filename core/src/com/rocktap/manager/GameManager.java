@@ -64,7 +64,7 @@ public class GameManager {
      * Ajout d'or passif
      */
     public void increaseGoldPassive(){
-        ValueDTO newValue = largeMath.increaseValue(gameInformation.getCurrentGold(), gameInformation.getCurrency(), gameInformation.getGenGoldActive(), gameInformation.getGenCurrencyActive());
+        ValueDTO newValue = largeMath.increaseValue(gameInformation.getCurrentGold(), gameInformation.getCurrency(), gameInformation.getGenGoldPassive(), gameInformation.getGenCurrencyPassive());
         gameInformation.setCurrentGold(newValue.getValue());
         gameInformation.setCurrency(newValue.getCurrency());
         largeMath.formatGameInformation();

@@ -32,14 +32,20 @@ public class ModuleManager {
     public void calculateGoldGen(){
         float goldGen = 0;
         int currGen = 0;
+        float goldGenToAdd=0;
+        int currGenToAdd=0;
+        ValueDTO newVal=new ValueDTO(0,0);
         for (int i=0;i<gameManager.getGameInformation().getUpgradeLevelList().size();i++) {
             if (gameManager.getGameInformation().getUpgradeLevelList().get(i) > 0) {
-                goldGen += moduleEntityList.get(i).getGoldGen()[getGameManager().getGameInformation().getUpgradeLevelList().get(i)];
-                currGen += moduleEntityList.get(i).getCurrency()[getGameManager().getGameInformation().getUpgradeLevelList().get(i)];
+                goldGen=newVal.getValue();
+                currGen=newVal.getCurrency();
+                goldGenToAdd=moduleEntityList.get(i).getGeneration().get(gameManager.getGameInformation().getUpgradeLevelList().get(i)).getValue();
+                currGenToAdd=moduleEntityList.get(i).getGeneration().get(gameManager.getGameInformation().getUpgradeLevelList().get(i)).getCurrency();
+                newVal = gameManager.getLargeMath().increaseValue(goldGen,currGen,goldGenToAdd,currGenToAdd);
             }
         }
-        gameManager.getGameInformation().setGenGoldPassive(goldGen);
-        gameManager.getGameInformation().setGenCurrencyActive(currGen);
+        gameManager.getGameInformation().setGenGoldPassive(newVal.getValue());
+        gameManager.getGameInformation().setGenCurrencyPassive(newVal.getCurrency());
     }
 
     /**
@@ -48,10 +54,10 @@ public class ModuleManager {
      * @return
      */
     public boolean isAvailable (int idSelect) {
-        if (((gameManager.getGameInformation().getCurrency() > moduleEntityList.get(idSelect).getCurrency()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)])
-                || (gameManager.getGameInformation().getCurrency() == moduleEntityList.get(idSelect).getCurrency()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)]
-                && gameManager.getGameInformation().getCurrentGold() >= moduleEntityList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)]))
-           && (gameManager.getGameInformation().getUpgradeLevelList().get(idSelect) < moduleEntityList.get(idSelect).getCurrency().length - 1)) {
+        if ( (gameManager.getGameInformation().getUpgradeLevelList().get(idSelect) < moduleEntityList.get(idSelect).getCost().size()-1) &&
+            ((gameManager.getGameInformation().getCurrency() > moduleEntityList.get(idSelect).getCost().get(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)).getCurrency()
+                || (gameManager.getGameInformation().getCurrency() == moduleEntityList.get(idSelect).getCost().get(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)).getCurrency()
+                && gameManager.getGameInformation().getCurrentGold() >= moduleEntityList.get(idSelect).getCost().get(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)).getValue())))) {
             return true;
         } else {
             return false;
@@ -64,13 +70,13 @@ public class ModuleManager {
      */
     public void increaseUpgradeLevel(int idSelect) {
         if (isAvailable(idSelect)) {
-            float costValue = moduleEntityList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
-            int currencyValue = moduleEntityList.get(idSelect).getCurrency()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
-            this.gameManager.getPlayScreen().getHud().animateDecreaseGold(costValue);
 
-            ValueDTO newValue = gameManager.getLargeMath().decreaseValue(gameManager.getGameInformation().getCurrentGold(),gameManager.getGameInformation().getCurrency(),costValue, currencyValue);
-            this.gameManager.getGameInformation().setCurrentGold(newValue.getValue());
-            this.gameManager.getGameInformation().setCurrency(newValue.getCurrency());
+            ValueDTO decreaseValue = moduleEntityList.get(idSelect).getCost().get(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect));
+            this.gameManager.getPlayScreen().getHud().animateDecreaseGold(decreaseValue);
+
+            ValueDTO gameInformationValue = gameManager.getLargeMath().decreaseValue(gameManager.getGameInformation().getCurrentGold(),gameManager.getGameInformation().getCurrency(),decreaseValue.getValue(), decreaseValue.getCurrency());
+            this.gameManager.getGameInformation().setCurrentGold(gameInformationValue .getValue());
+            this.gameManager.getGameInformation().setCurrency(gameInformationValue .getCurrency());
 
             gameManager.getGameInformation().getUpgradeLevelList().set(idSelect, gameManager.getGameInformation().getUpgradeLevelList().get(idSelect) + 1);
             this.calculateGoldGen();
@@ -79,61 +85,41 @@ public class ModuleManager {
 
         // modifie l'icon si premiere fois que upgrade debloquee
         if (this.moduleMenu.getGameManager().getGameInformation().getUpgradeLevelList().get(idSelect) == 1) {
-            switch (idSelect) {
-                case 0:
-                    this.moduleMenu.getUpgradeButton1().getStyle().imageUp = (this.moduleMenu.getUpgradeDrawable1());
-                    break;
-                case 1:
-                    this.moduleMenu.getUpgradeButton2().getStyle().imageUp = (this.moduleMenu.getUpgradeDrawable2());
-                    break;
-                case 2:
-                    this.moduleMenu.getUpgradeButton3().getStyle().imageUp = (this.moduleMenu.getUpgradeDrawable3());
-                    break;
-                case 3:
-                    this.moduleMenu.getUpgradeButton4().getStyle().imageUp = (this.moduleMenu.getUpgradeDrawable4());
-                    break;
-                case 4:
-                    this.moduleMenu.getUpgradeButton5().getStyle().imageUp = (this.moduleMenu.getUpgradeDrawable5());
-                    break;
-                case 5:
-                    this.moduleMenu.getUpgradeButton6().getStyle().imageUp = (this.moduleMenu.getUpgradeDrawable6());
-                    break;
-                case 6:
-                    this.moduleMenu.getUpgradeButton7().getStyle().imageUp = (this.moduleMenu.getUpgradeDrawable7());
-                    break;
-                case 7:
-                    this.moduleMenu.getUpgradeButton8().getStyle().imageUp = (this.moduleMenu.getUpgradeDrawable8());
-                    break;
-                default:
-                    break;
+                this.moduleMenu.getModuleButtonList().get(idSelect).getStyle().imageUp = (this.moduleMenu.getModuleDrawableUpList().get(idSelect));
             }
-        }
-    }
+     }
+
     /**
      * Met a jour les informations d'un detail d'upgrade
+     * en fonction de l'upgrade selectionne
      * @param idSelect
      */
-    public void updateUpgradeInformation(int idSelect) {
-        this.moduleMenu.getDetailTitre().setText(moduleEntityList.get(idSelect).getTitle());
-        this.moduleMenu.getDetailLevel().setText(String.valueOf(moduleMenu.getGameManager().getGameInformation().getUpgradeLevelList().get(idSelect)));
-        this.moduleMenu.getDetailGold().setText(String.valueOf(moduleEntityList.get(idSelect).getCost()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)]));
-        this.moduleMenu.getDetailDescription().setText(moduleEntityList.get(idSelect).getDescription());
+    public void updateModuleInformation(int idSelect) {
+        ModuleEntity moduleEntity = moduleEntityList.get(idSelect);
+        ValueDTO costValue = moduleEntity.getCost().get(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect));
+        ValueDTO genValue = moduleEntity.getGeneration().get(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect));
 
-        // TODO mettre valeur directement ds JSON
-        float goldGen = moduleEntityList.get(idSelect).getGoldGen()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
-        int currGen = moduleEntityList.get(idSelect).getCurrency()[gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)];
+        this.moduleMenu.getDetailTitre().setText(moduleEntity.getTitle());
+        this.moduleMenu.getDetailLevel().setText(String.valueOf(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)));
+        this.moduleMenu.getDetailGold().setText(this.gameManager.getLargeMath().getDisplayValue(costValue.getValue(), costValue.getCurrency()));
+        this.moduleMenu.getDetailDescription().setText(moduleEntity.getDescription());
+
+        //TODO a switch selon si actif ou passif
         int nbSquare=0;
-        if (goldGen < 5) {
-            nbSquare=1;
-        }else if (goldGen < 12) {
-            nbSquare=2;
-        }else if (goldGen < 20) {
+        int diffCurr = genValue.getCurrency() - gameManager.getGameInformation().getGenCurrencyActive();
+        float diffValue = genValue.getValue() - gameManager.getGameInformation().getGenGoldActive();
+        if (diffCurr > 2) {
+            nbSquare=5;
+        } else if (diffCurr > 1) {
+            nbSquare=4;
+        } else if (diffCurr ==0 && diffValue > gameManager.getGameInformation().getGenGoldActive()) {
             nbSquare=3;
-        }else if (goldGen < 30) {
-            nbSquare = 4;
+        } else if (diffCurr == 0 && diffValue >0 ) {
+            nbSquare=2;
         } else {
-            nbSquare = 5;
+            nbSquare = 1;
         }
+
         for (int i = 0; i<this.moduleMenu.getUpgradeCostTable().getCells().size; i++) {
             if (i<nbSquare) {
                 this.moduleMenu.getUpgradeCostTable().getCells().get(i).getActor().setVisible(true);
@@ -143,6 +129,9 @@ public class ModuleManager {
         }
     }
 
+//*****************************************************
+//                  GETTER & SETTER
+// ****************************************************
     public GameManager getGameManager() {
         return gameManager;
     }
