@@ -407,7 +407,6 @@ public class PlayScreen implements Screen {
         Gdx.app.debug("PlayScreen","saveInformation");
         gameManager.getLargeMath().formatGameInformation();
         gameInformation.saveInformation();
-
     }
 
 //*****************************************************

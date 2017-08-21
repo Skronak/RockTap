@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class Constants {
 
-    public static final String CURRENT_VERSION = "build v0.0.4";
+    public static final String CURRENT_VERSION = "build pre-alpha v1.0.1";
+
     // Taille virtuelle verticale de l'application
     public static final int V_WIDTH = 320; //320
 

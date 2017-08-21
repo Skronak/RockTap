@@ -28,6 +28,7 @@ public class CustomInputProcessor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK) )
+            gameManager.getGameInformation().saveInformation();
             Gdx.app.debug("Closing application", "close");
         return false;
     }
@@ -45,6 +46,7 @@ public class CustomInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         int randCritical = random.nextInt(Constants.CRITICAL_CHANCE) + 1;
+        this.gameManager.getGameInformation().setTotalTapNumber(this.gameManager.getGameInformation().getTotalTapNumber()+1);
         playScreen.processHit();
         if (randCritical == 1) {
             gameManager.increaseGoldCritical();

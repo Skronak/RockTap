@@ -27,6 +27,7 @@ import com.rocktap.entity.GameInformation;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.AbstractMenu;
 import com.rocktap.menu.CreditMenu;
+import com.rocktap.menu.GameInformationMenu;
 import com.rocktap.menu.ModuleMenu;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
@@ -42,6 +43,7 @@ public class Hud implements Disposable {
     private GameInformation gameInformation;
     private ModuleMenu moduleMenu;
     private CreditMenu creditMenu;
+    private GameInformationMenu gameInformationMenu;
     private Label versionLabel;
     private Label scoreLabel;
     private Label goldDecreaseLabel;
@@ -69,6 +71,7 @@ public class Hud implements Disposable {
         this.gameManager = gameManager;
         moduleMenu = new ModuleMenu(gameManager);
         creditMenu = new CreditMenu(gameManager);
+        gameInformationMenu = new GameInformationMenu(gameManager);
         this.gameInformation = gameManager.getGameInformation();
         OrthographicCamera camera = new OrthographicCamera();
         viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
@@ -136,6 +139,15 @@ public class Hud implements Disposable {
         };
         mapButton.addListener(buttonListenerCredit);
 
+        // Declaration des listener
+        InputListener buttonListenerInformation = new ClickListener(){
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                toggleMenu(gameInformationMenu);
+                return false;
+            }
+        };
+        achievButton.addListener(buttonListenerInformation);
+
         InputListener buttonListenerDEV = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 gameManager.getGameInformation().getUpgradeLevelList().set(0, 0);
@@ -183,6 +195,7 @@ public class Hud implements Disposable {
 
         stage.addActor(moduleMenu.getTable());
         stage.addActor(creditMenu.getTable());
+        stage.addActor(gameInformationMenu.getTable());
     }
 
     /**

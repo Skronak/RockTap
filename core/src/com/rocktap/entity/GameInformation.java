@@ -36,6 +36,13 @@ public class GameInformation {
     private int stationId;
     // liste des niveau d'upgrade du joueur pour faciliter son acces
     private List<Integer> upgradeLevelList;
+    // Total gameTime
+    private Long totalGameTime;
+    // Tap number
+    private int totalTapNumber;
+    private int factionId;
+    private int factionLvl;
+    private int factionExp;
 
     public GameInformation() {
         upgradeLevelList = new ArrayList<Integer>();
@@ -62,6 +69,11 @@ public class GameInformation {
             upgradeLevelList.add(0);
             upgradeLevelList.add(0);
             lastLogin = System.currentTimeMillis();
+            totalTapNumber=0;
+            totalGameTime=0l;
+            factionLvl=0;
+            factionId=0;
+            factionExp=0;
             firstPlay = true;
         } else {
             currentGold = prefs.getFloat("currentGold");
@@ -82,6 +94,11 @@ public class GameInformation {
             upgradeLevelList.add(prefs.getInteger("upgradeLevel7"));
             upgradeLevelList.add(prefs.getInteger("upgradeLevel8"));
             lastLogin = prefs.getLong("lastLogin");
+            totalGameTime = prefs.getLong("totalGameTime");
+            totalTapNumber = prefs.getInteger("totalTapNumber");
+            factionExp = prefs.getInteger("factionExp");
+            factionId = prefs.getInteger("factionId");
+            factionLvl = prefs.getInteger("factionLvl");
         }
     }
 
@@ -110,6 +127,11 @@ public class GameInformation {
         prefs.putInteger("upgradeLevel7", upgradeLevelList.get(6));
         prefs.putInteger("upgradeLevel8", upgradeLevelList.get(7));
         prefs.putLong("lastLogin", System.currentTimeMillis());
+        prefs.putLong("totalGameTime", totalGameTime + (System.currentTimeMillis() - lastLogin));
+        prefs.putInteger("totalTapNumber", totalTapNumber);
+        prefs.putInteger("factionExp", factionExp);
+        prefs.getInteger("factionId", factionId);
+        prefs.getInteger("factionLvl", factionLvl);
 
         prefs.flush();
     }
@@ -212,5 +234,21 @@ public class GameInformation {
 
     public void setUpgradeLevelList(List<Integer> upgradeLevelList) {
         this.upgradeLevelList = upgradeLevelList;
+    }
+
+    public Long getTotalGameTime() {
+        return totalGameTime;
+    }
+
+    public void setTotalGameTime(Long totalGameTime) {
+        this.totalGameTime = totalGameTime;
+    }
+
+    public int getTotalTapNumber() {
+        return totalTapNumber;
+    }
+
+    public void setTotalTapNumber(int totalTapNumber) {
+        this.totalTapNumber = totalTapNumber;
     }
 }
