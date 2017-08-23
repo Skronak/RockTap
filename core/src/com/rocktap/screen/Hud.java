@@ -27,6 +27,7 @@ import com.rocktap.entity.GameInformation;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.AbstractMenu;
 import com.rocktap.menu.CreditMenu;
+import com.rocktap.menu.FactionMenu;
 import com.rocktap.menu.GameInformationMenu;
 import com.rocktap.menu.ModuleMenu;
 import com.rocktap.utils.Constants;
@@ -43,6 +44,7 @@ public class Hud implements Disposable {
     private GameInformation gameInformation;
     private ModuleMenu moduleMenu;
     private CreditMenu creditMenu;
+    private FactionMenu factionMenu;
     private GameInformationMenu gameInformationMenu;
     private Label versionLabel;
     private Label scoreLabel;
@@ -71,6 +73,7 @@ public class Hud implements Disposable {
         this.gameManager = gameManager;
         moduleMenu = new ModuleMenu(gameManager);
         creditMenu = new CreditMenu(gameManager);
+        factionMenu = new FactionMenu(gameManager);
         gameInformationMenu = new GameInformationMenu(gameManager);
         this.gameInformation = gameManager.getGameInformation();
         OrthographicCamera camera = new OrthographicCamera();
@@ -196,6 +199,7 @@ public class Hud implements Disposable {
         stage.addActor(moduleMenu.getTable());
         stage.addActor(creditMenu.getTable());
         stage.addActor(gameInformationMenu.getTable());
+        stage.addActor(factionMenu.getTable());
     }
 
     /**
