@@ -1,17 +1,20 @@
 package com.rocktap.menu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.rocktap.input.InputUpgradeMenuButtonListener;
 import com.rocktap.input.InputUpgradeSkillButtonListener;
 import com.rocktap.manager.GameManager;
 import com.rocktap.manager.ModuleManager;
@@ -33,6 +36,9 @@ public class ModuleMenu extends AbstractMenu {
     private Label detailTitre;
     private ModuleManager moduleManager;
     private Texture squareTexture;
+    private Image goldIcon;
+    private Image timeIcon;
+
     private Image squareImage1;
     private Image squareImage2;
     private Image squareImage3;
@@ -49,6 +55,7 @@ public class ModuleMenu extends AbstractMenu {
         super(gameManager);
         this.moduleManager = new ModuleManager(this, gameManager);
         customizeMenuTable();
+
         currentSelection = 1;         // selection 1 module par defaut
         moduleManager.updateModuleInformation(currentSelection);
     }
@@ -57,11 +64,79 @@ public class ModuleMenu extends AbstractMenu {
         // Contenu du menu
         menutable.add(new Label("UPGRADE", skin)).expandX().top().colspan(2).height(50);
         menutable.row();
-        menutable.add(initModuleButtonTable());
-        menutable.add(initUpgradeDetailsTable()).top().expand();
+        // Partie gauche
+        menutable.add(initScrollingModuleSelection()).left().fill();
+        // Partie droite
+        initUpgradeDetailsTable();
+//        menutable.add(initUpgradeDetailsTable()).fillY().width(100);
+        menutable.setVisible(true);
+
 //        menutable.debug();
-        menutable.setVisible(false);
     }
+
+    /**
+     * Methode d'initialisation des modules disponibles a
+     * l'upgrade
+     * @return
+     */
+    private ScrollPane initScrollingModuleSelection() {
+        VerticalGroup scrollContainerVG = new VerticalGroup();
+        scrollContainerVG.space(5f);
+        ScrollPane.ScrollPaneStyle paneStyle = new ScrollPane.ScrollPaneStyle();
+        paneStyle.hScroll = paneStyle.hScrollKnob = paneStyle.vScroll = paneStyle.vScrollKnob;
+        ScrollPane pane = new ScrollPane(scrollContainerVG, paneStyle);
+        pane.setScrollingDisabled(true, false);
+
+        //Couleur de fond du menu
+        Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pm1.setColor(Color.BLUE);
+        pm1.fill();
+
+        // Definition drawables pour les boutons
+        moduleDrawableUpList = new ArrayList<Drawable>();
+        moduleDrawableDownList = new ArrayList<Drawable>();
+        moduleButtonList = new ArrayList<ImageButton>();
+        for (int i = 0; i < this.gameManager.getAssetManager().getUpgradeFile().size(); i++) {
+            moduleDrawableUpList.add(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/" + this.gameManager.getAssetManager().getUpgradeFile().get(i).getIcon())))));
+            moduleDrawableDownList.add(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/" + this.gameManager.getAssetManager().getUpgradeFile().get(i).getIconDisabled())))));
+        }
+
+        // Generation des upgrades de modules disponible
+        for (int i = 0; i < gameManager.getAssetManager().getUpgradeFile().size(); i++) {
+            goldIcon = new Image(new Texture(Gdx.files.internal("icons/gold+.png")));
+            timeIcon = new Image(new Texture(Gdx.files.internal("icons/speed+.png")));
+
+            Table moduleElementTable = new Table();
+            moduleElementTable.setHeight(30);
+
+            Image moduleIconImage = new Image(moduleDrawableUpList.get(i));
+            moduleElementTable.add(moduleIconImage);
+            VerticalGroup vg = new VerticalGroup();
+            Table col2 = new Table();
+            moduleElementTable.add(vg);
+            vg.addActor(new Label(gameManager.getAssetManager().getUpgradeFile().get(i).getTitle(), skin));
+            vg.addActor(col2);
+            col2.add(goldIcon).size(20,20).left();
+            col2.add(new Label("+ 50A", skin)).left();
+            col2.add(timeIcon).size(20,20).left();
+            col2.add(new Label("- 1 min", skin)).left();
+
+//            moduleElementTable.add(moduleElementVG);
+            moduleElementTable.add(new TextButton("500 A",skin)).fill();
+            Button button = new Button(moduleElementTable,skin);
+            button.setColor(Color.BLUE);
+            button.setWidth(200);
+            button.setHeight(50);
+            button.debug();
+            scrollContainerVG.addActor(button);
+        }
+
+
+        Gdx.app.debug("ModuleMenu", "Generation des boutons de Module terminee");
+
+        return pane;
+    }
+
 
     public Table initUpgradeDetailsTable() {
         // Initialisation des icon cost
@@ -83,7 +158,7 @@ public class ModuleMenu extends AbstractMenu {
         squareImage5.setY(-(squareImage5.getHeight() / 2));
 
         detailTitre = new Label("", skin);
-        detailDescription = new Label("DESCRIPTION", skin);
+        detailDescription = new Label("EFFECT", skin);
         detailDescription.setWrap(true);
         detailDescription.pack();
         detailGold = new Label("", skin);
@@ -95,23 +170,22 @@ public class ModuleMenu extends AbstractMenu {
 
         // Detail d'un module
         upgradeCostTable = new Table();
-        detailTable.add(detailTitre).expand().top().height(50).width(100);
+//        detailTable.debug();
+        detailTable.add(detailTitre).top().height(50);//.width(Value.percentWidth(.1F, menutable));
+//        detailTable.row();
+//        detailTable.add(detailDescription).left();
         detailTable.row();
-        detailTable.add(detailDescription).left();
+        Label lab = new Label("LEVEL: ", skin);
+//        detailTable.add(new Label("LEVEL: ", skin)).left();
+        lab.setFontScale(0.75f, 0.75f);
+
+        detailTable.add(lab);
+        detailTable.add(detailLevel);//.width(50);
         detailTable.row();
-        detailTable.add(new Label("LEVEL: ", skin)).left();
-        detailTable.add(detailLevel).width(50);
-        detailTable.row();
-        detailTable.add(new Label("GEN GOLD: ", skin)).left();
-        detailTable.add(upgradeCostTable).width(50);
-        upgradeCostTable.add(squareImage1).width(10).height(10).padLeft(10);
-        upgradeCostTable.add(squareImage2).width(10).height(10).padLeft(5);
-        upgradeCostTable.add(squareImage3).width(10).height(10).padLeft(5);
-        upgradeCostTable.add(squareImage4).width(10).height(10).padLeft(5);
-        upgradeCostTable.add(squareImage5).width(10).height(10).padLeft(5);
+        detailTable.add(new Label("GEN: ", skin)).left();
         detailTable.row();
         detailTable.add(new Label("COST: ", skin)).left();
-        detailTable.add(detailGold).width(50);
+        detailTable.add(detailGold);//.width(50);
         detailTable.row();
         detailTable.row();
         detailTable.add(upgraderButton).expandY().center();
@@ -119,42 +193,13 @@ public class ModuleMenu extends AbstractMenu {
         return detailTable;
     }
 
-    /**
-     * Methode d'initialisation des modules disponibles a
-     * l'upgrade
-     * @return
-     */
-    private ScrollPane initModuleButtonTable() {
-        upgradeTable = new Table();
-        ScrollPane.ScrollPaneStyle paneStyle = new ScrollPane.ScrollPaneStyle();
-        paneStyle.hScroll = paneStyle.hScrollKnob = paneStyle.vScroll = paneStyle.vScrollKnob;
-        ScrollPane pane = new ScrollPane(upgradeTable, paneStyle);
-        pane.setScrollingDisabled(true, false);
-
-        // Definition drawables pour les boutons
-        moduleDrawableUpList = new ArrayList<Drawable>();
-        moduleDrawableDownList = new ArrayList<Drawable>();
-        moduleButtonList = new ArrayList<ImageButton>();
-        for (int i = 0; i < this.gameManager.getAssetManager().getUpgradeFile().size(); i++) {
-            moduleDrawableUpList.add(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/" + this.gameManager.getAssetManager().getUpgradeFile().get(i).getIcon())))));
-            moduleDrawableDownList.add(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/" + this.gameManager.getAssetManager().getUpgradeFile().get(i).getIconDisabled())))));
-        }
-
-        // Initialisation etat bouton au commencement du jeu avec un listener
-        for (int i = 0; i < gameManager.getAssetManager().getUpgradeFile().size(); i++) {
-            if (gameManager.getGameInformation().getUpgradeLevelList().get(i) == 0) {
-                moduleButtonList.add(new ImageButton(moduleDrawableDownList.get(i)));
-            } else {
-                moduleButtonList.add(new ImageButton(moduleDrawableUpList.get(i)));
-            }
-            moduleButtonList.get(i).addListener(new InputUpgradeMenuButtonListener(this, i));
-            upgradeTable.add(moduleButtonList.get(i)).pad(2).row();
-        }
-
-        Gdx.app.debug("ModuleMenu", "Generation des boutons de Module terminee");
-
-        return pane;
-    }
+//            if (gameManager.getGameInformation().getUpgradeLevelList().get(i) == 0) {
+//                moduleButtonList.add(new ImageButton(moduleDrawableDownList.get(i)));
+//            } else {
+//                moduleButtonList.add(new ImageButton(moduleDrawableUpList.get(i)));
+//            }
+//            moduleButtonList.get(i).addListener(new InputUpgradeMenuButtonListener(this, i));
+    //           upgradeTable.add(moduleButtonList.get(i)).pad(2);
 
 //*****************************************************
 //                  GETTER & SETTER

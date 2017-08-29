@@ -1,7 +1,7 @@
 [
   {
     "id": "0",
-    "title": "Capteurs",
+    "title": "Radar upgrade",
     "description": "Amelioration des capteurs",
     "cost":[{"class": "com.rocktap.utils.ValueDTO", "value":100,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0}],
     "generation":[{"class": "com.rocktap.utils.ValueDTO", "value":1,"currency":1},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":1},{"class": "com.rocktap.utils.ValueDTO", "value":400,"currency":1}],
@@ -15,7 +15,7 @@
   },
   {
     "id": "1",
-    "title": "LASER",
+    "title": "LASER upgrade",
     "description": "Amelioration du laser",
     "cost":[{"class": "com.rocktap.utils.ValueDTO", "value":100,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"value":200,"currency":0}],
     "generation":[{"class": "com.rocktap.utils.ValueDTO", "value":500,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0}],
@@ -29,7 +29,7 @@
   },
   {
     "id": "2",
-    "title": "LASER",
+    "title": "Termanlion upgrade",
     "description": "Amelioration du laser",
     "cost":[{"class": "com.rocktap.utils.ValueDTO", "value":100,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"value":200,"currency":0}],
     "generation":[{"class": "com.rocktap.utils.ValueDTO", "value":100,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0}],
@@ -38,12 +38,12 @@
     "posX": 100,
     "posY": 94,
     "sprite": "module2.png",
-    "icon": "o2.png",
+    "icon": "o3.png",
     "iconDisabled" : "icon_disabled.png"
   },
   {
     "id": "3",
-    "title": "Capteurs",
+    "title": "Battery life",
     "description": "Amelioration des capteurs",
     "cost":[{"class": "com.rocktap.utils.ValueDTO", "value":100,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0}],
     "generation":[{"class": "com.rocktap.utils.ValueDTO", "value":100,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0}],
@@ -52,12 +52,12 @@
     "posX": 100,
     "posY": 94,
     "sprite": "module1.png",
-    "icon": "o1.png",
+    "icon": "o4.png",
     "iconDisabled" : "icon_disabled.png"
   },
   {
     "id": "4",
-    "title": "Capteurs",
+    "title": "TerraMission",
     "description": "Amelioration des capteurs",
     "cost":[{"class": "com.rocktap.utils.ValueDTO", "value":100,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0}],
     "generation":[{"class": "com.rocktap.utils.ValueDTO", "value":100,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0}],
@@ -66,12 +66,12 @@
     "posX": 100,
     "posY": 94,
     "sprite": "module1.png",
-    "icon": "o1.png",
+    "icon": "o5.png",
     "iconDisabled" : "icon_disabled.png"
   },
   {
     "id": "5",
-    "title": "Capteurs",
+    "title": "Compensator",
     "description": "Amelioration des capteurs",
     "cost":[{"class": "com.rocktap.utils.ValueDTO", "value":100,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0}],
     "generation":[{"class": "com.rocktap.utils.ValueDTO", "value":100,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0},{"class": "com.rocktap.utils.ValueDTO", "value":200,"currency":0}],
@@ -80,7 +80,7 @@
     "posX": 100,
     "posY": 94,
     "sprite": "module1.png",
-    "icon": "o1.png",
+    "icon": "o6.png",
     "iconDisabled" : "icon_disabled.png"
   },
   {
@@ -94,7 +94,7 @@
     "posX": 100,
     "posY": 94,
     "sprite": "module1.png",
-    "icon": "o1.png",
+    "icon": "o7.png",
     "iconDisabled" : "icon_disabled.png"
   },
   {
@@ -108,7 +108,7 @@
     "posX": 100,
     "posY": 94,
     "sprite": "module1.png",
-    "icon": "o1.png",
+    "icon": "o8.png",
     "iconDisabled" : "icon_disabled.png"
   }
 ]
