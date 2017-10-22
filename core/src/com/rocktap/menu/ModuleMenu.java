@@ -69,7 +69,7 @@ public class ModuleMenu extends AbstractMenu {
         // Partie droite
         initUpgradeDetailsTable();
 //        menutable.add(initUpgradeDetailsTable()).fillY().width(100);
-        menutable.setVisible(true);
+        menutable.setVisible(false);
 
 //        menutable.debug();
     }

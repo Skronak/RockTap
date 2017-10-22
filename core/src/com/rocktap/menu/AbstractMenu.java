@@ -56,6 +56,10 @@ public abstract class AbstractMenu {
         menutable.setPosition(Constants.UPDATE_MENU_PAD_EXTERNAL_WIDTH/2,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
     }
 
+    public void update(){
+
+    }
+
     /**
      * Definition du fond du menu
      * @param fname

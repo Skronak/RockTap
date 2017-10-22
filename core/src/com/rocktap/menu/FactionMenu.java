@@ -27,6 +27,9 @@ public class FactionMenu extends AbstractMenu {
         menutable.row();
 
         factionTable = new Table();
+//        Image image = new Image(new TextureRegion(new Texture("st1.png")));
+//        menutable.add(image).height(250);
+        menutable.row();
         factionButton1 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/faction_log1.png")))));
         factionButton2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/faction_log2.png")))));
         factionButton3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/faction_log3.png")))));

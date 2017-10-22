@@ -66,6 +66,7 @@ public class Hud implements Disposable {
     private Button mapButton;
     private Button achievButton;
     private LargeMath largeMath;
+    private AbstractMenu currentMenu;
 
     public Hud(SpriteBatch sb, GameManager gameManager) {
         largeMath = gameManager.getLargeMath();
@@ -136,7 +137,7 @@ public class Hud implements Disposable {
         // Declaration des listener
         InputListener buttonListenerCredit = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                toggleMenu(creditMenu);
+                toggleMenu(factionMenu);
                 return false;
             }
         };
@@ -241,9 +242,11 @@ public class Hud implements Disposable {
         if (!menu.getTable().isVisible()) {
             menu.getTable().setVisible(true);
             gameManager.setCurrentState(GameState.UPGRADE);
+            currentMenu = menu;
         } else {
             menu.getTable().setVisible(false);
             gameManager.setCurrentState(GameState.IN_GAME);
+            currentMenu=null;
         }
 
         // masque les autres menus
@@ -261,6 +264,12 @@ public class Hud implements Disposable {
         scoreLabel.setText(scoreAffichage);
     }
 
+    // Met a jour l'affichage du menu actif
+    public void updateMenu(){
+        if (null != currentMenu) {
+            currentMenu.update();
+        }
+    }
     public Stage getStage() {
         return stage;
     }

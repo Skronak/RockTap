@@ -194,7 +194,7 @@ public class PlayScreen implements Screen {
         updateLogic();
 //        spriteBatch.begin();
         hud.updateGoldLabel();
-
+        hud.updateMenu();
         stage.act();
 //        station.act(delta);
         stage.draw();
@@ -354,7 +354,7 @@ public class PlayScreen implements Screen {
         }
 
         // station animation
-        if(stationAnimationTimer >= 0.5f) {
+        if(stationAnimationTimer >= 0.2f) {
             if (station.getY() >= Constants.STATION_ANIMATION_MAX_ALTITUDE && stationAnimationUp) {
                 stationAnimationUp = false;
             }
