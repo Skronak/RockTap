@@ -9,6 +9,8 @@
     "height": 25,
     "posX": 100,
     "posY": 94,
+    "iconPosX":115,
+    "iconPosY":0,
     "sprite": "module1.png",
     "icon": "o1.png",
     "iconDisabled" : "icon_disabled.png"
@@ -23,6 +25,8 @@
     "height": 25,
     "posX": 80,
     "posY": -18,
+    "iconPosX":150,
+    "iconPosY":140,
     "sprite": "module2.png",
     "icon": "o2.png",
     "iconDisabled" : "icon_disabled.png"
@@ -37,6 +41,8 @@
     "height": 25,
     "posX": 100,
     "posY": 94,
+    "iconPosX":210,
+    "iconPosY":210,
     "sprite": "module2.png",
     "icon": "o3.png",
     "iconDisabled" : "icon_disabled.png"
@@ -51,6 +57,8 @@
     "height": 25,
     "posX": 100,
     "posY": 94,
+    "iconPosX":0,
+    "iconPosY":0,
     "sprite": "module1.png",
     "icon": "o4.png",
     "iconDisabled" : "icon_disabled.png"
@@ -65,6 +73,8 @@
     "height": 25,
     "posX": 100,
     "posY": 94,
+    "iconPosX":0,
+    "iconPosY":0,
     "sprite": "module1.png",
     "icon": "o5.png",
     "iconDisabled" : "icon_disabled.png"
@@ -79,6 +89,8 @@
     "height": 25,
     "posX": 100,
     "posY": 94,
+    "iconPosX":0,
+    "iconPosY":0,
     "sprite": "module1.png",
     "icon": "o6.png",
     "iconDisabled" : "icon_disabled.png"
@@ -93,6 +105,8 @@
     "height": 25,
     "posX": 100,
     "posY": 94,
+    "iconPosX":0,
+    "iconPosY":0,
     "sprite": "module1.png",
     "icon": "o7.png",
     "iconDisabled" : "icon_disabled.png"
@@ -107,6 +121,8 @@
     "height": 25,
     "posX": 100,
     "posY": 94,
+    "iconPosX":0,
+    "iconPosY":0,
     "sprite": "module1.png",
     "icon": "o8.png",
     "iconDisabled" : "icon_disabled.png"

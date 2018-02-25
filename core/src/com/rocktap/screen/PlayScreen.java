@@ -26,7 +26,6 @@ import com.rocktap.entity.GameInformation;
 import com.rocktap.entity.StationActor;
 import com.rocktap.input.CustomInputProcessor;
 import com.rocktap.manager.GameManager;
-import com.rocktap.menu.MainMenuBar;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.RainEffect;
 import com.rocktap.utils.ScrollingBackground;
@@ -50,7 +49,7 @@ public class PlayScreen implements Screen {
     private float increaseGoldTimer;
     private float stationAnimationTimer;
     private float otherbeamTimer;
-    private float lastTouch;
+    private long lastTouch;
     private int consecutivTouch; // touche consecutives
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -69,7 +68,6 @@ public class PlayScreen implements Screen {
     private Group layer0GraphicObject = new Group(); // Background
     private Group layer1GraphicObject = new Group(); // Objects
     private Group layer2GraphicObject = new Group(); // Foreground
-    private MainMenuBar mainMenuBar;
     private Label goldLabel;
     private StationActor station;
     private ScrollingBackground scrollingBackground;
@@ -89,7 +87,7 @@ public class PlayScreen implements Screen {
         weatherTimer = 0f;
         stationAnimationTimer = 0f;
         otherbeamTimer = 0f;
-        lastTouch = 0f;
+        lastTouch = 0l;
         stationAnimationUp = false;
         textAnimMinX =100;
         consecutivTouch=0;
@@ -159,8 +157,6 @@ public class PlayScreen implements Screen {
         rainEffect = new RainEffect();
 //        backgroundImageOverlay = new Image(new Texture(Gdx.files.internal("sprites/rock_overlay.png")));
 
-        mainMenuBar = new MainMenuBar();
-
         // Gestion des calques
         stage.addActor(layer0GraphicObject);
         stage.addActor(layer1GraphicObject);
@@ -179,9 +175,6 @@ public class PlayScreen implements Screen {
         layer2GraphicObject.addActor(rewardActor);
         layer2GraphicObject.addActor(stationBorderImage);
         layer2GraphicObject.addActor(station);
-
-        layer2GraphicObject.addActor(mainMenuBar);
-
         if (gameInformation.isFirstPlay()) {
             displayTutorial();
         }
@@ -243,7 +236,7 @@ public class PlayScreen implements Screen {
      */
     public void processHit() {
         goldLabel = new Label(gameManager.getLargeMath().getDisplayValue(gameInformation.getGenGoldActive(), gameInformation.getGenCurrencyActive()),new Label.LabelStyle(font, Constants.NORMAL_LABEL_COLOR));
-        goldLabel.setPosition(150,0);
+        goldLabel.setPosition(150,100);
         layer2GraphicObject.addActor(goldLabel);
         goldLabel.addAction(Actions.sequence(
                 Actions.fadeIn(1f),
@@ -251,18 +244,21 @@ public class PlayScreen implements Screen {
                 Actions.removeActor(goldLabel)
         ));
         goldLabel.addAction(Actions.moveTo(150+random.nextInt(100+textAnimMinX)-textAnimMinX,250,3f));
-        lastTouch += Gdx.graphics.getDeltaTime();
-        if (lastTouch >= 0.5f) {
-            station.getBeamActor().decreaseSpeed(0.05f);
-            lastTouch=0f;
+
+        // Augmente vitesse en fonction delai avec derniere touche
+        Gdx.app.log("lastouch",String.valueOf(station.getBeamActor().getIdleAnimation().getFrameDuration()));
+        if (System.currentTimeMillis()-lastTouch >= 500f) {
+            station.getBeamActor().decreaseSpeed(0.08f);
             consecutivTouch=0;
         } else {
             consecutivTouch++;
         }
+        lastTouch=System.currentTimeMillis();
+
         if (consecutivTouch >= 10) {
-            station.getBeamActor().increaseSpeed(0.05f);
-//            beamActor.setWidth(beamActor.getWidth()+1);
-//            beamActor.setX(beamActor.getX()-1);
+            station.getBeamActor().increaseSpeed(0.041f);
+//            station.getBeamActor().setWidth(station.getBeamActor().getWidth()+10);
+//            station.getBeamActor().setX(station.getBeamActor().getX()-5);
         }
     }
 
@@ -342,7 +338,7 @@ public class PlayScreen implements Screen {
             increaseGoldTimer=0f;
         }
 
-        // Autosave
+
         if(weatherTimer >= 30) {
             Gdx.app.debug("PlayScreen","Changing weather");
             if (null == rainEffect.getParent()) {

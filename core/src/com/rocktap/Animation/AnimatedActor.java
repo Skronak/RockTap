@@ -48,7 +48,7 @@ public class AnimatedActor extends Actor {
 
     public void increaseSpeed(float value) {
         animation.setFrameDuration(value);
-            }
+    }
 
     public void decreaseSpeed(float value){
         animation.setFrameDuration(value);

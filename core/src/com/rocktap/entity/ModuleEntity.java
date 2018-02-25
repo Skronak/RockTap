@@ -26,6 +26,8 @@ public class ModuleEntity implements Serializable {
     private String iconDisabled;
     private float width;
     private float height;
+    private float iconPosX;
+    private float iconPosY;
 
     public ModuleEntity() {
     }
@@ -145,5 +147,21 @@ public class ModuleEntity implements Serializable {
 
     public void setHeight(float height) {
         this.height = height;
+    }
+
+    public float getIconPosX() {
+        return iconPosX;
+    }
+
+    public void setIconPosX(float iconPosX) {
+        this.iconPosX = iconPosX;
+    }
+
+    public float getIconPosY() {
+        return iconPosY;
+    }
+
+    public void setIconPosY(float iconPosY) {
+        this.iconPosY = iconPosY;
     }
 }

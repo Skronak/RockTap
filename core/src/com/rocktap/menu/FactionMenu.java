@@ -23,13 +23,15 @@ public class FactionMenu extends AbstractMenu {
 
     public FactionMenu(GameManager gameManager) {
         super(gameManager);
-        menutable.add(new Label("CHOOSE A FACTION", skin)).pad(60);
-        menutable.row();
-
         factionTable = new Table();
-//        Image image = new Image(new TextureRegion(new Texture("st1.png")));
-//        menutable.add(image).height(250);
-        menutable.row();
+
+        customizeMenuTable();
+
+    }
+
+    public void customizeMenuTable() {
+        parentTable.add(new Label("CHOOSE A FACTION", skin)).pad(60);
+        parentTable.row();
         factionButton1 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/faction_log1.png")))));
         factionButton2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/faction_log2.png")))));
         factionButton3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/faction_log3.png")))));
@@ -37,13 +39,6 @@ public class FactionMenu extends AbstractMenu {
         factionTable.add(factionButton1).width(90).pad(2).top();
         factionTable.add(factionButton2).width(90).pad(2);
         factionTable.add(factionButton3).width(90).pad(2);
-        menutable.add(factionTable);
-        menutable.setVisible(false);
+        parentTable.add(factionTable);
     }
-
-
-
-//*****************************************************
-//                  GETTER & SETTER
-// ****************************************************
 }

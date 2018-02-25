@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -17,13 +16,12 @@ public class RainEffect extends Actor {
     private final TextureRegion textureRegion;
     private Rectangle textureRegionBounds1;
     private Rectangle textureRegionBounds2;
-    private int speed = 400;
-    private ShapeRenderer shapeRenderer;
+    private int speed = 500;
 
     public RainEffect() {
         textureRegion = new TextureRegion(new Texture(Gdx.files.internal("sprites/background/rain.png")));
-        textureRegionBounds1 = new Rectangle(0 - Constants.V_WIDTH, 0, Constants.V_WIDTH, Constants.V_HEIGHT);
-        textureRegionBounds2 = new Rectangle(Constants.V_WIDTH, 0, Constants.V_WIDTH, Constants.V_HEIGHT);
+        textureRegionBounds1 = new Rectangle(0 - Constants.V_WIDTH, 100, Constants.V_WIDTH, Constants.V_HEIGHT);
+        textureRegionBounds2 = new Rectangle(Constants.V_WIDTH, 100, Constants.V_WIDTH, Constants.V_HEIGHT);
     }
 
     @Override
@@ -54,6 +52,6 @@ public class RainEffect extends Actor {
 
     private void resetBounds() {
         textureRegionBounds1 = textureRegionBounds2;
-        textureRegionBounds2 = new Rectangle(Constants.V_HEIGHT, 0, Constants.V_HEIGHT, Constants.V_WIDTH);
+        textureRegionBounds2 = new Rectangle(Constants.V_HEIGHT, 200, Constants.V_HEIGHT, Constants.V_WIDTH);
     }
 }

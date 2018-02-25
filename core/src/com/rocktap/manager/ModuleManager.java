@@ -1,7 +1,7 @@
 package com.rocktap.manager;
 
 import com.rocktap.entity.ModuleEntity;
-import com.rocktap.menu.ModuleMenu;
+import com.rocktap.menu.OLD_UpgradeModuleMenu;
 import com.rocktap.utils.ValueDTO;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.List;
 public class ModuleManager {
 
     private GameManager gameManager;
-    private ModuleMenu moduleMenu;
+    private OLD_UpgradeModuleMenu moduleMenu;
     private List<ModuleEntity> moduleEntityList;
 
-    public ModuleManager(ModuleMenu moduleMenu, GameManager gameManager) {
+    public ModuleManager(OLD_UpgradeModuleMenu moduleMenu, GameManager gameManager) {
         this.moduleMenu = moduleMenu;
         this.gameManager = gameManager;
         this.moduleEntityList = gameManager.getAssetManager().getUpgradeFile();
@@ -99,13 +99,14 @@ public class ModuleManager {
         ValueDTO costValue = moduleEntity.getCost().get(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect));
         ValueDTO genValue = moduleEntity.getGeneration().get(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect));
 
+        // TODO revoir pour recuperer valeur suivante
         this.moduleMenu.getDetailTitre().setText(moduleEntity.getTitle());
-        this.moduleMenu.getDetailLevel().setText(String.valueOf(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)));
+        this.moduleMenu.updateDetailLevelLabel(String.valueOf(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)),String.valueOf(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect+1)));
         this.moduleMenu.getDetailGold().setText(this.gameManager.getLargeMath().getDisplayValue(costValue.getValue(), costValue.getCurrency()));
         this.moduleMenu.getDetailDescription().setText(moduleEntity.getDescription());
 
         //TODO a switch selon si actif ou passif
-        int nbSquare=0;
+/*        int nbSquare=0;
         int diffCurr = genValue.getCurrency() - gameManager.getGameInformation().getGenCurrencyActive();
         float diffValue = genValue.getValue() - gameManager.getGameInformation().getGenGoldActive();
         if (diffCurr > 2) {
@@ -127,6 +128,7 @@ public class ModuleManager {
                 this.moduleMenu.getUpgradeCostTable().getCells().get(i).getActor().setVisible(false);
             }
         }
+*/
     }
 
 //*****************************************************
@@ -140,11 +142,11 @@ public class ModuleManager {
         this.gameManager = gameManager;
     }
 
-    public ModuleMenu getModuleMenu() {
+    public OLD_UpgradeModuleMenu getModuleMenu() {
         return moduleMenu;
     }
 
-    public void setModuleMenu(ModuleMenu moduleMenu) {
+    public void setUpgradeModuleMenu(OLD_UpgradeModuleMenu moduleMenu) {
         this.moduleMenu = moduleMenu;
     }
 }

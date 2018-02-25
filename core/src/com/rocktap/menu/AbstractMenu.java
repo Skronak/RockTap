@@ -2,14 +2,12 @@ package com.rocktap.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.manager.GameManager;
-import com.rocktap.utils.BitmapFontGenerator;
 import com.rocktap.utils.Constants;
 
 /**
@@ -18,10 +16,8 @@ import com.rocktap.utils.Constants;
 
 public abstract class AbstractMenu {
     protected GameManager gameManager;
-    protected Table menutable;
+    protected Table parentTable;
     protected Skin skin;
-    protected BitmapFontGenerator generator;
-    protected BitmapFont font;
     private float menu_width;
     private float menu_height;
     private TextureRegionDrawable menuBackground;
@@ -40,20 +36,18 @@ public abstract class AbstractMenu {
 //        Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 //        pm1.setColor(10,1,1,.2f);
 //        pm1.fill();
-//        menutable.setBackground((new TextureRegionDrawable(new TextureRegion(new Texture(pm1)))));
+//        parentTable.setBackground((new TextureRegionDrawable(new TextureRegion(new Texture(pm1)))));
 
-        // Text
-        generator = new BitmapFontGenerator();
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-        font = generator.getFont();
-        generator.dispose();
+
 
         // Definition du menu
-        menutable = new Table();
-        menutable.setBackground(menuBackground);
-        menutable.setWidth(menu_width);
-        menutable.setHeight(menu_height);
-        menutable.setPosition(Constants.UPDATE_MENU_PAD_EXTERNAL_WIDTH/2,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
+        parentTable = new Table();
+        parentTable.setBackground(menuBackground);
+        parentTable.setWidth(menu_width);
+        parentTable.setHeight(menu_height);
+        parentTable.setPosition(Constants.UPDATE_MENU_PAD_EXTERNAL_WIDTH/2,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
+        parentTable.setVisible(false);
     }
 
     public void update(){
@@ -83,8 +77,7 @@ public abstract class AbstractMenu {
         this.gameManager = gameManager;
     }
 
-    public Table getTable() {
-        return menutable;
+    public Table getParentTable() {
+        return parentTable;
     }
-
 }

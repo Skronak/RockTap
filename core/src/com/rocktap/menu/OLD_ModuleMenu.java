@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.rocktap.input.InputUpgradeSkillButtonListener;
 import com.rocktap.manager.GameManager;
 import com.rocktap.manager.ModuleManager;
 
@@ -27,7 +26,7 @@ import java.util.List;
  * Menu d'update
  * // TODO: super menu desactivant l'input listener, gerer un state?
  */
-public class ModuleMenu extends AbstractMenu {
+public class OLD_ModuleMenu extends AbstractMenu {
     private Table upgradeTable;
     private Table upgradeCostTable;
     private Label detailGold;
@@ -51,27 +50,26 @@ public class ModuleMenu extends AbstractMenu {
     private List<Drawable> moduleDrawableUpList;
     private List<Drawable> moduleDrawableDownList;
 
-    public ModuleMenu(GameManager gameManager) {
+    public OLD_ModuleMenu(GameManager gameManager) {
         super(gameManager);
-        this.moduleManager = new ModuleManager(this, gameManager);
+        this.moduleManager = new ModuleManager(new OLD_UpgradeModuleMenu(gameManager), gameManager);
         customizeMenuTable();
 
         currentSelection = 1;         // selection 1 module par defaut
-        moduleManager.updateModuleInformation(currentSelection);
+//        moduleManager.updateModuleInformation(currentSelection);
     }
 
     public void customizeMenuTable() {
         // Contenu du menu
-        menutable.add(new Label("UPGRADE", skin)).expandX().top().colspan(2).height(50);
-        menutable.row();
+        parentTable.add(new Label("UPGRADE", skin)).expandX().top().colspan(2).height(50);
+        parentTable.row();
         // Partie gauche
-        menutable.add(initScrollingModuleSelection()).left().fill();
+        parentTable.add(initScrollingModuleSelection()).left().fill();
         // Partie droite
         initUpgradeDetailsTable();
-//        menutable.add(initUpgradeDetailsTable()).fillY().width(100);
-        menutable.setVisible(false);
+//        parentTable.add(initUpgradeDetailsTable()).fillY().width(100);
 
-//        menutable.debug();
+//        parentTable.debug();
     }
 
     /**
@@ -92,7 +90,7 @@ public class ModuleMenu extends AbstractMenu {
         pm1.setColor(Color.BLUE);
         pm1.fill();
 
-        // Definition drawables pour les boutons
+        // Definition drawables possibles pour les boutons
         moduleDrawableUpList = new ArrayList<Drawable>();
         moduleDrawableDownList = new ArrayList<Drawable>();
         moduleButtonList = new ArrayList<ImageButton>();
@@ -132,7 +130,7 @@ public class ModuleMenu extends AbstractMenu {
         }
 
 
-        Gdx.app.debug("ModuleMenu", "Generation des boutons de Module terminee");
+        Gdx.app.debug("OLD_ModuleMenu", "Generation des boutons de Module terminee");
 
         return pane;
     }
@@ -164,14 +162,14 @@ public class ModuleMenu extends AbstractMenu {
         detailGold = new Label("", skin);
         detailLevel = new Label("", skin);
         TextButton upgraderButton = new TextButton("UPGRADER", skin);
-        InputUpgradeSkillButtonListener customInputSkillListener = new InputUpgradeSkillButtonListener(this);
-        upgraderButton.addListener(customInputSkillListener);
+//        InputUpgradeSkillButtonListener customInputSkillListener = new InputUpgradeSkillButtonListener(this);
+//        upgraderButton.addListener(customInputSkillListener);
         Table detailTable = new Table();
 
         // Detail d'un module
         upgradeCostTable = new Table();
 //        detailTable.debug();
-        detailTable.add(detailTitre).top().height(50);//.width(Value.percentWidth(.1F, menutable));
+        detailTable.add(detailTitre).top().height(50);//.width(Value.percentWidth(.1F, parentTable));
 //        detailTable.row();
 //        detailTable.add(detailDescription).left();
         detailTable.row();

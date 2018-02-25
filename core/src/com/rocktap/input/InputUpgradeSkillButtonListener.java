@@ -2,7 +2,7 @@ package com.rocktap.input;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.rocktap.menu.ModuleMenu;
+import com.rocktap.menu.OLD_UpgradeModuleMenu;
 
 /**
  * Created by Skronak on 29/01/2017.
@@ -10,9 +10,9 @@ import com.rocktap.menu.ModuleMenu;
  */
 public class InputUpgradeSkillButtonListener extends ClickListener {
 
-    private ModuleMenu moduleMenu;
+    private OLD_UpgradeModuleMenu moduleMenu;
 
-    public InputUpgradeSkillButtonListener(ModuleMenu moduleMenu) {
+    public InputUpgradeSkillButtonListener(OLD_UpgradeModuleMenu moduleMenu) {
         this.moduleMenu = moduleMenu;
     }
 

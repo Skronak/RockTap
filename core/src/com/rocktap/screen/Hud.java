@@ -23,17 +23,18 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.rocktap.entity.GameInformation;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.AbstractMenu;
-import com.rocktap.menu.CreditMenu;
+import com.rocktap.menu.AchievmentMenu;
 import com.rocktap.menu.FactionMenu;
 import com.rocktap.menu.GameInformationMenu;
-import com.rocktap.menu.ModuleMenu;
+import com.rocktap.menu.UpgradeMenu;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
 import com.rocktap.utils.LargeMath;
 import com.rocktap.utils.ValueDTO;
+
+import java.util.ArrayList;
 
 /**
  * Created by Skronak on 11/12/2016.
@@ -41,9 +42,7 @@ import com.rocktap.utils.ValueDTO;
 public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
-    private GameInformation gameInformation;
-    private ModuleMenu moduleMenu;
-    private CreditMenu creditMenu;
+    private UpgradeMenu upgradeMenu;
     private FactionMenu factionMenu;
     private GameInformationMenu gameInformationMenu;
     private Label versionLabel;
@@ -67,16 +66,12 @@ public class Hud implements Disposable {
     private Button achievButton;
     private LargeMath largeMath;
     private AbstractMenu currentMenu;
+    // Liste de tous les menus du jeu
+    private ArrayList<AbstractMenu> activeMenuList;
 
     public Hud(SpriteBatch sb, GameManager gameManager) {
         largeMath = gameManager.getLargeMath();
-        initButton();
         this.gameManager = gameManager;
-        moduleMenu = new ModuleMenu(gameManager);
-        creditMenu = new CreditMenu(gameManager);
-        factionMenu = new FactionMenu(gameManager);
-        gameInformationMenu = new GameInformationMenu(gameManager);
-        this.gameInformation = gameManager.getGameInformation();
         OrthographicCamera camera = new OrthographicCamera();
         viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
         stage = new Stage(viewport, sb);
@@ -84,12 +79,28 @@ public class Hud implements Disposable {
         font = generator.getFont();
         generator.dispose();
         font.setColor(Color.WHITE);
+
+        initMenu();
+        initButton();
         initHud();
     }
 
     /**
-     * Initialisation des bouton du playscreen
-     * TODO gerer la taille des images des boutons
+     * Initialise les menu
+     */
+    private void initMenu() {
+        upgradeMenu = new UpgradeMenu(gameManager);
+        factionMenu = new FactionMenu(gameManager);
+        gameInformationMenu = new GameInformationMenu(gameManager);
+
+        activeMenuList = new ArrayList<AbstractMenu>();
+        activeMenuList.add(upgradeMenu);
+        activeMenuList.add(new AchievmentMenu(gameManager));
+        activeMenuList.add(factionMenu);
+        activeMenuList.add(gameInformationMenu);
+    }
+    /**
+     * Initialisation des bouton du hud
      */
     private void initButton() {
         upgradeButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b2.png"));
@@ -128,16 +139,24 @@ public class Hud implements Disposable {
         // Declaration des listener
         InputListener buttonListener = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                toggleMenu(moduleMenu);
+                toggleMenu(activeMenuList.get(0));
                 return false;
             }
         };
         upgradeButton.addListener(buttonListener);
 
+        InputListener buttonListenerSkill = new ClickListener(){
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                toggleMenu(activeMenuList.get(1));
+                return false;
+            }
+        };
+        skillButton.addListener(buttonListenerSkill);
+
         // Declaration des listener
         InputListener buttonListenerCredit = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                toggleMenu(factionMenu);
+                toggleMenu(activeMenuList.get(2));
                 return false;
             }
         };
@@ -146,7 +165,7 @@ public class Hud implements Disposable {
         // Declaration des listener
         InputListener buttonListenerInformation = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                toggleMenu(gameInformationMenu);
+                toggleMenu(activeMenuList.get(3));
                 return false;
             }
         };
@@ -166,14 +185,17 @@ public class Hud implements Disposable {
                 return false;
             }
         };
-        achievButton.addListener(buttonListenerDEV);
     }
 
+    /**
+     * Initialise les informations du HUD et
+     * ajoute les elemnts dans le stage
+     */
     private void initHud(){
         versionLabel = new Label(Constants.CURRENT_VERSION, new Label.LabelStyle(font, Color.WHITE));
         versionLabel.setFontScale(0.5f);
         versionLabel.setWrap(true);
-        scoreLabel = new Label(largeMath.getDisplayValue(gameInformation.getCurrentGold(), gameInformation.getCurrency()), new Label.LabelStyle(font, Color.WHITE));
+        scoreLabel = new Label(largeMath.getDisplayValue(gameManager.getGameInformation().getCurrentGold(), gameManager.getGameInformation().getCurrency()), new Label.LabelStyle(font, Color.WHITE));
         scoreLabel.setAlignment(Align.right);
         scoreLabel.setFontScale(2);
 
@@ -197,10 +219,10 @@ public class Hud implements Disposable {
         table.add(achievButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
         stage.addActor(table);
 
-        stage.addActor(moduleMenu.getTable());
-        stage.addActor(creditMenu.getTable());
-        stage.addActor(gameInformationMenu.getTable());
-        stage.addActor(factionMenu.getTable());
+        stage.addActor(activeMenuList.get(0).getParentTable());
+        stage.addActor(activeMenuList.get(1).getParentTable());
+        stage.addActor(activeMenuList.get(2).getParentTable());
+        stage.addActor(activeMenuList.get(3).getParentTable());
     }
 
     /**
@@ -238,29 +260,26 @@ public class Hud implements Disposable {
      * Modification du listener d'input en fonction de l'etat
      */
     private void toggleMenu(AbstractMenu menu) {
-        // Affiche le menu s'il n'est pas visible
-        if (!menu.getTable().isVisible()) {
-            menu.getTable().setVisible(true);
-            gameManager.setCurrentState(GameState.UPGRADE);
-            currentMenu = menu;
-        } else {
-            menu.getTable().setVisible(false);
-            gameManager.setCurrentState(GameState.IN_GAME);
-            currentMenu=null;
+        // Masque tous les menu
+        for (int i = 1; i < activeMenuList.size(); i++) {
+            activeMenuList.get(i).getParentTable().setVisible(false);
         }
 
-        // masque les autres menus
-        if (menu instanceof CreditMenu ){
-            moduleMenu.getTable().setVisible(false);
-        }
-        if (menu instanceof ModuleMenu){
-            creditMenu.getTable().setVisible(false);
+        // Affiche le menu concerné si non visible
+        if (menu.equals(currentMenu)) {
+            menu.getParentTable().setVisible(false);
+            gameManager.setCurrentState(GameState.IN_GAME);
+            currentMenu = null;
+        } else {
+            menu.getParentTable().setVisible(true);
+            gameManager.setCurrentState(GameState.UPGRADE);
+            currentMenu = menu;
         }
     }
 
     // Met a jour l'affichage de l'or
     public void updateGoldLabel(){
-        String scoreAffichage = largeMath.getDisplayValue(gameInformation.getCurrentGold(), gameInformation.getCurrency());
+        String scoreAffichage = largeMath.getDisplayValue(gameManager.getGameInformation().getCurrentGold(), gameManager.getGameInformation().getCurrency());
         scoreLabel.setText(scoreAffichage);
     }
 

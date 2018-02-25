@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Skronak on 30/01/2017.
  *
- * Classe de l'etat du compte du Joueur
+ * Classe de stat & information sur le compte du jeu
  */
 public class GameInformation {
     // dernier login

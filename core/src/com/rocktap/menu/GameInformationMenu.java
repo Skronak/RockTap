@@ -26,34 +26,35 @@ public class GameInformationMenu extends AbstractMenu {
         criticalHitLabel = new Label(String.valueOf("x "+gameManager.getGameInformation().getCriticalRate()), skin);
         gameTimeLabel = new Label(String.valueOf((gameManager.getGameInformation().getTotalGameTime()/ (1000*60*60)) + " hours"), skin);
         tapNumberLabel = new Label(String.valueOf(gameManager.getGameInformation().getTotalTapNumber()), skin);
-        menutable.add(new Label("GAME INFORMATION ", skin)).left().top();
-        menutable.row();
-        menutable.row();
-        menutable.add(new Label("Station lvl: ", skin)).left();
-        menutable.add(stationLvlLabel).left();
-        menutable.row();
-        menutable.add(new Label("Current gold: ", skin)).left();
-        menutable.add(goldLabel).left();
-        menutable.row();
-        menutable.add(new Label("Active Gold generation: ", skin)).left();
-        menutable.add(activGoldGenLabel).left();
-        menutable.row();
-        menutable.add(new Label("Passive gold generation: ", skin)).left();
-        menutable.add(passivGoldGenLabel).left();
-        menutable.row();
-        menutable.add(new Label("Critical rate: ", skin)).left();
-        menutable.add(criticalHitLabel).left();
-        menutable.row();
-        menutable.add(new Label("Total Game time: ", skin)).left();
-        menutable.add(gameTimeLabel).left();
-        menutable.row();
-        menutable.add(new Label("Total tap number: ", skin)).left();
-        menutable.add(tapNumberLabel).left();
-        menutable.row();
-
-        menutable.setVisible(false);
+        customizeMenuTable();
     }
 
+    public void customizeMenuTable() {
+        parentTable.add(new Label("GAME INFORMATION ", skin)).left().top();
+        parentTable.row();
+        parentTable.row();
+        parentTable.add(new Label("Station lvl: ", skin)).left();
+        parentTable.add(stationLvlLabel).left();
+        parentTable.row();
+        parentTable.add(new Label("Current gold: ", skin)).left();
+        parentTable.add(goldLabel).left();
+        parentTable.row();
+        parentTable.add(new Label("Active Gold generation: ", skin)).left();
+        parentTable.add(activGoldGenLabel).left();
+        parentTable.row();
+        parentTable.add(new Label("Passive gold generation: ", skin)).left();
+        parentTable.add(passivGoldGenLabel).left();
+        parentTable.row();
+        parentTable.add(new Label("Critical rate: ", skin)).left();
+        parentTable.add(criticalHitLabel).left();
+        parentTable.row();
+        parentTable.add(new Label("Total Game time: ", skin)).left();
+        parentTable.add(gameTimeLabel).left();
+        parentTable.row();
+        parentTable.add(new Label("Total tap number: ", skin)).left();
+        parentTable.add(tapNumberLabel).left();
+        parentTable.row();
+    }
     public void update() {
         stationLvlLabel.setText(String.valueOf(gameManager.getGameInformation().getStationId()));
         goldLabel.setText(gameManager.getLargeMath().getDisplayValue(gameManager.getGameInformation().getCurrentGold(), gameManager.getGameInformation().getCurrency()));
