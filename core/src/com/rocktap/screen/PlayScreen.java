@@ -72,7 +72,8 @@ public class PlayScreen implements Screen {
     private StationActor station;
     private ScrollingBackground scrollingBackground;
     private RainEffect rainEffect;
-
+    private int[] goldLabelPosition = {100,80,120,70,130};
+    int gLPPointer;
 
     private AnimatedActor tapActor;
     private AnimatedActor rewardActor;
@@ -236,7 +237,12 @@ public class PlayScreen implements Screen {
      */
     public void processHit() {
         goldLabel = new Label(gameManager.getLargeMath().getDisplayValue(gameInformation.getGenGoldActive(), gameInformation.getGenCurrencyActive()),new Label.LabelStyle(font, Constants.NORMAL_LABEL_COLOR));
-        goldLabel.setPosition(150,100);
+        goldLabel.setPosition(150,goldLabelPosition[gLPPointer]);
+        if (gLPPointer<goldLabelPosition.length-1){
+            gLPPointer++;
+        } else {
+            gLPPointer=0;
+        }
         layer2GraphicObject.addActor(goldLabel);
         goldLabel.addAction(Actions.sequence(
                 Actions.fadeIn(1f),

@@ -52,7 +52,7 @@ public class OLD_ModuleMenu extends AbstractMenu {
 
     public OLD_ModuleMenu(GameManager gameManager) {
         super(gameManager);
-        this.moduleManager = new ModuleManager(new OLD_UpgradeModuleMenu(gameManager), gameManager);
+//        this.moduleManager = new ModuleManager(new OLD_UpgradeModuleMenu(gameManager), gameManager);
         customizeMenuTable();
 
         currentSelection = 1;         // selection 1 module par defaut

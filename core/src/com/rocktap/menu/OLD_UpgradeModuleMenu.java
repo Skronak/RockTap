@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.input.InputUpgradeMenuButtonListener;
-import com.rocktap.input.InputUpgradeSkillButtonListener;
 import com.rocktap.manager.GameManager;
 import com.rocktap.manager.ModuleManager;
 
@@ -41,7 +40,7 @@ public class OLD_UpgradeModuleMenu extends AbstractMenu {
 
     public OLD_UpgradeModuleMenu(GameManager gameManager) {
         super(gameManager);
-        this.moduleManager = new ModuleManager(this, gameManager);
+//        this.moduleManager = new ModuleManager(this, gameManager);
         customizeMenu();
 
         currentSelection = 1;
@@ -92,8 +91,8 @@ public class OLD_UpgradeModuleMenu extends AbstractMenu {
         parentTable.add(group).width(280).height(280);
         parentTable.row();
 
-        InputUpgradeSkillButtonListener customInputSkillListener = new InputUpgradeSkillButtonListener(this);
-        buyButton.addListener(customInputSkillListener);
+//        InputUpgradeSkillButtonListener customInputSkillListener = new InputUpgradeSkillButtonListener(this);
+//        buyButton.addListener(customInputSkillListener);
         // Partie details
         detailTitre = new Label("Canon Garrick", skin);
         detailDescription = new Label("GoldGeneration 50A >>", skin);

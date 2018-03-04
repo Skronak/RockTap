@@ -159,7 +159,12 @@ public class LargeMath {
         return (decimalFormat.format(valueDto.getValue()) + printLetter(valueDto.getCurrency()));
     }
 
-//    formatGameInformation();
+    public String getDisplayValue(ValueDTO valueDTO) {
+        ValueDTO valueDto = adjustCurrency(valueDTO.getValue(), valueDTO.getCurrency());
+        return (decimalFormat.format(valueDto.getValue()) + printLetter(valueDto.getCurrency()));
+    }
+
+    //    formatGameInformation();
 
     /**
      * Renvoie la lettre Majuscule associee a l'index passe en parametre

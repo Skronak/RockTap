@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Skronak on 17/07/2017.
+ * Classe representant l'ensemble des modules du jeu
  *
  */
 public class ModuleEntity implements Serializable {

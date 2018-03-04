@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.rocktap.input.InputUpgradeSkillButtonListener;
 import com.rocktap.manager.GameManager;
 import com.rocktap.manager.ModuleManager;
 
@@ -37,13 +37,14 @@ public class UpgradeMenu extends AbstractMenu {
     private Texture squareTexture;
     private Image goldIcon;
     private Image timeIcon;
-
     private Image squareImage1;
     private Image squareImage2;
     private Image squareImage3;
     private Image squareImage4;
     private Image squareImage5;
-
+    private Label moduleLevelLabel;
+    private Image moduleLevelImage;
+    private TextButton buyButton;
     // indique le skill actuellement selectionne
     private int currentSelection;
     private List<ImageButton> moduleButtonList;
@@ -52,19 +53,19 @@ public class UpgradeMenu extends AbstractMenu {
 
     public UpgradeMenu(GameManager gameManager) {
         super(gameManager);
-        this.moduleManager = new ModuleManager(new OLD_UpgradeModuleMenu(gameManager), gameManager);
+        this.moduleManager = new ModuleManager(this, gameManager);
         customizeMenuTable();
 
         currentSelection = 1;         // selection 1 module par defaut
-//        moduleManager.updateModuleInformation(currentSelection);
     }
 
     public void customizeMenuTable() {
         // Contenu du menu
-        parentTable.add(new Label("UPGRADE", skin)).expandX().top().colspan(2).height(50);
+        parentTable.add(new Label("UPGRADE", skin)).colspan(2).height(50);
         parentTable.row();
         // Partie gauche
-        parentTable.add(initScrollingModuleSelection()).left().fill();
+        parentTable.add(initScrollingModuleSelection());
+        parentTable.debug();
     }
 
     /**
@@ -94,35 +95,46 @@ public class UpgradeMenu extends AbstractMenu {
             moduleDrawableDownList.add(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/" + this.gameManager.getAssetManager().getUpgradeFile().get(i).getIconDisabled())))));
         }
 
-        // Generation des upgrades de modules disponible
+        // Genere chaque upgrade disponible dans la liste
         for (int i = 0; i < gameManager.getAssetManager().getUpgradeFile().size(); i++) {
             goldIcon = new Image(new Texture(Gdx.files.internal("icons/gold+.png")));
             timeIcon = new Image(new Texture(Gdx.files.internal("icons/speed+.png")));
+            Image moduleIconImage = new Image(moduleDrawableUpList.get(i));
+            moduleLevelLabel = new Label("Level "+gameManager.getGameInformation().getUpgradeLevelList().get(i), skin);
+            moduleLevelImage = new Image(new Texture(Gdx.files.internal("icons/upgradeMenu/mLvl"+gameManager.getGameInformation().getUpgradeLevelList().get(i)+".png")));
+            buyButton = new TextButton(moduleManager.getCostLabelById(i),gameManager.getAssetManager().getModuleMenuBuyTxtBtnStyle());
+            InputUpgradeSkillButtonListener customInputSkillListener = new InputUpgradeSkillButtonListener(this);
+            buyButton.addListener(customInputSkillListener);
+            // Premiere colonne
+            VerticalGroup vgCol0 = new VerticalGroup();
+            vgCol0.addActor((new Label(gameManager.getAssetManager().getUpgradeFile().get(i).getTitle(), skin)));
+            vgCol0.addActor(moduleIconImage);
 
+            // Liste level actuel du module
+            Table moduleLevelGroup = new Table();
+            moduleLevelGroup.add(moduleLevelLabel).left().colspan(4);
+            moduleLevelGroup.row();
+            moduleLevelGroup.add(moduleLevelImage).size(120,40).left().colspan(4);
+            moduleLevelGroup.row();
+            moduleLevelGroup.add(goldIcon).size(20,20).left();
+            moduleLevelGroup.add(new Label("+ 50A", skin)).left();
+            moduleLevelGroup.add(timeIcon).size(20,20).left();
+            moduleLevelGroup.add(new Label("- 1 min", skin)).left();
             Table moduleElementTable = new Table();
             moduleElementTable.setHeight(30);
+            moduleElementTable.add(vgCol0).width(80);
+            moduleElementTable.add(moduleLevelGroup);
+            moduleElementTable.add(buyButton).height(90).width(70);
+            moduleElementTable.debug();
+            scrollContainerVG.addActor(moduleElementTable);
 
-            Image moduleIconImage = new Image(moduleDrawableUpList.get(i));
-            moduleElementTable.add(moduleIconImage);
-            VerticalGroup vg = new VerticalGroup();
-            Table col2 = new Table();
-            moduleElementTable.add(vg);
-            vg.addActor(new Label(gameManager.getAssetManager().getUpgradeFile().get(i).getTitle(), skin));
-            vg.addActor(col2);
-            col2.add(goldIcon).size(20,20).left();
-            col2.add(new Label("+ 50A", skin)).left();
-            col2.add(timeIcon).size(20,20).left();
-            col2.add(new Label("- 1 min", skin)).left();
-
-//            moduleElementTable.add(moduleElementVG);
-            moduleElementTable.add(new TextButton("500 A",skin)).fill();
-            Button button = new Button(moduleElementTable,skin);
-            button.setColor(Color.BLUE);
+            // Bouton englobe le moduleElement pour afficher un fond
+            /* Button button = new Button(moduleElementTable,skin);
+            button.setColor(Color.GRAY);
             button.setWidth(200);
             button.setHeight(50);
-            scrollContainerVG.addActor(button);
+            scrollContainerVG.addActor(button);*/
         }
-
 
         Gdx.app.log("ModuleMenu", "Generation des boutons de Module terminee");
 
