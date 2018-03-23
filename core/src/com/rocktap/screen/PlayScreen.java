@@ -49,6 +49,7 @@ public class PlayScreen implements Screen {
     private float increaseGoldTimer;
     private float stationAnimationTimer;
     private float otherbeamTimer;
+    private float logicTimer;
     private long lastTouch;
     private int consecutivTouch; // touche consecutives
     private OrthographicCamera camera;
@@ -74,7 +75,6 @@ public class PlayScreen implements Screen {
     private RainEffect rainEffect;
     private int[] goldLabelPosition = {100,80,120,70,130};
     int gLPPointer;
-
     private AnimatedActor tapActor;
     private AnimatedActor rewardActor;
     private Array<TextureRegion> frames;
@@ -88,6 +88,7 @@ public class PlayScreen implements Screen {
         weatherTimer = 0f;
         stationAnimationTimer = 0f;
         otherbeamTimer = 0f;
+        logicTimer = 0f;
         lastTouch = 0l;
         stationAnimationUp = false;
         textAnimMinX =100;
@@ -252,7 +253,6 @@ public class PlayScreen implements Screen {
         goldLabel.addAction(Actions.moveTo(150+random.nextInt(100+textAnimMinX)-textAnimMinX,250,3f));
 
         // Augmente vitesse en fonction delai avec derniere touche
-        Gdx.app.log("lastouch",String.valueOf(station.getBeamActor().getIdleAnimation().getFrameDuration()));
         if (System.currentTimeMillis()-lastTouch >= 500f) {
             station.getBeamActor().decreaseSpeed(0.08f);
             consecutivTouch=0;
@@ -317,12 +317,21 @@ public class PlayScreen implements Screen {
         stationAnimationTimer += Gdx.graphics.getDeltaTime();
         otherbeamTimer += Gdx.graphics.getDeltaTime();
         weatherTimer += Gdx.graphics.getDeltaTime();
+        logicTimer += Gdx.graphics.getDeltaTime();
+
         switch (gameManager.getCurrentState()) {
-            case IN_GAME: Gdx.input.setInputProcessor(inputMultiplexer);
+            case IN_GAME:
+                Gdx.input.setInputProcessor(inputMultiplexer);
                 break;
-            case UPGRADE:  Gdx.input.setInputProcessor(hud.getStage());
+            case UPGRADE:
+                Gdx.input.setInputProcessor(hud.getStage());
+                if (logicTimer > 1f) {
+                    hud.getUpgradeModuleMenu().getModuleManager().updateUpgradeButton();
+                    logicTimer=0f;
+                }
                 break;
-            case CREDIT:  Gdx.input.setInputProcessor(hud.getStage());
+            case CREDIT:
+                Gdx.input.setInputProcessor(hud.getStage());
                 break;
             default:
                 break;

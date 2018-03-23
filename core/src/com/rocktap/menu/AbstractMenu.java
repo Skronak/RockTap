@@ -30,16 +30,8 @@ public abstract class AbstractMenu {
     public void initMenu() {
         menu_width = Constants.V_WIDTH - Constants.UPDATE_MENU_PAD_EXTERNAL_WIDTH;
         menu_height = Constants.V_HEIGHT - Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT - (Constants.UPDATE_MENU_PAD_EXTERNAL_HEIGHT);
-        menuBackground = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("credit.png"))));
-
-        //Couleur de fond du menu
-//        Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-//        pm1.setColor(10,1,1,.2f);
-//        pm1.fill();
-//        parentTable.setBackground((new TextureRegionDrawable(new TextureRegion(new Texture(pm1)))));
-
-        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-
+        menuBackground = gameManager.getAssetManager().getMenuBackgroundTexture();
+        skin = gameManager.getAssetManager().getSkin();
 
         // Definition du menu
         parentTable = new Table();
@@ -48,6 +40,7 @@ public abstract class AbstractMenu {
         parentTable.setHeight(menu_height);
         parentTable.setPosition(Constants.UPDATE_MENU_PAD_EXTERNAL_WIDTH/2,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
         parentTable.setVisible(false);
+        parentTable.top();
     }
 
     public void update(){

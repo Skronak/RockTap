@@ -46,7 +46,6 @@ public class GameInformation {
 
     public GameInformation() {
         upgradeLevelList = new ArrayList<Integer>();
-
         prefs = Gdx.app.getPreferences("rockTapPreferences");
 
         if (!prefs.contains("lastLogin")) {

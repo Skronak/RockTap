@@ -28,7 +28,7 @@ import com.rocktap.menu.AbstractMenu;
 import com.rocktap.menu.AchievmentMenu;
 import com.rocktap.menu.FactionMenu;
 import com.rocktap.menu.GameInformationMenu;
-import com.rocktap.menu.UpgradeMenu;
+import com.rocktap.menu.UpgradeModuleMenu;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
 import com.rocktap.utils.LargeMath;
@@ -38,11 +38,14 @@ import java.util.ArrayList;
 
 /**
  * Created by Skronak on 11/12/2016.
+ *
+ * Classe HUD contenant tous les boutons et menu
+ * du jeu
  */
 public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
-    private UpgradeMenu upgradeMenu;
+    private UpgradeModuleMenu upgradeModuleMenu;
     private FactionMenu factionMenu;
     private GameInformationMenu gameInformationMenu;
     private Label versionLabel;
@@ -89,12 +92,12 @@ public class Hud implements Disposable {
      * Initialise les menu
      */
     private void initMenu() {
-        upgradeMenu = new UpgradeMenu(gameManager);
+        upgradeModuleMenu = new UpgradeModuleMenu(gameManager);
         factionMenu = new FactionMenu(gameManager);
         gameInformationMenu = new GameInformationMenu(gameManager);
 
         activeMenuList = new ArrayList<AbstractMenu>();
-        activeMenuList.add(upgradeMenu);
+        activeMenuList.add(upgradeModuleMenu);
         activeMenuList.add(new AchievmentMenu(gameManager));
         activeMenuList.add(factionMenu);
         activeMenuList.add(gameInformationMenu);
@@ -301,4 +304,9 @@ public class Hud implements Disposable {
     public void resize(int width, int height) {
         viewport.update(width, height);
     }
+
+    public UpgradeModuleMenu getUpgradeModuleMenu() {
+        return upgradeModuleMenu;
+    }
+
 }

@@ -34,4 +34,5 @@ public class ValueDTO {
     public void setCurrency(int currency) {
         this.currency = currency;
     }
+
 }

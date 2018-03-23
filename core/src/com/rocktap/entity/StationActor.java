@@ -23,7 +23,7 @@ public class StationActor extends Actor {
     private float deltatime;
     private int width;
     private int height;
-    private List<ModuleEntity> upgradeList;
+    private List<ModuleElementDTO> moduleToDraw;
     private float animSpeed;
     private TextureRegion currentFrame;
     private AnimatedActor beamActor;
@@ -36,7 +36,7 @@ public class StationActor extends Actor {
         this.animSpeed = animSpeed;
         this.setPosition(posX, posY);
         this.gameManager = gameManager;
-        upgradeList = loadUpgrade();
+        moduleToDraw = loadUpgrade();
         beamActor = initBeam();
 
         //Animation par defaut de la station
@@ -50,20 +50,20 @@ public class StationActor extends Actor {
     }
 
     /**
-     * Generation des upgrade de la station
+     * Liste des upgrades a afficher
      * @return
      */
-    public List<ModuleEntity> loadUpgrade() {
-        this.upgradeList = new ArrayList<ModuleEntity>();
-        int y = 0;
+    public List<ModuleElementDTO> loadUpgrade() {
+        this.moduleToDraw = new ArrayList<ModuleElementDTO>();
         for (int i=0;i<gameManager.getGameInformation().getUpgradeLevelList().size();i++) {
+            // Pour les upgrade 1-8, si lvl i > 0 alors ajoute dans liste a afficher
             if (gameManager.getGameInformation().getUpgradeLevelList().get(i) > 0) {
-                upgradeList.add(gameManager.getAssetManager().getUpgradeFile().get(i));
-                upgradeList.get(y).setTextureRegion(new TextureRegion(new Texture(Gdx.files.internal(("sprites/upgrade/"+upgradeList.get(y).getSprite())))));
-                y+=1;
+                ModuleElementDTO moduleElementDTO = gameManager.getAssetManager().getModuleElementList().get(i);
+                moduleElementDTO.setTextureRegion(new TextureRegion(new Texture(Gdx.files.internal(("sprites/upgrade/"+moduleElementDTO.getLevel().get(gameManager.getGameInformation().getUpgradeLevelList().get(i)).getSprite())))));
+                moduleToDraw.add(moduleElementDTO);
             }
         }
-        return upgradeList;
+        return moduleToDraw;
     }
 
 
@@ -89,9 +89,8 @@ public class StationActor extends Actor {
     public void draw (Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         currentFrame = (TextureRegion) idleAnimation.getKeyFrame(deltatime, true);
-        //TODO upgradeActor s'affichent eux meme
-        for (int i=0;i<upgradeList.size();i++) {
-            batch.draw(upgradeList.get(i).getTextureRegion(), getX()+ upgradeList.get(i).getPosX(), getY() + upgradeList.get(i).getPosY(), upgradeList.get(i).getWidth(), upgradeList.get(i).getHeight());
+        for (int i=0;i<moduleToDraw.size();i++) {
+            batch.draw(moduleToDraw.get(i).getTextureRegion(), getX()+ moduleToDraw.get(i).getPosX(), getY() + moduleToDraw.get(i).getPosY(), moduleToDraw.get(i).getWidth(), moduleToDraw.get(i).getHeight());
         }
         batch.draw(currentFrame,getX(),getY(),width,height);
     }
