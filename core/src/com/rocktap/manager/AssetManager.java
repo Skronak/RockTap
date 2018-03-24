@@ -88,9 +88,23 @@ public class AssetManager {
             moduleDrawableUpList.add(new Texture(Gdx.files.internal("sprites/menu/" + getModuleElementList().get(i).getIcon())));
         }
 
+        // Pour chaque niveau de rarete on met dans la liste
         for (int i=0; i<7;i++){
-            upgradeLvlImageList.add(new Texture(Gdx.files.internal("icons/upgradeMenu/mLvl"+i+".png")));
+            upgradeLvlImageList.add(new Texture(Gdx.files.internal("icons/upgradeMenu/mLvlC"+i+".png")));
         }
+        for (int i=0; i<7;i++){
+            upgradeLvlImageList.add(new Texture(Gdx.files.internal("icons/upgradeMenu/mLvlB"+i+".png")));
+        }
+        for (int i=0; i<7;i++){
+            upgradeLvlImageList.add(new Texture(Gdx.files.internal("icons/upgradeMenu/mLvlA"+i+".png")));
+        }
+        for (int i=0; i<7;i++){
+            upgradeLvlImageList.add(new Texture(Gdx.files.internal("icons/upgradeMenu/mLvlS"+i+".png")));
+        }
+        for (int i=0; i<7;i++){
+            upgradeLvlImageList.add(new Texture(Gdx.files.internal("icons/upgradeMenu/mLvlSS"+i+".png")));
+        }
+
     }
 
 //*****************************************************

@@ -91,10 +91,11 @@ public class ModuleManager {
      * @param idSelect
      */
     public void increaseUpgradeLevel(int idSelect) {
-        // Soustraction du cout de l'upgrade
+        // Calcul et Affichage de la soustraction
         ValueDTO decreaseValue = moduleEntityList.get(idSelect).getLevel().get(gameManager.getGameInformation().getUpgradeLevelList().get(idSelect)).getCost();
         this.gameManager.getPlayScreen().getHud().animateDecreaseGold(decreaseValue);
-        // TODO Utile?
+
+        // Mise a jour du montant des golds du joueur
         ValueDTO gameInformationValue = gameManager.getLargeMath().decreaseValue(gameManager.getGameInformation().getCurrentGold(),gameManager.getGameInformation().getCurrency(),decreaseValue.getValue(), decreaseValue.getCurrency());
         this.gameManager.getGameInformation().setCurrentGold(gameInformationValue .getValue());
         this.gameManager.getGameInformation().setCurrency(gameInformationValue .getCurrency());
@@ -103,7 +104,7 @@ public class ModuleManager {
         gameManager.getGameInformation().getUpgradeLevelList().set(idSelect, gameManager.getGameInformation().getUpgradeLevelList().get(idSelect) + 1);
         this.calculateGoldGen();
 
-        // Regenere les upgrades a afficher
+        // Regenere les upgrades a afficher en jeux
         this.moduleMenu.getGameManager().getStationActor().loadUpgrade();
      }
 
@@ -119,7 +120,7 @@ public class ModuleManager {
         moduleElementMenu.getModuleLevelLabel().setText("Level "+gameManager.getGameInformation().getUpgradeLevelList().get(id));
         moduleElementMenu.getModuleLevelImage().setDrawable(new TextureRegionDrawable(new TextureRegion(gameManager.getAssetManager().getUpgradeLvlImageList().get(gameManager.getGameInformation().getUpgradeLevelList().get(id)))));
         moduleElementMenu.getSkillIcon().setDrawable(new TextureRegionDrawable(new TextureRegion(gameManager.getAssetManager().getModuleDrawableUpList().get(id))));
-        moduleElementMenu.getGoldBonusLabel().setText("50");
+        moduleElementMenu.getGoldBonusLabel().setText("+"+gameManager.getLargeMath().getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()));
         moduleElementMenu.getTimeBonusLabel().setText("20");
         moduleElementMenu.getBuyButton().setText(gameManager.getLargeMath().getDisplayValue(moduleLevel.getCost().getValue(), moduleLevel.getCost().getCurrency()));
     }

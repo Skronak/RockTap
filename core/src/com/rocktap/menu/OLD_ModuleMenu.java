@@ -143,7 +143,7 @@ public class OLD_ModuleMenu {
 //        detailGold = new Label("", skin);
 //        detailLevel = new Label("", skin);
 //        TextButton upgraderButton = new TextButton("UPGRADER", skin);
-////        InputUpgradeSkillButtonListener customInputSkillListener = new InputUpgradeSkillButtonListener(this);
+////        OLD_InputUpgradeSkillButtonListener customInputSkillListener = new OLD_InputUpgradeSkillButtonListener(this);
 ////        upgraderButton.addListener(customInputSkillListener);
 //        Table detailTable = new Table();
 //

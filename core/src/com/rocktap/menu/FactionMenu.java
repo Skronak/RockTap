@@ -40,5 +40,6 @@ public class FactionMenu extends AbstractMenu {
         factionTable.add(factionButton2).width(90).pad(2);
         factionTable.add(factionButton3).width(90).pad(2);
         parentTable.add(factionTable);
+        factionTable.debug();
     }
 }

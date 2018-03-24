@@ -11,7 +11,7 @@ import java.util.Random;
 
 /**
  * Created by Skronak on 29/01/2017.
- * Listener des input sur le PLayscreen
+ * Listener des input sur le Playscreen
  */
 public class CustomInputProcessor implements InputProcessor {
 

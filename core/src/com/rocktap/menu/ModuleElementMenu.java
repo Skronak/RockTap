@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.entity.ModuleElementDTO;
+import com.rocktap.entity.ModuleLevelDTO;
 import com.rocktap.input.BuyUpgradeButtonListener;
 import com.rocktap.manager.GameManager;
 
@@ -44,11 +45,12 @@ public class ModuleElementMenu extends Table {
     public void initModuleElementMenu(int i) {
         ModuleElementDTO moduleElementDTOSource = gameManager.getAssetManager().getModuleElementList().get(i);
         int currentLevel = gameManager.getGameInformation().getUpgradeLevelList().get(i);
+        ModuleLevelDTO moduleLevel = gameManager.getAssetManager().getModuleElementList().get(i).getLevel().get(gameManager.getGameInformation().getUpgradeLevelList().get(i));
 
         moduleLevelLabel = new Label("Level "+currentLevel, gameManager.getAssetManager().getSkin());
         moduleLevelImage = new Image(gameManager.getAssetManager().getUpgradeLvlImageList().get(gameManager.getGameInformation().getUpgradeLevelList().get(i)));
         elementTitle = new Label(moduleElementDTOSource.getTitle(), gameManager.getAssetManager().getSkin());
-        goldBonusLabel = new Label("50", gameManager.getAssetManager().getSkin());
+        goldBonusLabel = new Label("+"+gameManager.getLargeMath().getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()), gameManager.getAssetManager().getSkin());
         timeBonusLabel = new Label("- 1 min", gameManager.getAssetManager().getSkin());
         buyButton = new TextButton(gameManager.getLargeMath().getDisplayValue(moduleElementDTOSource.getLevel().get(currentLevel).getCost().getValue(), moduleElementDTOSource.getLevel().get(currentLevel).getCost().getCurrency()),gameManager.getAssetManager().getModuleMenuBuyTxtBtnStyle());
         buyButton.addListener(new BuyUpgradeButtonListener(upgradeModuleMenu, i));

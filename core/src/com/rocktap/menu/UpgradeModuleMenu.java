@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -25,9 +27,10 @@ public class UpgradeModuleMenu extends AbstractMenu {
     private Label detailLevel;
     private Label detailTitre;
     private ModuleManager moduleManager;
-
+    private Stack stack;
     private Label moduleLevelLabel;
     private TextButton buyButton;
+    private Table moduleDetails;
     // indique le skill actuellement selectionne
     private int currentSelection;
     private List<ImageButton> moduleButtonList;
@@ -42,11 +45,27 @@ public class UpgradeModuleMenu extends AbstractMenu {
     }
 
     public void customizeMenuTable() {
-        // Contenu du menu
+        // titre
         parentTable.add(new Label("UPGRADE", skin)).colspan(2).height(50);
         parentTable.row();
-        // Partie gauche
-        parentTable.add(initScrollingModuleSelection());
+
+        // Contenu
+        stack = new Stack();
+       // moduleDetails = new Table();
+       // moduleDetails.add(new Label("ELELELE",skin));
+       // moduleDetails.setWidth(100);
+       // moduleDetails.setHeight(100);
+       // moduleDetails.setPosition(Constants.UPDATE_MENU_PAD_EXTERNAL_WIDTH/2,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
+       // moduleDetails.setVisible(true);
+       // moduleDetails.setBackground(gameManager.getAssetManager().getMenuBackgroundTexture());
+       // moduleDetails.top();
+       // moduleDetails.debug();
+
+
+
+        stack.addActor(initScrollingModuleSelection());
+        //stack.addActor(moduleDetails);
+        parentTable.add(stack);
         parentTable.debug();
 
     }

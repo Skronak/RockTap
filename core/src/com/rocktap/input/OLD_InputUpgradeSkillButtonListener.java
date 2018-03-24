@@ -8,11 +8,11 @@ import com.rocktap.menu.UpgradeModuleMenu;
  * Created by Skronak on 29/01/2017.
  * Listener du bouton BUY de l'upgrade d'un module
  */
-public class InputUpgradeSkillButtonListener extends ClickListener {
+public class OLD_InputUpgradeSkillButtonListener extends ClickListener {
 
     private UpgradeModuleMenu moduleMenu;
 
-    public InputUpgradeSkillButtonListener(UpgradeModuleMenu moduleMenu) {
+    public OLD_InputUpgradeSkillButtonListener(UpgradeModuleMenu moduleMenu) {
         this.moduleMenu = moduleMenu;
     }
 

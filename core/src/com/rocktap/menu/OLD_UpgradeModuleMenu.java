@@ -75,7 +75,7 @@ public class OLD_UpgradeModuleMenu {
 //        parentTable.add(group).width(280).height(280);
 //        parentTable.row();
 //
-////        InputUpgradeSkillButtonListener customInputSkillListener = new InputUpgradeSkillButtonListener(this);
+////        OLD_InputUpgradeSkillButtonListener customInputSkillListener = new OLD_InputUpgradeSkillButtonListener(this);
 ////        buyButton.addListener(customInputSkillListener);
 //
 //        // Partie details

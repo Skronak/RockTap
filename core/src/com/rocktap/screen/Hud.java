@@ -51,9 +51,9 @@ public class Hud implements Disposable {
     private Label versionLabel;
     private Label scoreLabel;
     private Label goldDecreaseLabel;
-    BitmapFont font;
-    com.rocktap.utils.BitmapFontGenerator generator;
-    Table table;
+    private BitmapFont font;
+    private com.rocktap.utils.BitmapFontGenerator generator;
+    private Table table;
     private GameManager gameManager;
     private Texture upgradeButtonTextureUp;
     private Texture skillButtonTextureUp;
@@ -222,6 +222,7 @@ public class Hud implements Disposable {
         table.add(achievButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
         stage.addActor(table);
 
+        // Ajout des menu a l'interface
         stage.addActor(activeMenuList.get(0).getParentTable());
         stage.addActor(activeMenuList.get(1).getParentTable());
         stage.addActor(activeMenuList.get(2).getParentTable());

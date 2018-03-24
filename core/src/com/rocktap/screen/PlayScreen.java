@@ -353,7 +353,6 @@ public class PlayScreen implements Screen {
             increaseGoldTimer=0f;
         }
 
-
         if(weatherTimer >= 30) {
             Gdx.app.debug("PlayScreen","Changing weather");
             if (null == rainEffect.getParent()) {
@@ -412,6 +411,8 @@ public class PlayScreen implements Screen {
     public void dispose() {
         Gdx.app.debug("PlayScreen","dispose");
         spriteBatch.dispose();
+        hud.dispose();
+        generator.dispose();
         Gdx.app.debug("PlayScreen","saveInformation");
         gameManager.getLargeMath().formatGameInformation();
         gameInformation.saveInformation();
