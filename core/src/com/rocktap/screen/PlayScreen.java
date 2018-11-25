@@ -184,6 +184,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        camera.update();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 //        this.spriteBatch.setProjectionMatrix(camera.combined);
         updateLogic();
