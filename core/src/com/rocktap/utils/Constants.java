@@ -15,6 +15,10 @@ public class Constants {
     // Taille virtuelle horizontale de l'application
     public static final int V_HEIGHT = 570; //570
 
+    public static final int CAMERA_MAX_Y=295;
+
+    public static final int CAMERA_MIN_Y=-600;
+
     // Taux generation gold offline
     public static float RATE_GENGOLD_OFFLINE = 0.5f;
 

@@ -2,6 +2,8 @@ package com.rocktap.manager;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.entity.ModuleElementDTO;
 import com.rocktap.entity.ModuleLevelDTO;
@@ -123,6 +125,13 @@ public class ModuleManager {
         moduleElementMenu.getGoldBonusLabel().setText("+"+gameManager.getLargeMath().getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()));
         moduleElementMenu.getTimeBonusLabel().setText("20");
         moduleElementMenu.getBuyButton().setText(gameManager.getLargeMath().getDisplayValue(moduleLevel.getCost().getValue(), moduleLevel.getCost().getCurrency()));
+        animateLabel(moduleElementMenu.getGoldBonusLabel());
+        animateLabel(moduleElementMenu.getTimeBonusLabel());
+    }
+
+    public void animateLabel(Label label) {
+        label.clearActions();
+        label.addAction(Actions.sequence(Actions.color(Color.BLUE,0.5f), Actions.color(Color.WHITE)));
     }
 
 //*****************************************************

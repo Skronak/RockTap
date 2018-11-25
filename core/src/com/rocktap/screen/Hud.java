@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.rocktap.input.CameraDragListener;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.AbstractMenu;
 import com.rocktap.menu.AchievmentMenu;
@@ -71,8 +72,9 @@ public class Hud implements Disposable {
     private AbstractMenu currentMenu;
     // Liste de tous les menus du jeu
     private ArrayList<AbstractMenu> activeMenuList;
+    private PlayScreen playScreen;
 
-    public Hud(SpriteBatch sb, GameManager gameManager) {
+    public Hud(SpriteBatch sb, GameManager gameManager, PlayScreen playscreen) {
         largeMath = gameManager.getLargeMath();
         this.gameManager = gameManager;
         OrthographicCamera camera = new OrthographicCamera();
@@ -82,7 +84,7 @@ public class Hud implements Disposable {
         font = generator.getFont();
         generator.dispose();
         font.setColor(Color.WHITE);
-
+        this.playScreen = playscreen;
         initMenu();
         initButton();
         initHud();
@@ -138,6 +140,8 @@ public class Hud implements Disposable {
         style4.up = achievDrawableUp;
         style4.down = achievDrawableDown;
         achievButton = new ImageButton(style4);
+
+        stage.addListener(new CameraDragListener(playScreen));
 
         // Declaration des listener
         InputListener buttonListener = new ClickListener(){

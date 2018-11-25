@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -52,7 +53,7 @@ public class PlayScreen implements Screen {
     private float logicTimer;
     private long lastTouch;
     private int consecutivTouch; // touche consecutives
-    private OrthographicCamera camera;
+    public OrthographicCamera camera;
     private Viewport viewport;
     private Hud hud;
     private int textAnimMinX;
@@ -102,11 +103,12 @@ public class PlayScreen implements Screen {
         random = new Random();
         gameManager = new GameManager(gameInformation, this);
         gameManager.calculateRestReward();
-        hud = new Hud(spriteBatch, gameManager);
 
         camera = new OrthographicCamera(Constants.V_WIDTH, Constants.V_HEIGHT);
         viewport = new StretchViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
         stage = new Stage(viewport);
+
+        hud = new Hud(spriteBatch, gameManager, this);
 
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
@@ -149,9 +151,12 @@ public class PlayScreen implements Screen {
         stationBorderImage = new Image(new Texture(files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_0.png")));
         stationBorderImage.setBounds(70,400,200,100);
 //        backgroundImage = new Image(new Texture(Gdx.files.internal("sprites/rock.png")));
-        backgroundImage = new Image(new Texture(files.internal("sprites/background/rockValley.png")));
+        //backgroundImage = new Image(new Texture(files.internal("sprites/background/rockValley.png")));
+        //backgroundImage.setScale(0.6f,0.6f);
+        //backgroundImage.setPosition(-130, backgroundImage.getY());
+        backgroundImage = new Image(new Texture(files.internal("sprites/background/rockValley2.png")));
         backgroundImage.setScale(0.6f,0.6f);
-        backgroundImage.setPosition(-130, backgroundImage.getY());
+        backgroundImage.setPosition(-180,-(backgroundImage.getHeight()-550)*0.6f);
         skyImage = new Image(new Texture(files.internal("sprites/background/sky.png")));
         skyImage.scaleBy(0.4f);
 
@@ -182,6 +187,16 @@ public class PlayScreen implements Screen {
         }
     }
 
+    // member variables:
+    float timeToCameraZoomTarget, cameraZoomTarget, cameraZoomOrigin, cameraZoomDuration;
+
+    private void zoomTo (float newZoom, float duration){
+        cameraZoomOrigin = camera.zoom;
+        cameraZoomTarget = newZoom;
+        timeToCameraZoomTarget = cameraZoomDuration = duration;
+    }
+
+
     @Override
     public void render(float delta) {
         camera.update();
@@ -199,12 +214,17 @@ public class PlayScreen implements Screen {
         hud.draw();
 
         //DEBUG
+        if (timeToCameraZoomTarget > 0){
+            timeToCameraZoomTarget -= delta;
+            float progress = timeToCameraZoomTarget < 0 ? 1 : 1f - timeToCameraZoomTarget / cameraZoomDuration;
+            camera.zoom = Interpolation.pow3Out.apply(cameraZoomOrigin, cameraZoomTarget, progress);
+        }
+
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            camera.zoom = 1;
+            zoomTo(1,3);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            camera.zoom = 2;
-        }
+            zoomTo(2,3);        }
 
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             camera.translate(-1f,0f);
