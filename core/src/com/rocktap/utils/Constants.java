@@ -29,7 +29,7 @@ public class Constants {
     public static int DELAY_AUTOSAVE = 300;
 
     // Taille du texte du HUD
-    public static int HUD_TEXT_SIZE = 22;
+    public static int HUD_TEXT_SIZE = 15;
 
     // Style du font utilise
     public static String FONT_STYLE = "stocky";

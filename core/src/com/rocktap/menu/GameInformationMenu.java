@@ -55,6 +55,8 @@ public class GameInformationMenu extends AbstractMenu {
         parentTable.add(tapNumberLabel).left();
         parentTable.row();
     }
+
+    @Override
     public void update() {
         stationLvlLabel.setText(String.valueOf(gameManager.getGameInformation().getStationId()));
         goldLabel.setText(gameManager.getLargeMath().getDisplayValue(gameManager.getGameInformation().getCurrentGold(), gameManager.getGameInformation().getCurrency()));

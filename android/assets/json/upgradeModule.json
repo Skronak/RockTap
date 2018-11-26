@@ -3,7 +3,7 @@
     "id": "0",
     "title": "Radar",
     "description": "Amelioration des capteurs",
-    "cost":[{"value":100,"currency":0},{"value":200,"currency":3},{"value":200,"currency":0},{"value":200,"currency":0},{"value":200,"currency":0},{"value":200,"currency":0}],
+    "cost":[{"value":100,"currency":0},{"value":200,"currency":0},{"value":200,"currency":0},{"value":200,"currency":0},{"value":200,"currency":0},{"value":200,"currency":0}],
     "generation":[{"value":1,"currency":1},{"value":200,"currency":1},{"value":400,"currency":1},{"value":400,"currency":1},{"value":400,"currency":1},{"value":400,"currency":1}],
     "width": 30,
     "height": 25,

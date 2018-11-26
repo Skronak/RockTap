@@ -18,7 +18,7 @@ import com.rocktap.manager.GameManager;
  *
  */
 
-public class ModuleElementMenu extends Table {
+public class ModuleElementTable extends Table {
     private GameManager gameManager;
     private UpgradeModuleMenu upgradeModuleMenu;
 
@@ -32,7 +32,7 @@ public class ModuleElementMenu extends Table {
     private Image goldIcon;
     private Image timeIcon;
 
-    public ModuleElementMenu(GameManager gameManager, UpgradeModuleMenu upgradeModuleMenu){
+    public ModuleElementTable(GameManager gameManager, UpgradeModuleMenu upgradeModuleMenu){
         this.gameManager = gameManager;
         this.upgradeModuleMenu = upgradeModuleMenu;
     }
@@ -93,13 +93,10 @@ public class ModuleElementMenu extends Table {
     // OBSOLETE
     public void updateModuleElementMenu(int i) {
         ModuleElementDTO moduleElementDTOSource = gameManager.getAssetManager().getModuleElementList().get(i);
-
         moduleLevelLabel.setText("Level "+gameManager.getGameInformation().getUpgradeLevelList().get(i));
         moduleLevelImage.setDrawable(new TextureRegionDrawable(new TextureRegion(gameManager.getAssetManager().getUpgradeLvlImageList().get(gameManager.getGameInformation().getUpgradeLevelList().get(i)))));
         skillIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(gameManager.getAssetManager().getModuleDrawableUpList().get(i))));
         elementTitle.setText(moduleElementDTOSource.getTitle());
-        goldBonusLabel.setText("50");
-        timeBonusLabel.setText("20");
         buyButton.setText(gameManager.getLargeMath().getDisplayValue(moduleElementDTOSource.getLevel().get(i).getCost().getValue(), moduleElementDTOSource.getLevel().get(i).getCost().getCurrency()));
     }
 //*****************************************************

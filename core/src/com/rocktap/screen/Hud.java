@@ -73,6 +73,7 @@ public class Hud implements Disposable {
     // Liste de tous les menus du jeu
     private ArrayList<AbstractMenu> activeMenuList;
     private PlayScreen playScreen;
+    private Label depthLabel;
 
     public Hud(SpriteBatch sb, GameManager gameManager, PlayScreen playscreen) {
         largeMath = gameManager.getLargeMath();
@@ -205,6 +206,8 @@ public class Hud implements Disposable {
         scoreLabel = new Label(largeMath.getDisplayValue(gameManager.getGameInformation().getCurrentGold(), gameManager.getGameInformation().getCurrency()), new Label.LabelStyle(font, Color.WHITE));
         scoreLabel.setAlignment(Align.right);
         scoreLabel.setFontScale(2);
+        depthLabel = new Label(String.valueOf(gameManager.getGameInformation().getDepth()+" Meters"), new Label.LabelStyle(font, Color.WHITE));
+        depthLabel.setFontScale(1);
 
         goldDecreaseLabel = new Label("", new Label.LabelStyle(font, Color.RED));
         goldDecreaseLabel.setVisible(false);
@@ -213,24 +216,32 @@ public class Hud implements Disposable {
         Stack stack = new Stack();
         stack.add(scoreLabel);
         stack.add(goldDecreaseLabel);
+
         table = new Table();
-        table.top();
+//        table.top();
         table.setFillParent(true);
+        table.add(stack).expandX().align(Align.right).colspan(4);
         table.row();
-        table.add(versionLabel).expandX().align(Align.left).top();
-        table.add(stack).expandX().align(Align.right).colspan(3);
+        table.add(versionLabel).expandX().align(Align.right).colspan(3).bottom();
+        table.row();
+        table.add(depthLabel);
         table.row();
         table.add(upgradeButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
         table.add(skillButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
         table.add(mapButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
         table.add(achievButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
-        stage.addActor(table);
+        table.row();
+        table.addActor(activeMenuList.get(0).getParentTable());
+        table.addActor(activeMenuList.get(1).getParentTable());
+        table.addActor(activeMenuList.get(2).getParentTable());
+        table.addActor(activeMenuList.get(3).getParentTable());
 
+        stage.addActor(table);
         // Ajout des menu a l'interface
-        stage.addActor(activeMenuList.get(0).getParentTable());
-        stage.addActor(activeMenuList.get(1).getParentTable());
-        stage.addActor(activeMenuList.get(2).getParentTable());
-        stage.addActor(activeMenuList.get(3).getParentTable());
+        //stage.addActor(activeMenuList.get(0).getParentTable());
+        //stage.addActor(activeMenuList.get(1).getParentTable());
+        //stage.addActor(activeMenuList.get(2).getParentTable());
+        //stage.addActor(activeMenuList.get(3).getParentTable());
     }
 
     /**
@@ -292,7 +303,7 @@ public class Hud implements Disposable {
     }
 
     // Met a jour l'affichage du menu actif
-    public void updateMenu(){
+    public void updateMenu() {
         if (null != currentMenu) {
             currentMenu.update();
         }

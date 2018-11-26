@@ -40,7 +40,6 @@ public class UpgradeModuleMenu extends AbstractMenu {
         super(gameManager);
         this.moduleManager = new ModuleManager(this, gameManager);
         customizeMenuTable();
-
         currentSelection = 1;         // selection 1 module par defaut
     }
 
@@ -51,23 +50,10 @@ public class UpgradeModuleMenu extends AbstractMenu {
 
         // Contenu
         stack = new Stack();
-       // moduleDetails = new Table();
-       // moduleDetails.add(new Label("ELELELE",skin));
-       // moduleDetails.setWidth(100);
-       // moduleDetails.setHeight(100);
-       // moduleDetails.setPosition(Constants.UPDATE_MENU_PAD_EXTERNAL_WIDTH/2,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
-       // moduleDetails.setVisible(true);
-       // moduleDetails.setBackground(gameManager.getAssetManager().getMenuBackgroundTexture());
-       // moduleDetails.top();
-       // moduleDetails.debug();
-
-
-
         stack.addActor(initScrollingModuleSelection());
         //stack.addActor(moduleDetails);
         parentTable.add(stack);
         parentTable.debug();
-
     }
 
     /**
@@ -91,15 +77,19 @@ public class UpgradeModuleMenu extends AbstractMenu {
         moduleButtonList = new ArrayList<ImageButton>();
 
         for (int i = 0; i < gameManager.getAssetManager().getModuleElementList().size(); i++) {
-            ModuleElementMenu moduleElementMenu = new ModuleElementMenu(gameManager, this);
-            moduleElementMenu.initModuleElementMenu(i);
-            scrollContainerVG.addActor(moduleElementMenu);
+            ModuleElementTable moduleElementTable = new ModuleElementTable(gameManager, this);
+            moduleElementTable.initModuleElementMenu(i);
+            scrollContainerVG.addActor(moduleElementTable);
         }
         Gdx.app.log("ModuleMenu", "Generation des boutons de Module terminee");
 
         return pane;
     }
 
+    @Override
+    public void update() {
+        moduleManager.updateUpgradeButton();
+    }
 //*****************************************************
 //                  GETTER & SETTER
 // ****************************************************

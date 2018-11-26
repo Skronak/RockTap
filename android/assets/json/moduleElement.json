@@ -1,30 +1,30 @@
 [
   {
     "id": "0",
-    "title": "Detecteur",
-    "description": "Amelioration des capteurs",
+    "title": "Station",
+    "description": "Amelioration de la station",
     "posX": 100,
-    "posY": 94,
+    "posY": 90,
     "iconPosX":115,
     "iconPosY":0,
     "icon": "icon0.png",
     "width": 30,
-    "height": 25,
+    "height": 40,
     "level":[{
-      "cost":{"value":200,"currency":4},
+      "cost":{"value":200,"currency":0},
       "generation":{"value":0,"currency":0},
       "sprite": ""
       },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":0},
       "sprite": "module0.png"
     },{
       "cost":{"value":300,"currency":1},
-      "generation":{"value":10,"currency":4},
+      "generation":{"value":100,"currency":0},
       "sprite": "module0.png"
       },{
       "cost": {"value": 500, "currency":1 },
-      "generation": {"value": 100,"currency": 4},
+      "generation": {"value": 100,"currency": 1},
       "sprite": "module0.png"
       },{
       "cost":{"value":10,"currency":2},
@@ -52,103 +52,103 @@
         "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":90,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     },{
       "cost":{"value":150,"currency":1},
-      "generation":{"value":50,"currency":4},
+      "generation":{"value":50,"currency":2},
       "sprite": "module0.png"
     }
     ]
@@ -169,15 +169,15 @@
       "generation":{"value":0,"currency":0},
       "sprite": "module1.png"
       },{
-      "cost":{"value":100,"currency":3},
+      "cost":{"value":100,"currency":1},
       "generation":{"value":1,"currency":1},
       "sprite": "module1.png"
       },{
-      "cost":{"value":100,"currency":4},
+      "cost":{"value":100,"currency":1},
       "generation":{"value":1,"currency":1},
       "sprite": "module1.png"
       },{
-      "cost": {"value": 100, "currency": 5},
+      "cost": {"value": 100, "currency": 1},
       "generation": {"value": 1,"currency": 1},
       "sprite": "module1.png"
       },{
@@ -192,14 +192,14 @@
     "title": "Laser",
     "description": "Amelioration des capteurs",
     "posX": 80,
-    "posY": -15,
+    "posY": -12,
     "iconPosX":115,
     "iconPosY":0,
     "icon": "icon2.png",
     "width": 40,
     "height": 20,
     "level":[{
-      "cost":{"value":300,"currency":4},
+      "cost":{"value":300,"currency":1},
       "generation":{"value":0,"currency":0},
       "sprite": "module2.png"
       },{
@@ -211,7 +211,7 @@
       "generation":{"value":1,"currency":1},
       "sprite": "module2.png"
       },{
-      "cost": {"value": 700, "currency": 2},
+      "cost": {"value": 700, "currency": 1},
       "generation": {"value": 1,"currency": 1},
       "sprite": "module2.png"
       },{
@@ -225,15 +225,15 @@
     "id": "3",
     "title": "Stabilisateur",
     "description": "Amelioration des sta",
-    "posX": 80,
-    "posY": -15,
+    "posX": 82,
+    "posY": -19,
     "iconPosX":115,
     "iconPosY":0,
     "icon": "icon3.png",
-    "width": 40,
-    "height": 20,
+    "width": 36,
+    "height": 15,
     "level":[{
-      "cost":{"value":300,"currency":4},
+      "cost":{"value":300,"currency":1},
       "generation":{"value":0,"currency":0},
       "sprite": "module3.png"
     },{
@@ -259,15 +259,15 @@
     "id": "4",
     "title": "Personnel",
     "description": "Amelioration des sta",
-    "posX": 193,
+    "posX": -50,
     "posY": 20,
     "iconPosX":115,
     "iconPosY":0,
     "icon": "icon4.png",
     "width": 35,
-    "height": 80,
+    "height": 110,
     "level":[{
-      "cost":{"value":300,"currency":4},
+      "cost":{"value":300,"currency":1},
       "generation":{"value":0,"currency":0},
       "sprite": "module4.png"
     },{
