@@ -1,7 +1,7 @@
 package com.rocktap.manager;
 
 import com.rocktap.entity.GameInformation;
-import com.rocktap.entity.StationActor;
+import com.rocktap.entity.OldStationActor;
 import com.rocktap.screen.PlayScreen;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
@@ -18,7 +18,7 @@ public class GameManager {
     // Information persistentes
     private GameInformation gameInformation;
 
-    private StationActor stationActor;
+    private OldStationActor oldStationActor;
 
     private AssetManager assetManager;
 
@@ -38,7 +38,7 @@ public class GameManager {
     }
 
     /**
-     * Generation d'une stationActor en fonction des informations du compte
+     * Generation d'une oldStationActor en fonction des informations du compte
      * @param posX
      * @param posY
      * @param width
@@ -46,9 +46,9 @@ public class GameManager {
      * @param animSpeed
      * @return
      */
-    public StationActor initStationActor(int posX, int posY, int width, int height, float animSpeed) {
-        stationActor = new StationActor(posX,posY,width,height,animSpeed, this);
-        return stationActor;
+    public OldStationActor initStationActor(int posX, int posY, int width, int height, float animSpeed) {
+        oldStationActor = new OldStationActor(posX,posY,width,height,animSpeed, this);
+        return oldStationActor;
     }
     /**
      * methode d'ajout d'or au tap
@@ -111,12 +111,12 @@ public class GameManager {
         this.gameInformation = gameInformation;
     }
 
-    public StationActor getStationActor() {
-        return stationActor;
+    public OldStationActor getOldStationActor() {
+        return oldStationActor;
     }
 
-    public void setStationActor(StationActor stationActor) {
-        this.stationActor = stationActor;
+    public void setOldStationActor(OldStationActor oldStationActor) {
+        this.oldStationActor = oldStationActor;
     }
 
     public AssetManager getAssetManager() {

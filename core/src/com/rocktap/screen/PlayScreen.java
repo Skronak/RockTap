@@ -23,8 +23,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rocktap.Animation.AnimatedActor;
+import com.rocktap.actor.StationActor;
 import com.rocktap.entity.GameInformation;
-import com.rocktap.entity.StationActor;
+import com.rocktap.entity.OldStationActor;
 import com.rocktap.input.CustomInputProcessor;
 import com.rocktap.manager.GameManager;
 import com.rocktap.utils.Constants;
@@ -48,7 +49,6 @@ public class PlayScreen implements Screen {
     private float autoSaveTimer;
     private float weatherTimer;
     private float increaseGoldTimer;
-    private float stationAnimationTimer;
     private float otherbeamTimer;
     private float logicTimer;
     private long lastTouch;
@@ -64,14 +64,14 @@ public class PlayScreen implements Screen {
     private Image stationBorderImage;
     private Image backgroundImage;
     private Image skyImage;
+    private Image holeImage;
     private Image backgroundImageOverlay;
-    private boolean stationAnimationUp; // indique si animation de montée ou descente
     private boolean backgroundImageOverlayIncrease; // indique si alpha augmente ou descend
     private Group layer0GraphicObject = new Group(); // Background
     private Group layer1GraphicObject = new Group(); // Objects
     private Group layer2GraphicObject = new Group(); // Foreground
     private Label goldLabel;
-    private StationActor station;
+    private OldStationActor station;
     private ScrollingBackground scrollingBackground;
     private RainEffect rainEffect;
     private int[] goldLabelPosition = {100,80,120,70,130};
@@ -81,17 +81,16 @@ public class PlayScreen implements Screen {
     private Array<TextureRegion> frames;
     private Array<TextureRegion> frames2;
     private InputMultiplexer inputMultiplexer;
+    StationActor stationActor;
 
     @Override
     public void show() {
         autoSaveTimer = 0f;
         increaseGoldTimer = 0f;
         weatherTimer = 0f;
-        stationAnimationTimer = 0f;
         otherbeamTimer = 0f;
         logicTimer = 0f;
         lastTouch = 0l;
-        stationAnimationUp = false;
         textAnimMinX =100;
         consecutivTouch=0;
 
@@ -141,6 +140,21 @@ public class PlayScreen implements Screen {
         station = gameManager.initStationActor(70,400,200,100,2f);
         //TODO => j'ajoute dans une table pour add facilement des amelioration => creer object station direct avec partie amovibles
 
+        frames = new Array<TextureRegion>();
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_0.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_2.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_3.png"))));
+        Animation idleAnimation = new Animation(2f, frames);
+        idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        stationActor = new StationActor();
+        stationActor.storeAnimation("idle",idleAnimation);
+        stationActor.setSize(200,100);
+        stationActor.setPosition(70,400);
+
+        holeImage = new Image(new Texture(files.internal("sprites/background/hole.png")));
+        holeImage.setSize(80,30);
+        holeImage.setPosition(Constants.V_WIDTH/2-holeImage.getWidth()/2, 70);
         // TODO: Mettre asset dans classe de chargement => splash screen
         beamCriticalImage = new Image(new Texture(files.internal("sprites/beamCritical.png")));
         beamCriticalImage.setBounds(155,50, 32,station.getY()-30); // position de l'image
@@ -173,6 +187,7 @@ public class PlayScreen implements Screen {
         layer0GraphicObject.addActor(skyImage);
         layer0GraphicObject.addActor(scrollingBackground);
         layer0GraphicObject.addActor(backgroundImage);
+        layer0GraphicObject.addActor(holeImage);
 
 //        layer0GraphicObject.addActor(backgroundImageOverlay);
         layer1GraphicObject.addActor(station.getBeamActor());
@@ -180,8 +195,9 @@ public class PlayScreen implements Screen {
         layer1GraphicObject.addActor(beamCriticalImage);
         layer1GraphicObject.addActor(tapActor);
         layer2GraphicObject.addActor(rewardActor);
-        layer2GraphicObject.addActor(stationBorderImage);
-        layer2GraphicObject.addActor(station);
+        //layer2GraphicObject.addActor(stationBorderImage);
+        //layer2GraphicObject.addActor(station);
+        layer2GraphicObject.addActor(stationActor);
         if (gameInformation.isFirstPlay()) {
             displayTutorial();
         }
@@ -203,14 +219,12 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 //        this.spriteBatch.setProjectionMatrix(camera.combined);
         updateLogic();
-//        spriteBatch.begin();
         hud.updateGoldLabel();
         hud.updateMenu();
         stage.act();
-//        station.act(delta);
         stage.draw();
-//        spriteBatch.end();
         spriteBatch.setProjectionMatrix(hud.getStage().getCamera().combined);
+
         hud.draw();
 
         //DEBUG
@@ -335,7 +349,6 @@ public class PlayScreen implements Screen {
     public void updateLogic() {
         autoSaveTimer += Gdx.graphics.getDeltaTime();
         increaseGoldTimer += Gdx.graphics.getDeltaTime();
-        stationAnimationTimer += Gdx.graphics.getDeltaTime();
         otherbeamTimer += Gdx.graphics.getDeltaTime();
         weatherTimer += Gdx.graphics.getDeltaTime();
         logicTimer += Gdx.graphics.getDeltaTime();
@@ -383,25 +396,6 @@ public class PlayScreen implements Screen {
             }
             weatherTimer=0f;
         }
-
-        // station animation
-        if(stationAnimationTimer >= 0.2f) {
-            if (station.getY() >= Constants.STATION_ANIMATION_MAX_ALTITUDE && stationAnimationUp) {
-                stationAnimationUp = false;
-            }
-            if (station.getY() <= Constants.STATION_ANIMATION_MIN_ALTITUDE && !stationAnimationUp) {
-                stationAnimationUp = true;
-            }
-
-            if (stationAnimationUp) {
-                station.moveBy(0,1);
-                stationBorderImage.moveBy(0,1);
-            } else {
-                station.moveBy(0,-1);
-                stationBorderImage.moveBy(0,-1);
-            }
-            stationAnimationTimer = 0f;
-        }
 }
 
     //TODO: a terminer
@@ -447,11 +441,11 @@ public class PlayScreen implements Screen {
         return gameManager;
     }
 
-    public StationActor getStation() {
+    public OldStationActor getStation() {
         return station;
     }
 
-    public void setStation(StationActor station) {
+    public void setStation(OldStationActor station) {
         this.station = station;
     }
 
