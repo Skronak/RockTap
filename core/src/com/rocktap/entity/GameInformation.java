@@ -11,7 +11,9 @@ import java.util.List;
  *
  * Classe de stat & information sur le compte du jeu
  */
-public class GameInformation {
+public enum GameInformation {
+    INSTANCE;
+
     // dernier login
     private Long lastLogin;
     // Total d'or
@@ -46,7 +48,7 @@ public class GameInformation {
     private int depth;
     private int achiev1,achiev2,achiev3,achiev4,achiev5,achiev6,achiev7,achiev8,achiev9,achiev10,achiev11,achiev12,achiev13,achiev14,achiev15,achiev16,achiev17,achiev18,achiev19,achiev20;
 
-    public GameInformation() {
+    GameInformation() {
         upgradeLevelList = new ArrayList<Integer>();
         prefs = Gdx.app.getPreferences("rockTapPreferences");
 

@@ -1,7 +1,12 @@
 package com.rocktap.manager;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
+import com.rocktap.actor.StationActor;
 import com.rocktap.entity.GameInformation;
-import com.rocktap.entity.OldStationActor;
 import com.rocktap.screen.PlayScreen;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
@@ -15,10 +20,7 @@ import com.rocktap.utils.ValueDTO;
  * gerant le lien entre PlayScreen et gameInformation
  */
 public class GameManager {
-    // Information persistentes
-    private GameInformation gameInformation;
-
-    private OldStationActor oldStationActor;
+    private StationActor stationActor;
 
     private AssetManager assetManager;
 
@@ -29,34 +31,34 @@ public class GameManager {
     // Etat du jeu
     private GameState currentState;
 
-    public GameManager(GameInformation gameInformation, PlayScreen playScreen) {
-        this.gameInformation = gameInformation;
+    public GameManager(PlayScreen playScreen) {
         currentState = GameState.IN_GAME;
         assetManager = new AssetManager();
         this.playScreen = playScreen;
-        largeMath = new LargeMath(gameInformation);
+        largeMath = new LargeMath();
     }
 
-    /**
-     * Generation d'une oldStationActor en fonction des informations du compte
-     * @param posX
-     * @param posY
-     * @param width
-     * @param height
-     * @param animSpeed
-     * @return
-     */
-    public OldStationActor initStationActor(int posX, int posY, int width, int height, float animSpeed) {
-        oldStationActor = new OldStationActor(posX,posY,width,height,animSpeed, this);
-        return oldStationActor;
+    public void initStation(){
+        stationActor = new StationActor();
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_0.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_2.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_3.png"))));
+        Animation idleAnimation = new Animation(2f, frames);
+        idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        stationActor = new StationActor();
+        stationActor.storeAnimation("idle",idleAnimation);
+        stationActor.setSize(200,100);
+        stationActor.setPosition(70,400);
     }
     /**
      * methode d'ajout d'or au tap
      */
     public void increaseGoldActive(){
-        ValueDTO newValue = largeMath.increaseValue(gameInformation.getCurrentGold(), gameInformation.getCurrency(), gameInformation.getGenGoldActive(), gameInformation.getGenCurrencyActive());
-        gameInformation.setCurrentGold(newValue.getValue());
-        gameInformation.setCurrency(newValue.getCurrency());
+        ValueDTO newValue = largeMath.increaseValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency(), GameInformation.INSTANCE.getGenGoldActive(), GameInformation.INSTANCE.getGenCurrencyActive());
+        GameInformation.INSTANCE.setCurrentGold(newValue.getValue());
+        GameInformation.INSTANCE.setCurrency(newValue.getCurrency());
         largeMath.formatGameInformation();
     }
 
@@ -64,14 +66,14 @@ public class GameManager {
      * Ajout d'or passif
      */
     public void increaseGoldPassive(){
-        ValueDTO newValue = largeMath.increaseValue(gameInformation.getCurrentGold(), gameInformation.getCurrency(), gameInformation.getGenGoldPassive(), gameInformation.getGenCurrencyPassive());
-        gameInformation.setCurrentGold(newValue.getValue());
-        gameInformation.setCurrency(newValue.getCurrency());
+        ValueDTO newValue = largeMath.increaseValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency(), GameInformation.INSTANCE.getGenGoldPassive(), GameInformation.INSTANCE.getGenCurrencyPassive());
+        GameInformation.INSTANCE.setCurrentGold(newValue.getValue());
+        GameInformation.INSTANCE.setCurrency(newValue.getCurrency());
         largeMath.formatGameInformation();
     }
 
     public void calculateRestReward() {
-        long diff = System.currentTimeMillis() - gameInformation.getLastLogin();
+        long diff = System.currentTimeMillis() - GameInformation.INSTANCE.getLastLogin();
         float hours   = (diff / (1000*60*60));
 
         if (hours >= Constants.DELAY_HOURS_REWARD) {
@@ -89,10 +91,10 @@ public class GameManager {
      * @return
      */
     public float getCriticalValue(){
-        return (gameInformation.getGenGoldActive() * gameInformation.getCriticalRate());
+        return (GameInformation.INSTANCE.getGenGoldActive() * GameInformation.INSTANCE.getCriticalRate());
     }
 
-//*****************************************************
+    //*****************************************************
 //                  GETTER & SETTER
 // ****************************************************
     public GameState getCurrentState() {
@@ -101,22 +103,6 @@ public class GameManager {
 
     public void setCurrentState(GameState currentState) {
         this.currentState = currentState;
-    }
-
-    public GameInformation getGameInformation() {
-        return gameInformation;
-    }
-
-    public void setGameInformation(GameInformation gameInformation) {
-        this.gameInformation = gameInformation;
-    }
-
-    public OldStationActor getOldStationActor() {
-        return oldStationActor;
-    }
-
-    public void setOldStationActor(OldStationActor oldStationActor) {
-        this.oldStationActor = oldStationActor;
     }
 
     public AssetManager getAssetManager() {
@@ -141,5 +127,9 @@ public class GameManager {
 
     public void setLargeMath(LargeMath largeMath) {
         this.largeMath = largeMath;
+    }
+
+    public StationActor getStationActor() {
+        return stationActor;
     }
 }

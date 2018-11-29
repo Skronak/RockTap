@@ -65,7 +65,8 @@ public class CameraDragListener extends InputListener {
     }
 
     /**
-     * Move camera according to the mouse/touch
+     * Move parentActor according to the mouse
+     * Move shadow image according to the ground
      *
      * @param event
      * @param x
@@ -75,8 +76,6 @@ public class CameraDragListener extends InputListener {
     public void drag(InputEvent event, float x, float y, int pointer) {
         Gdx.app.debug("camera", String.valueOf(playScreen.camera.position.y));
         float translateY = deltaY * (playScreen.camera.viewportHeight / Constants.V_HEIGHT);
-
-        // check bond
         if (playScreen.camera.position.y + translateY < Constants.CAMERA_MAX_Y && playScreen.camera.position.y + translateY > Constants.CAMERA_MIN_Y ) {
             playScreen.camera.translate(0, translateY);
             playScreen.camera.update();
