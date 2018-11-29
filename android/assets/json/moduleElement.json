@@ -21,7 +21,7 @@
     },{
       "cost":{"value":300,"currency":1},
       "generation":{"value":100,"currency":0},
-      "sprite": "module0.png"
+      "sprite": "module0_0.png"
       },{
       "cost": {"value": 500, "currency":1 },
       "generation": {"value": 100,"currency": 1},
@@ -171,7 +171,7 @@
       },{
       "cost":{"value":100,"currency":1},
       "generation":{"value":1,"currency":1},
-      "sprite": "module1.png"
+      "sprite": "module0_1.png"
       },{
       "cost":{"value":100,"currency":1},
       "generation":{"value":1,"currency":1},
@@ -205,7 +205,7 @@
       },{
       "cost":{"value":300,"currency":1},
       "generation":{"value":1,"currency":1},
-      "sprite": "module2.png"
+      "sprite": "module0_2.png"
       },{
       "cost":{"value":550,"currency":1},
       "generation":{"value":1,"currency":1},
@@ -239,7 +239,7 @@
     },{
       "cost":{"value":300,"currency":1},
       "generation":{"value":1,"currency":1},
-      "sprite": "module3.png"
+      "sprite": "module0_3.png"
     },{
       "cost":{"value":550,"currency":1},
       "generation":{"value":1,"currency":1},
@@ -273,7 +273,7 @@
     },{
       "cost":{"value":300,"currency":1},
       "generation":{"value":1,"currency":1},
-      "sprite": "module4.png"
+      "sprite": "module0_4.png"
     },{
       "cost":{"value":550,"currency":1},
       "generation":{"value":1,"currency":1},
