@@ -16,7 +16,10 @@ public class LargeMath {
 
     private DecimalFormat decimalFormat;
 
-    public LargeMath() {
+    private GameInformation gameInformation;
+
+    public LargeMath(GameInformation gameInformation) {
+        this.gameInformation = gameInformation;
         decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
         decimalFormat.applyPattern("##.##");
     }
@@ -125,14 +128,14 @@ public class LargeMath {
      * Similaire a adjustCurrency
      */
     public void formatGameInformation(){
-        float value=GameInformation.INSTANCE.getCurrentGold();
-        int currency=GameInformation.INSTANCE.getCurrency();
+        float value=gameInformation.getCurrentGold();
+        int currency=gameInformation.getCurrency();
         while(value>=1000) {
             value=value/1000;
             currency+=1;
         }
-        GameInformation.INSTANCE.setCurrentGold(value);
-        GameInformation.INSTANCE.setCurrency(currency);
+        gameInformation.setCurrentGold(value);
+        gameInformation.setCurrency(currency);
         //TODO formater pour que virgule ne passe pas la limite du systeme
     }
 

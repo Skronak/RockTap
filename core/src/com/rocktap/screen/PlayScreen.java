@@ -23,8 +23,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rocktap.Animation.AnimatedActor;
+import com.rocktap.actor.BeamActor;
 import com.rocktap.actor.StationActor;
 import com.rocktap.entity.GameInformation;
+import com.rocktap.entity.OldStationActor;
 import com.rocktap.input.CustomInputProcessor;
 import com.rocktap.manager.GameManager;
 import com.rocktap.utils.Constants;
@@ -58,6 +60,8 @@ public class PlayScreen implements Screen {
     private int textAnimMinX;
     private GameInformation gameInformation;
     private com.rocktap.utils.BitmapFontGenerator generator;
+    private Image beamCriticalImage;
+    private Image beamMaxSpeedImage;
     private Image stationBorderImage;
     private Image backgroundImage;
     private Image skyImage;
@@ -68,6 +72,7 @@ public class PlayScreen implements Screen {
     private Group layer1GraphicObject = new Group(); // Objects
     private Group layer2GraphicObject = new Group(); // Foreground
     private Label goldLabel;
+    private OldStationActor station;
     private ScrollingBackground scrollingBackground;
     private RainEffect rainEffect;
     private int[] goldLabelPosition = {100,80,120,70,130};
@@ -78,6 +83,7 @@ public class PlayScreen implements Screen {
     private Array<TextureRegion> frames2;
     private InputMultiplexer inputMultiplexer;
     StationActor stationActor;
+    BeamActor beamActor;
 
     @Override
     public void show() {
@@ -92,7 +98,6 @@ public class PlayScreen implements Screen {
 
         generator = new com.rocktap.utils.BitmapFontGenerator();
         font = generator.getFont();
-
         gameInformation = new GameInformation();
         spriteBatch = new SpriteBatch();
         random = new Random();
@@ -132,12 +137,51 @@ public class PlayScreen implements Screen {
         rewardActor =new AnimatedActor(0,0,20,20,0.1f,frames, Animation.PlayMode.NORMAL);
         rewardActor.setVisible(false);
 
+        // Station //TODO a mettre dans une classe specifique pour gerer les amelio
+        station = gameManager.initStationActor(70,400,200,100,2f);
+        //TODO => j'ajoute dans une table pour add facilement des amelioration => creer object station direct avec partie amovibles
 
+        frames = new Array<TextureRegion>();
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_0.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_2.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_3.png"))));
+        Animation idleAnimation = new Animation(2f, frames);
+        idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        stationActor = new StationActor();
+        stationActor.storeAnimation("idle",idleAnimation);
+        stationActor.setSize(200,100);
+        stationActor.setPosition(70,400);
+
+        beamActor = new BeamActor(stationActor);
+        beamActor.setSize(28,250);
+        beamActor.setVisible(false);
+
+        frames = new Array<TextureRegion>();
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b2.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b3.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b4.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b5.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b6.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b7.png"))));
+
+        beamActor.storeAnimation("idle",new Animation(0.2f,frames,Animation.PlayMode.LOOP));
+        frames = new Array<TextureRegion>();
+        frames.add(new TextureRegion(new Texture(files.internal("sprites/beamCritical.png"))));
+        beamActor.storeAnimation("critical", new Animation(0.2f,frames,Animation.PlayMode.LOOP));
 
         holeImage = new Image(new Texture(files.internal("sprites/background/hole.png")));
         holeImage.setSize(80,30);
         holeImage.setPosition(Constants.V_WIDTH/2-holeImage.getWidth()/2, 70);
         // TODO: Mettre asset dans classe de chargement => splash screen
+        beamCriticalImage = new Image(new Texture(files.internal("sprites/beamCritical.png")));
+        beamCriticalImage.setBounds(155,50, 32,stationActor.getY()-30); // position de l'image
+        beamCriticalImage.setVisible(false);
+        beamMaxSpeedImage = new Image(new Texture(files.internal("sprites/bMaxSpeed.png")));
+        beamMaxSpeedImage.setBounds(155,50, 32,stationActor.getY()-30); // position de l'image
+        beamMaxSpeedImage.setVisible(false);
         stationBorderImage = new Image(new Texture(files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_0.png")));
         stationBorderImage.setBounds(70,400,200,100);
 //        backgroundImage = new Image(new Texture(Gdx.files.internal("sprites/rock.png")));
@@ -166,9 +210,8 @@ public class PlayScreen implements Screen {
         layer0GraphicObject.addActor(holeImage);
 
 //        layer0GraphicObject.addActor(backgroundImageOverlay);
-//        layer1GraphicObject.addActor(station.getBeamActor());
-//        layer1GraphicObject.addActor(beamMaxSpeedImage);
-//        layer1GraphicObject.addActor(beamCriticalImage);
+        layer1GraphicObject.addActor(beamActor);
+        layer1GraphicObject.addActor(beamMaxSpeedImage);
         layer1GraphicObject.addActor(tapActor);
         layer2GraphicObject.addActor(rewardActor);
         //layer2GraphicObject.addActor(stationBorderImage);
@@ -193,7 +236,6 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         camera.update();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        this.spriteBatch.setProjectionMatrix(camera.combined);
         updateLogic();
         hud.updateGoldLabel();
         hud.updateMenu();
@@ -284,11 +326,23 @@ public class PlayScreen implements Screen {
      * @param value: valeur du critique
      */
     public void processCriticalHit(float value) {
-        beamCriticalImage.clearActions();
-        beamCriticalImage.addAction(Actions.sequence(
+        beamActor.clearActions();
+        beamActor.addAction(Actions.sequence(
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        beamActor.setActiveAnimation("critical");
+                    }
+                }),
                 Actions.show(),
                 Actions.fadeIn(0.5f),
                 Actions.fadeOut(0.5f),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        beamActor.setActiveAnimation("idle");
+                    }
+                }),
                 Actions.hide()));
         hud.animateCritical();
 
@@ -310,8 +364,8 @@ public class PlayScreen implements Screen {
                     Actions.fadeOut(0.5f),
                     Actions.hide()));
         } else {
-            station.getBeamActor().clearActions();
-            station.getBeamActor().addAction(Actions.sequence(
+            beamActor.clearActions();
+            beamActor.addAction(Actions.sequence(
             Actions.show(),
             Actions.fadeIn(0.5f),
             Actions.fadeOut(0.5f),
@@ -417,31 +471,15 @@ public class PlayScreen implements Screen {
         return gameManager;
     }
 
+    public OldStationActor getStation() {
+        return station;
+    }
+
+    public void setStation(OldStationActor station) {
+        this.station = station;
+    }
+
     public Hud getHud() {
         return hud;
-    }
-
-    public Group getLayer0GraphicObject() {
-        return layer0GraphicObject;
-    }
-
-    public void setLayer0GraphicObject(Group layer0GraphicObject) {
-        this.layer0GraphicObject = layer0GraphicObject;
-    }
-
-    public Group getLayer1GraphicObject() {
-        return layer1GraphicObject;
-    }
-
-    public void setLayer1GraphicObject(Group layer1GraphicObject) {
-        this.layer1GraphicObject = layer1GraphicObject;
-    }
-
-    public Group getLayer2GraphicObject() {
-        return layer2GraphicObject;
-    }
-
-    public void setLayer2GraphicObject(Group layer2GraphicObject) {
-        this.layer2GraphicObject = layer2GraphicObject;
     }
 }

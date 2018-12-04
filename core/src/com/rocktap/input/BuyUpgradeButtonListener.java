@@ -2,7 +2,6 @@ package com.rocktap.input;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.rocktap.entity.GameInformation;
 import com.rocktap.menu.UpgradeModuleMenu;
 
 /**
@@ -26,7 +25,7 @@ public class BuyUpgradeButtonListener extends ClickListener {
         if (moduleMenu.getModuleManager().isAvailableUpgrade(idModule)) {
             this.moduleMenu.getModuleManager().increaseUpgradeLevel(idModule);
             this.moduleMenu.getModuleManager().updateModuleInformation(idModule);
-            GameInformation.INSTANCE.saveInformation();
+            this.moduleMenu.getGameManager().getGameInformation().saveInformation();
         }
         return false;
     }
