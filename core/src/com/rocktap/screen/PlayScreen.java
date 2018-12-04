@@ -29,6 +29,7 @@ import com.rocktap.entity.GameInformation;
 import com.rocktap.entity.OldStationActor;
 import com.rocktap.input.CustomInputProcessor;
 import com.rocktap.manager.GameManager;
+import com.rocktap.manager.WeatherManager;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.RainEffect;
 import com.rocktap.utils.ScrollingBackground;
@@ -84,6 +85,7 @@ public class PlayScreen implements Screen {
     private InputMultiplexer inputMultiplexer;
     StationActor stationActor;
     BeamActor beamActor;
+    WeatherManager weatherManager;
 
     @Override
     public void show() {
@@ -103,7 +105,6 @@ public class PlayScreen implements Screen {
         random = new Random();
         gameManager = new GameManager(gameInformation, this);
         gameManager.calculateRestReward();
-
         camera = new OrthographicCamera(Constants.V_WIDTH, Constants.V_HEIGHT);
         viewport = new StretchViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
         stage = new Stage(viewport);
@@ -194,9 +195,10 @@ public class PlayScreen implements Screen {
         skyImage = new Image(new Texture(files.internal("sprites/background/sky.png")));
         skyImage.scaleBy(0.4f);
 
-        scrollingBackground = new ScrollingBackground();
+        scrollingBackground = new ScrollingBackground("sprites/background/cl.png");
         rainEffect = new RainEffect();
 //        backgroundImageOverlay = new Image(new Texture(Gdx.files.internal("sprites/rock_overlay.png")));
+        weatherManager = new WeatherManager(this);
 
         // Gestion des calques
         stage.addActor(layer0GraphicObject);
@@ -246,10 +248,16 @@ public class PlayScreen implements Screen {
         hud.draw();
 
         //DEBUG
-        if (timeToCameraZoomTarget > 0){
+        if (timeToCameraZoomTarget > 0) {
             timeToCameraZoomTarget -= delta;
             float progress = timeToCameraZoomTarget < 0 ? 1 : 1f - timeToCameraZoomTarget / cameraZoomDuration;
             camera.zoom = Interpolation.pow3Out.apply(cameraZoomOrigin, cameraZoomTarget, progress);
+            // reajust y position
+            if (cameraZoomTarget == 2) {
+                camera.position.y = Interpolation.pow3Out.apply(285, 0, progress);
+            } else {
+                camera.position.y = Interpolation.pow3Out.apply(0, 285, progress);
+            }
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
@@ -417,13 +425,18 @@ public class PlayScreen implements Screen {
             increaseGoldTimer=0f;
         }
 
-        if(weatherTimer >= 30) {
+        if(weatherTimer >= Constants.DELAY_WEATHER_CHANGE) {
             Gdx.app.debug("PlayScreen","Changing weather");
-            if (null == rainEffect.getParent()) {
-                layer0GraphicObject.addActor(rainEffect);
+            if (weatherManager.isComplete()) {
+                weatherManager.addSnow();
             } else {
-                rainEffect.addAction(Actions.removeActor());
+                weatherManager.removeSnow();
             }
+            //  if (null == rainEffect.getParent()) {
+            //      layer0GraphicObject.addActor(rainEffect);
+            //  } else {
+            //      rainEffect.addAction(Actions.removeActor());
+            //  }
             weatherTimer=0f;
         }
 }
@@ -481,5 +494,17 @@ public class PlayScreen implements Screen {
 
     public Hud getHud() {
         return hud;
+    }
+
+    public Group getLayer1GraphicObject() {
+        return layer1GraphicObject;
+    }
+
+    public StationActor getStationActor() {
+        return stationActor;
+    }
+
+    public Image getBackgroundImage() {
+        return backgroundImage;
     }
 }

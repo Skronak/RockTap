@@ -17,8 +17,8 @@ public class ScrollingBackground extends Actor {
     private Rectangle textureRegionBounds2;
     private int speed = 10;
 
-    public ScrollingBackground() {
-        textureRegion = new TextureRegion(new Texture(Gdx.files.internal("sprites/background/cl.png")));
+    public ScrollingBackground(String path) {
+        textureRegion = new TextureRegion(new Texture(Gdx.files.internal(path)));
         textureRegionBounds1 = new Rectangle(0 - Constants.V_WIDTH, 0, Constants.V_WIDTH, Constants.V_HEIGHT);
         textureRegionBounds2 = new Rectangle(Constants.V_WIDTH, 0, Constants.V_WIDTH, Constants.V_HEIGHT);
     }
@@ -55,5 +55,4 @@ public class ScrollingBackground extends Actor {
         textureRegionBounds1 = textureRegionBounds2;
         textureRegionBounds2 = new Rectangle(Constants.V_WIDTH, 0, Constants.V_WIDTH, Constants.V_HEIGHT);
     }
-
 }
