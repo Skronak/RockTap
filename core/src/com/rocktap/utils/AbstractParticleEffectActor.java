@@ -38,6 +38,10 @@ abstract class AbstractParticleEffectActor extends Actor {
     public void disableCompletion(){
     }
 
+    public boolean isComplete(){
+        return particleEffect.isComplete();
+    }
+
     public void stop(){
         particleEffect.getEmitters().get(0).allowCompletion();
     }

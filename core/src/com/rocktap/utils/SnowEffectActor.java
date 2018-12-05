@@ -18,7 +18,7 @@ public class SnowEffectActor extends AbstractParticleEffectActor {
         super();
         playScreen = screen;
 
-        particleEffect.load(Gdx.files.internal("snow.party"),Gdx.files.internal(""));
+        particleEffect.load(Gdx.files.internal("particles/snow.party"),Gdx.files.internal("particles"));
         particleEffect.getEmitters().first().setPosition(0, Constants.V_HEIGHT);
         particleEffect.scaleEffect(0.3f);
 
@@ -27,6 +27,7 @@ public class SnowEffectActor extends AbstractParticleEffectActor {
         snow3 = new Image(new Texture(Gdx.files.internal("sprites/weather/snow_0_0.png")));
         fog = new Image(new Texture(Gdx.files.internal("sprites/weather/fog02.png")));
         background = new Image(new Texture(Gdx.files.internal("sprites/weather/rockValley2_snow.png")));
+        this.stop();
     }
 
     @Override
@@ -40,6 +41,12 @@ public class SnowEffectActor extends AbstractParticleEffectActor {
     @Override
     public void start() {
         super.start();
+        snow1.setVisible(true);
+        snow2.setVisible(true);
+        snow3.setVisible(true);
+        fog.setVisible(true);
+        background.setVisible(true);
+
         snow1.setSize(playScreen.getStationActor().getWidth(), playScreen.getStationActor().getHeight());
         snow1.setPosition(playScreen.getStationActor().getX(),playScreen.getStationActor().getY());
         snow1.getColor().a=0f;
@@ -67,6 +74,29 @@ public class SnowEffectActor extends AbstractParticleEffectActor {
         snow1.addAction(Actions.sequence(Actions.delay(5f),Actions.fadeIn(5f),Actions.delay(30f), Actions.fadeOut(5f),Actions.removeActor(snow1)));
         snow2.addAction(Actions.sequence(Actions.delay(10f),Actions.fadeIn(5f),Actions.delay(25f), Actions.fadeOut(5f),Actions.removeActor(snow2)));
         snow3.addAction(Actions.sequence(Actions.delay(15f),Actions.fadeIn(5f),Actions.delay(5f), Actions.fadeOut(5f),Actions.removeActor(snow3)));
+    }
 
+    @Override
+    public boolean isComplete() {
+        if (snow3.getActions().size == 0 && particleEffect.isComplete()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void stop(){
+        super.stop();
+        snow1.clearActions();
+        snow2.clearActions();
+        snow3.clearActions();
+        fog.clearActions();
+        background.clearActions();
+        snow1.setVisible(false);
+        snow2.setVisible(false);
+        snow3.setVisible(false);
+        fog.setVisible(false);
+        background.setVisible(false);
     }
 }

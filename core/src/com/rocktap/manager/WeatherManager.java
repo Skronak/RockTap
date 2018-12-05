@@ -1,13 +1,14 @@
 package com.rocktap.manager;
-import com.rocktap.Animation.RainEffect;
+import com.badlogic.gdx.Gdx;
 import com.rocktap.screen.PlayScreen;
+import com.rocktap.utils.RainEffectActor;
 import com.rocktap.utils.SnowEffectActor;
 
 import java.util.Random;
 
 public class WeatherManager {
 
-    private RainEffect rainEffect;
+    private RainEffectActor rainEffectActor;
     private PlayScreen screen;
     private SnowEffectActor snowEffectActor;
     private Random random;
@@ -15,22 +16,30 @@ public class WeatherManager {
 
     public WeatherManager(PlayScreen screen){
         this.screen = screen;
-        rainEffect = new RainEffect();
+        rainEffectActor = new RainEffectActor(screen);
+
         random = new Random();
         snowEffectActor = new SnowEffectActor(screen);
-        snowEffectActor.allowCompletion();
 
         screen.getLayer1GraphicObject().addActor(snowEffectActor);
-
+        screen.getLayer1GraphicObject().addActor(rainEffectActor);
     }
 
     /**
      *
      */
     public void addRandomWeather() {
-        int val = random.nextInt(2);
-        if (val==0){
-            addSnow();
+        if (snowEffectActor.isComplete() && rainEffectActor.isComplete()) {
+            int val = random.nextInt(3);
+            Gdx.app.log("e",String.valueOf(val));
+            if (val == 0) {
+                addSnow();
+            } else if (val==2) {
+                addRain();
+            }
+        } else {
+            snowEffectActor.stop();
+            rainEffectActor.stop();
         }
     }
 
@@ -45,11 +54,11 @@ public class WeatherManager {
          * Use particle instead
          */
     public void addRain(){
-        screen.getLayer1GraphicObject().addActor(rainEffect);
+        rainEffectActor.start();
     }
 
     public void removeRain(){
-        screen.getLayer1GraphicObject().removeActor(rainEffect);
+        rainEffectActor.stop();
     }
 
     public boolean isComplete(){
