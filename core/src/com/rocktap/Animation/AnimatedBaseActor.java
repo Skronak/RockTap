@@ -74,6 +74,10 @@ public class AnimatedBaseActor extends BaseActor
         return activeName;
     }
 
+    public Animation getCurrentAnimation(){
+        return activeAnim;
+    }
+
     public void pauseAnimation()
     {  pauseAnim = true;  }
 

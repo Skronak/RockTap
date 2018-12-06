@@ -26,7 +26,7 @@ import com.rocktap.Animation.AnimatedActor;
 import com.rocktap.actor.BeamActor;
 import com.rocktap.actor.StationActor;
 import com.rocktap.entity.GameInformation;
-import com.rocktap.entity.OldStationActor;
+import com.rocktap.entity.StationEntity;
 import com.rocktap.input.CustomInputProcessor;
 import com.rocktap.manager.GameManager;
 import com.rocktap.manager.WeatherManager;
@@ -59,10 +59,9 @@ public class PlayScreen implements Screen {
     private Viewport viewport;
     private Hud hud;
     private int textAnimMinX;
-    private GameInformation gameInformation;
     private com.rocktap.utils.BitmapFontGenerator generator;
-    private Image beamCriticalImage;
-    private Image beamMaxSpeedImage;
+   // private Image beamCriticalImage;
+   // private Image beamMaxSpeedImage;
     private Image stationBorderImage;
     private Image backgroundImage;
     private Image skyImage;
@@ -73,7 +72,7 @@ public class PlayScreen implements Screen {
     private Group layer1GraphicObject = new Group(); // Objects
     private Group layer2GraphicObject = new Group(); // Foreground
     private Label goldLabel;
-    private OldStationActor station;
+    //private OldStationActor station;
     private ScrollingBackground scrollingBackground;
     private RainEffect rainEffect;
     private int[] goldLabelPosition = {100,80,120,70,130};
@@ -86,6 +85,7 @@ public class PlayScreen implements Screen {
     StationActor stationActor;
     BeamActor beamActor;
     WeatherManager weatherManager;
+    StationEntity stationEntity;
 
     @Override
     public void show() {
@@ -100,10 +100,9 @@ public class PlayScreen implements Screen {
 
         generator = new com.rocktap.utils.BitmapFontGenerator();
         font = generator.getFont();
-        gameInformation = new GameInformation();
         spriteBatch = new SpriteBatch();
         random = new Random();
-        gameManager = new GameManager(gameInformation, this);
+        gameManager = new GameManager(this);
         gameManager.calculateRestReward();
         camera = new OrthographicCamera(Constants.V_WIDTH, Constants.V_HEIGHT);
         viewport = new StretchViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
@@ -139,52 +138,52 @@ public class PlayScreen implements Screen {
         rewardActor.setVisible(false);
 
         // Station //TODO a mettre dans une classe specifique pour gerer les amelio
-        station = gameManager.initStationActor(70,400,200,100,2f);
+        //station = gameManager.initStationActor(70,400,200,100,2f);
         //TODO => j'ajoute dans une table pour add facilement des amelioration => creer object station direct avec partie amovibles
 
         frames = new Array<TextureRegion>();
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_0.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_1.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_2.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_3.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_0.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_2.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_3.png"))));
         Animation idleAnimation = new Animation(2f, frames);
         idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
-        stationActor = new StationActor();
-        stationActor.storeAnimation("idle",idleAnimation);
-        stationActor.setSize(200,100);
-        stationActor.setPosition(70,400);
+       // stationActor = new StationActor();
+       // stationActor.storeAnimation("idle",idleAnimation);
+       // stationActor.setSize(200,100);
+       // stationActor.setPosition(70,400);
 
-        beamActor = new BeamActor(stationActor);
-        beamActor.setSize(28,250);
-        beamActor.setVisible(false);
+        stationEntity = new StationEntity(gameManager);
+        beamActor = stationEntity.beamActor;
+        stationActor=stationEntity.stationActor;
 
-        frames = new Array<TextureRegion>();
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b1.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b2.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b3.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b4.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b5.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b6.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b7.png"))));
-
-        beamActor.storeAnimation("idle",new Animation(0.2f,frames,Animation.PlayMode.LOOP));
-        frames = new Array<TextureRegion>();
-        frames.add(new TextureRegion(new Texture(files.internal("sprites/beamCritical.png"))));
-        beamActor.storeAnimation("critical", new Animation(0.2f,frames,Animation.PlayMode.LOOP));
+      //  frames = new Array<TextureRegion>();
+      //  frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b1.png"))));
+      //  frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b2.png"))));
+      //  frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b3.png"))));
+      //  frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b4.png"))));
+      //  frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b5.png"))));
+      //  frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b6.png"))));
+      //  frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/b7.png"))));
+//
+      //  beamActor.storeAnimation("idle",new Animation(0.2f,frames,Animation.PlayMode.LOOP));
+      //  frames = new Array<TextureRegion>();
+      //  frames.add(new TextureRegion(new Texture(files.internal("sprites/beamCritical.png"))));
+      //  beamActor.storeAnimation("critical", new Animation(0.2f,frames,Animation.PlayMode.LOOP));
 
         holeImage = new Image(new Texture(files.internal("sprites/background/hole.png")));
         holeImage.setSize(80,30);
         holeImage.setPosition(Constants.V_WIDTH/2-holeImage.getWidth()/2, 70);
         // TODO: Mettre asset dans classe de chargement => splash screen
-        beamCriticalImage = new Image(new Texture(files.internal("sprites/beamCritical.png")));
-        beamCriticalImage.setBounds(155,50, 32,stationActor.getY()-30); // position de l'image
-        beamCriticalImage.setVisible(false);
-        beamMaxSpeedImage = new Image(new Texture(files.internal("sprites/bMaxSpeed.png")));
-        beamMaxSpeedImage.setBounds(155,50, 32,stationActor.getY()-30); // position de l'image
-        beamMaxSpeedImage.setVisible(false);
-        stationBorderImage = new Image(new Texture(files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_0.png")));
-        stationBorderImage.setBounds(70,400,200,100);
+        //beamCriticalImage = new Image(new Texture(files.internal("sprites/beamCritical.png")));
+        //beamCriticalImage.setBounds(155,50, 32,stationActor.getY()-30); // position de l'image
+        //beamCriticalImage.setVisible(false);
+        //beamMaxSpeedImage = new Image(new Texture(files.internal("sprites/bMaxSpeed.png")));
+        //beamMaxSpeedImage.setBounds(155,50, 32,stationActor.getY()-30); // position de l'image
+        //beamMaxSpeedImage.setVisible(false);
+      //  stationBorderImage = new Image(new Texture(files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_0.png")));
+      //  stationBorderImage.setBounds(70,400,200,100);
 //        backgroundImage = new Image(new Texture(Gdx.files.internal("sprites/rock.png")));
         //backgroundImage = new Image(new Texture(files.internal("sprites/background/rockValley.png")));
         //backgroundImage.setScale(0.6f,0.6f);
@@ -213,13 +212,11 @@ public class PlayScreen implements Screen {
 
 //        layer0GraphicObject.addActor(backgroundImageOverlay);
         layer1GraphicObject.addActor(beamActor);
-        layer1GraphicObject.addActor(beamMaxSpeedImage);
+//        layer1GraphicObject.addActor(beamMaxSpeedImage);
         layer1GraphicObject.addActor(tapActor);
         layer2GraphicObject.addActor(rewardActor);
-        //layer2GraphicObject.addActor(stationBorderImage);
-        //layer2GraphicObject.addActor(station);
         layer2GraphicObject.addActor(stationActor);
-        if (gameInformation.isFirstPlay()) {
+        if (GameInformation.INSTANCE.isFirstPlay()) {
             displayTutorial();
         }
     }
@@ -298,7 +295,7 @@ public class PlayScreen implements Screen {
      * Animation du jeu au touche
      */
     public void processHit() {
-        goldLabel = new Label(gameManager.getLargeMath().getDisplayValue(gameInformation.getGenGoldActive(), gameInformation.getGenCurrencyActive()),new Label.LabelStyle(font, Constants.NORMAL_LABEL_COLOR));
+        goldLabel = new Label(gameManager.getLargeMath().getDisplayValue(GameInformation.INSTANCE.getGenGoldActive(), GameInformation.INSTANCE.getGenCurrencyActive()),new Label.LabelStyle(font, Constants.NORMAL_LABEL_COLOR));
         goldLabel.setPosition(150,goldLabelPosition[gLPPointer]);
         if (gLPPointer<goldLabelPosition.length-1){
             gLPPointer++;
@@ -315,7 +312,7 @@ public class PlayScreen implements Screen {
 
         // Augmente vitesse en fonction delai avec derniere touche
         if (System.currentTimeMillis()-lastTouch >= 500f) {
-            station.getBeamActor().decreaseSpeed(0.08f);
+            //beamActor.decreaseSpeed(0.08f);
             consecutivTouch=0;
         } else {
             consecutivTouch++;
@@ -323,7 +320,7 @@ public class PlayScreen implements Screen {
         lastTouch=System.currentTimeMillis();
 
         if (consecutivTouch >= 10) {
-            station.getBeamActor().increaseSpeed(0.041f);
+            //station.getBeamActor().increaseSpeed(0.041f);
 //            station.getBeamActor().setWidth(station.getBeamActor().getWidth()+10);
 //            station.getBeamActor().setX(station.getBeamActor().getX()-5);
         }
@@ -362,15 +359,13 @@ public class PlayScreen implements Screen {
      * Animation du jeu au touche normal
      */
     public void processNormalHit() {
-        //TODO Isoler systeme gestion beam
-        // TODO mep state
-        if (station.getBeamActor().getIdleAnimation().getFrameDuration() <= 0.04f) {
-            beamMaxSpeedImage.clearActions();
-            beamMaxSpeedImage.addAction(Actions.sequence(
-                    Actions.show(),
-                    Actions.fadeIn(0.5f),
-                    Actions.fadeOut(0.5f),
-                    Actions.hide()));
+        if (beamActor.getCurrentAnimation().getFrameDuration() <= 0.04f) {
+          //  beamMaxSpeedImage.clearActions();
+          //  beamMaxSpeedImage.addAction(Actions.sequence(
+          //          Actions.show(),
+          //          Actions.fadeIn(0.5f),
+          //          Actions.fadeOut(0.5f),
+          //          Actions.hide()));
         } else {
             beamActor.clearActions();
             beamActor.addAction(Actions.sequence(
@@ -412,32 +407,25 @@ public class PlayScreen implements Screen {
         // Autosave
         if(autoSaveTimer >= Constants.DELAY_AUTOSAVE){
             Gdx.app.debug("PlayScreen","Saving");
-            gameInformation.saveInformation();
+            GameInformation.INSTANCE.saveInformation();
             autoSaveTimer=0f;
         }
 
         // Increase Gold
         if(increaseGoldTimer >= Constants.DELAY_GENGOLD_PASSIV) {
             gameManager.increaseGoldPassive();
-            Gdx.app.debug("PlayScreen","Increasing Gold by "+gameInformation.getGenGoldPassive()+" val "+gameInformation.getGenCurrencyPassive());
+            Gdx.app.debug("PlayScreen","Increasing Gold by "+GameInformation.INSTANCE.getGenGoldPassive()+" val "+GameInformation.INSTANCE.getGenCurrencyPassive());
             gameManager.increaseGoldPassive();
             hud.updateGoldLabel();
             increaseGoldTimer=0f;
         }
 
-        if(weatherTimer >= Constants.DELAY_WEATHER_CHANGE) {
-            Gdx.app.debug("PlayScreen","Changing weather");
-            if (weatherManager.isComplete()) {
-                weatherManager.addSnow();
-            } else {
-                weatherManager.removeSnow();
+        if (GameInformation.INSTANCE.isOptionWeather()) {
+            if (weatherTimer >= Constants.DELAY_WEATHER_CHANGE) {
+                Gdx.app.debug("PlayScreen", "Changing weather");
+                weatherManager.addRandomWeather();
+                weatherTimer = 0f;
             }
-            //  if (null == rainEffect.getParent()) {
-            //      layer0GraphicObject.addActor(rainEffect);
-            //  } else {
-            //      rainEffect.addAction(Actions.removeActor());
-            //  }
-            weatherTimer=0f;
         }
 }
 
@@ -473,7 +461,7 @@ public class PlayScreen implements Screen {
         generator.dispose();
         Gdx.app.debug("PlayScreen","saveInformation");
         gameManager.getLargeMath().formatGameInformation();
-        gameInformation.saveInformation();
+        GameInformation.INSTANCE.saveInformation();
     }
 
 //*****************************************************
@@ -482,14 +470,6 @@ public class PlayScreen implements Screen {
 
     public GameManager getGameManager() {
         return gameManager;
-    }
-
-    public OldStationActor getStation() {
-        return station;
-    }
-
-    public void setStation(OldStationActor station) {
-        this.station = station;
     }
 
     public Hud getHud() {
@@ -506,5 +486,13 @@ public class PlayScreen implements Screen {
 
     public Image getBackgroundImage() {
         return backgroundImage;
+    }
+
+    public WeatherManager getWeatherManager() {
+        return weatherManager;
+    }
+
+    public Group getLayer2GraphicObject() {
+        return layer2GraphicObject;
     }
 }

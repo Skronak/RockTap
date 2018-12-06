@@ -1,5 +1,6 @@
 package com.rocktap.actor;
 
+import com.rocktap.Animation.AnimatedActor;
 import com.rocktap.Animation.AnimatedBaseActor;
 import com.rocktap.utils.Constants;
 
@@ -7,6 +8,7 @@ public class StationActor extends AnimatedBaseActor {
 
     private float stationAnimationTimer;
     private boolean stationAnimationUp; // indique si animation de montée ou descente
+    private AnimatedActor beamActor;
 
     public StationActor(){
         stationAnimationTimer = 0f;

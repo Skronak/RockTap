@@ -1,5 +1,5 @@
 package com.rocktap.manager;
-import com.badlogic.gdx.Gdx;
+
 import com.rocktap.screen.PlayScreen;
 import com.rocktap.utils.RainEffectActor;
 import com.rocktap.utils.SnowEffectActor;
@@ -31,16 +31,22 @@ public class WeatherManager {
     public void addRandomWeather() {
         if (snowEffectActor.isComplete() && rainEffectActor.isComplete()) {
             int val = random.nextInt(3);
-            Gdx.app.log("e",String.valueOf(val));
-            if (val == 0) {
+            if (val == 2) {
                 addSnow();
-            } else if (val==2) {
+            } else if (val==0) {
                 addRain();
             }
         } else {
-            snowEffectActor.stop();
-            rainEffectActor.stop();
+            stopAll();
         }
+    }
+
+    /**
+     * Stop all climatic effect
+     */
+    public void stopAll(){
+        snowEffectActor.stop();
+        rainEffectActor.stop();
     }
 
     public void addSnow() {
@@ -50,9 +56,7 @@ public class WeatherManager {
     public void removeSnow(){
         snowEffectActor.stop();
     }
-        /**
-         * Use particle instead
-         */
+
     public void addRain(){
         rainEffectActor.start();
     }
@@ -62,7 +66,7 @@ public class WeatherManager {
     }
 
     public boolean isComplete(){
-        return snowEffectActor.particleEffect.isComplete();
+        return snowEffectActor.particleEffect.isComplete()&& rainEffectActor.isComplete();
     }
 
  }

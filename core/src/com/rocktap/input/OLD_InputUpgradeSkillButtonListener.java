@@ -2,6 +2,7 @@ package com.rocktap.input;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.rocktap.entity.GameInformation;
 import com.rocktap.menu.UpgradeModuleMenu;
 
 /**
@@ -29,7 +30,7 @@ public class OLD_InputUpgradeSkillButtonListener extends ClickListener {
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
         this.moduleMenu.getModuleManager().increaseUpgradeLevel(moduleMenu.getCurrentSelection());
 //        this.moduleMenu.getModuleManager().updateModuleInformation(moduleMenu.getCurrentSelection());
-        this.moduleMenu.getGameManager().getGameInformation().saveInformation();
+        GameInformation.INSTANCE.saveInformation();
     return false;
 
     }

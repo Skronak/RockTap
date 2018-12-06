@@ -68,7 +68,7 @@ public class Constants {
 
     public static int STATION_ANIMATION_MIN_ALTITUDE = 402;//302
 
-    public static int DELAY_WEATHER_CHANGE = 60;
+    public static int DELAY_WEATHER_CHANGE = 15;
 
 
 }

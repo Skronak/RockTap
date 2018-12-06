@@ -23,12 +23,14 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.rocktap.entity.GameInformation;
 import com.rocktap.input.CameraDragListener;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.AbstractMenu;
 import com.rocktap.menu.AchievmentMenu;
 import com.rocktap.menu.FactionMenu;
 import com.rocktap.menu.GameInformationMenu;
+import com.rocktap.menu.OptionMenu;
 import com.rocktap.menu.UpgradeModuleMenu;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
@@ -68,6 +70,7 @@ public class Hud implements Disposable {
     private Button upgradeButton;
     private Button mapButton;
     private Button achievButton;
+    private Button optionButton;
     private LargeMath largeMath;
     private AbstractMenu currentMenu;
     // Liste de tous les menus du jeu
@@ -104,6 +107,7 @@ public class Hud implements Disposable {
         activeMenuList.add(new AchievmentMenu(gameManager));
         activeMenuList.add(factionMenu);
         activeMenuList.add(gameInformationMenu);
+        activeMenuList.add(new OptionMenu(gameManager));
     }
     /**
      * Initialisation des bouton du hud
@@ -141,6 +145,10 @@ public class Hud implements Disposable {
         style4.up = achievDrawableUp;
         style4.down = achievDrawableDown;
         achievButton = new ImageButton(style4);
+        ImageButton.ImageButtonStyle style5 = new ImageButton.ImageButtonStyle();
+        style5.up = achievDrawableUp;
+        style5.down = achievDrawableDown;
+        optionButton = new ImageButton(style5);
 
         stage.addListener(new CameraDragListener(playScreen));
 
@@ -161,7 +169,6 @@ public class Hud implements Disposable {
         };
         skillButton.addListener(buttonListenerSkill);
 
-        // Declaration des listener
         InputListener buttonListenerCredit = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 toggleMenu(activeMenuList.get(2));
@@ -170,7 +177,6 @@ public class Hud implements Disposable {
         };
         mapButton.addListener(buttonListenerCredit);
 
-        // Declaration des listener
         InputListener buttonListenerInformation = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 toggleMenu(activeMenuList.get(3));
@@ -179,17 +185,25 @@ public class Hud implements Disposable {
         };
         achievButton.addListener(buttonListenerInformation);
 
+        InputListener buttonListenerOption = new ClickListener(){
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                toggleMenu(activeMenuList.get(4));
+                return false;
+            }
+        };
+        optionButton.addListener(buttonListenerOption);
+
         InputListener buttonListenerDEV = new ClickListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                gameManager.getGameInformation().getUpgradeLevelList().set(0, 0);
-                gameManager.getGameInformation().getUpgradeLevelList().set(1, 0);
-                gameManager.getGameInformation().getUpgradeLevelList().set(2, 0);
-                gameManager.getGameInformation().getUpgradeLevelList().set(3, 0);
-                gameManager.getGameInformation().getUpgradeLevelList().set(4, 0);
-                gameManager.getGameInformation().getUpgradeLevelList().set(5, 0);
-                gameManager.getGameInformation().getUpgradeLevelList().set(6, 0);
-                gameManager.getGameInformation().getUpgradeLevelList().set(7, 0);
-                gameManager.getGameInformation().setStationId(1);
+                GameInformation.INSTANCE.getUpgradeLevelList().set(0, 0);
+                GameInformation.INSTANCE.getUpgradeLevelList().set(1, 0);
+                GameInformation.INSTANCE.getUpgradeLevelList().set(2, 0);
+                GameInformation.INSTANCE.getUpgradeLevelList().set(3, 0);
+                GameInformation.INSTANCE.getUpgradeLevelList().set(4, 0);
+                GameInformation.INSTANCE.getUpgradeLevelList().set(5, 0);
+                GameInformation.INSTANCE.getUpgradeLevelList().set(6, 0);
+                GameInformation.INSTANCE.getUpgradeLevelList().set(7, 0);
+                GameInformation.INSTANCE.setStationId(1);
                 return false;
             }
         };
@@ -203,10 +217,10 @@ public class Hud implements Disposable {
         versionLabel = new Label(Constants.CURRENT_VERSION, new Label.LabelStyle(font, Color.WHITE));
         versionLabel.setFontScale(0.5f);
         versionLabel.setWrap(true);
-        scoreLabel = new Label(largeMath.getDisplayValue(gameManager.getGameInformation().getCurrentGold(), gameManager.getGameInformation().getCurrency()), new Label.LabelStyle(font, Color.WHITE));
+        scoreLabel = new Label(largeMath.getDisplayValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency()), new Label.LabelStyle(font, Color.WHITE));
         scoreLabel.setAlignment(Align.right);
         scoreLabel.setFontScale(2);
-        depthLabel = new Label(String.valueOf(gameManager.getGameInformation().getDepth()+" Meters"), new Label.LabelStyle(font, Color.WHITE));
+        depthLabel = new Label(String.valueOf(GameInformation.INSTANCE.getDepth()+" Meters"), new Label.LabelStyle(font, Color.WHITE));
         depthLabel.setFontScale(1);
 
         goldDecreaseLabel = new Label("", new Label.LabelStyle(font, Color.RED));
@@ -220,28 +234,26 @@ public class Hud implements Disposable {
         table = new Table();
 //        table.top();
         table.setFillParent(true);
-        table.add(stack).expandX().align(Align.right).colspan(4);
+        table.add(stack).expandX().align(Align.right).colspan(activeMenuList.size());
         table.row();
-        table.add(versionLabel).expandX().align(Align.right).colspan(3).bottom();
+        table.add(versionLabel).expandX().align(Align.right).colspan(activeMenuList.size()-1).bottom();
         table.row();
-        table.add(depthLabel);
+        table.add(depthLabel).colspan(activeMenuList.size());
         table.row();
-        table.add(upgradeButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
-        table.add(skillButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
-        table.add(mapButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
-        table.add(achievButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/4);
-        table.row();
+        table.add(upgradeButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/5);
+        table.add(skillButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/5);
+        table.add(mapButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/5);
+        table.add(achievButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/5);
+        table.add(optionButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/5);
+
+        // Ajout des menu a l'interface
         table.addActor(activeMenuList.get(0).getParentTable());
         table.addActor(activeMenuList.get(1).getParentTable());
         table.addActor(activeMenuList.get(2).getParentTable());
         table.addActor(activeMenuList.get(3).getParentTable());
+        table.addActor(activeMenuList.get(4).getParentTable());
 
         stage.addActor(table);
-        // Ajout des menu a l'interface
-        //stage.addActor(activeMenuList.get(0).getParentTable());
-        //stage.addActor(activeMenuList.get(1).getParentTable());
-        //stage.addActor(activeMenuList.get(2).getParentTable());
-        //stage.addActor(activeMenuList.get(3).getParentTable());
     }
 
     /**
@@ -298,7 +310,7 @@ public class Hud implements Disposable {
 
     // Met a jour l'affichage de l'or
     public void updateGoldLabel(){
-        String scoreAffichage = largeMath.getDisplayValue(gameManager.getGameInformation().getCurrentGold(), gameManager.getGameInformation().getCurrency());
+        String scoreAffichage = largeMath.getDisplayValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency());
         scoreLabel.setText(scoreAffichage);
     }
 

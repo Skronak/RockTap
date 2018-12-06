@@ -16,10 +16,7 @@ public class LargeMath {
 
     private DecimalFormat decimalFormat;
 
-    private GameInformation gameInformation;
-
-    public LargeMath(GameInformation gameInformation) {
-        this.gameInformation = gameInformation;
+    public LargeMath() {
         decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
         decimalFormat.applyPattern("##.##");
     }
@@ -123,19 +120,19 @@ public class LargeMath {
         return new ValueDTO(valueRes, maxCurrency);
     }
     /**
-     * Format les valeurs de gameInformation pour
+     * Format les valeurs de GameInformation.INSTANCE pour
      * la sauvegarde
      * Similaire a adjustCurrency
      */
     public void formatGameInformation(){
-        float value=gameInformation.getCurrentGold();
-        int currency=gameInformation.getCurrency();
+        float value= GameInformation.INSTANCE.getCurrentGold();
+        int currency=GameInformation.INSTANCE.getCurrency();
         while(value>=1000) {
             value=value/1000;
             currency+=1;
         }
-        gameInformation.setCurrentGold(value);
-        gameInformation.setCurrency(currency);
+        GameInformation.INSTANCE.setCurrentGold(value);
+        GameInformation.INSTANCE.setCurrency(currency);
         //TODO formater pour que virgule ne passe pas la limite du systeme
     }
 
@@ -164,7 +161,7 @@ public class LargeMath {
         return (decimalFormat.format(valueDto.getValue()) + printLetter(valueDto.getCurrency()));
     }
 
-    //    formatGameInformation();
+    //    formatGameInformation.INSTANCE();
 
     /**
      * Renvoie la lettre Majuscule associee a l'index passe en parametre

@@ -3,6 +3,7 @@ package com.rocktap.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.rocktap.entity.GameInformation;
 import com.rocktap.manager.GameManager;
 import com.rocktap.screen.PlayScreen;
 import com.rocktap.utils.Constants;
@@ -28,7 +29,7 @@ public class CustomInputProcessor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK) )
-            gameManager.getGameInformation().saveInformation();
+            GameInformation.INSTANCE.saveInformation();
             Gdx.app.debug("Closing application", "close");
         return false;
     }
@@ -46,7 +47,7 @@ public class CustomInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         int randCritical = random.nextInt(Constants.CRITICAL_CHANCE) + 1;
-        this.gameManager.getGameInformation().setTotalTapNumber(this.gameManager.getGameInformation().getTotalTapNumber()+1);
+        GameInformation.INSTANCE.setTotalTapNumber(GameInformation.INSTANCE.getTotalTapNumber()+1);
         playScreen.processHit();
         if (randCritical == 1) {
             gameManager.increaseGoldCritical();

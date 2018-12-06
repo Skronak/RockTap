@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.rocktap.Animation.AnimatedActor;
 import com.rocktap.manager.GameManager;
+import com.rocktap.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +29,14 @@ public class OldStationActor extends Actor {
     private TextureRegion currentFrame;
     private AnimatedActor beamActor;
     private GameManager gameManager;
+    private float stationAnimationTimer;
+    private boolean stationAnimationUp;
 
     public OldStationActor(int posX, int posY, int width, int height, float animSpeed, GameManager gameManager) {
         deltatime = 0;
+        stationAnimationTimer = 0f;
+        stationAnimationUp = false;
+
         this.width = width;
         this.height = height;
         this.animSpeed = animSpeed;
@@ -41,10 +47,10 @@ public class OldStationActor extends Actor {
 
         //Animation par defaut de la station
         frames = new Array<TextureRegion>();
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_0.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_1.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_2.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ gameManager.getGameInformation().getStationId()+"_3.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_0.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_2.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_3.png"))));
         idleAnimation = new Animation(animSpeed, frames);
         idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
     }
@@ -55,11 +61,11 @@ public class OldStationActor extends Actor {
      */
     public List<ModuleElementDTO> loadUpgrade() {
         this.moduleToDraw = new ArrayList<ModuleElementDTO>();
-        for (int i=0;i<gameManager.getGameInformation().getUpgradeLevelList().size();i++) {
+        for (int i=0;i<GameInformation.INSTANCE.getUpgradeLevelList().size();i++) {
             // Pour les upgrade 1-8, si lvl i > 0 alors ajoute dans liste a afficher
-            if (gameManager.getGameInformation().getUpgradeLevelList().get(i) > 0) {
+            if (GameInformation.INSTANCE.getUpgradeLevelList().get(i) > 0) {
                 ModuleElementDTO moduleElementDTO = gameManager.getAssetManager().getModuleElementList().get(i);
-                moduleElementDTO.setTextureRegion(new TextureRegion(new Texture(Gdx.files.internal(("sprites/upgrade/"+moduleElementDTO.getLevel().get(gameManager.getGameInformation().getUpgradeLevelList().get(i)).getSprite())))));
+                moduleElementDTO.setTextureRegion(new TextureRegion(new Texture(Gdx.files.internal(("sprites/upgrade/"+moduleElementDTO.getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i)).getSprite())))));
                 moduleToDraw.add(moduleElementDTO);
             }
         }
@@ -100,6 +106,26 @@ public class OldStationActor extends Actor {
     {
         super.act(deltaTime);
         deltatime += deltaTime;
+        updatePosition();
+    }
+
+    public void updatePosition(){
+        // station animation
+        if(stationAnimationTimer >= 0.2f) {
+            if (this.getY() >= Constants.STATION_ANIMATION_MAX_ALTITUDE && stationAnimationUp) {
+                stationAnimationUp = false;
+            }
+            if (this.getY() <= Constants.STATION_ANIMATION_MIN_ALTITUDE && !stationAnimationUp) {
+                stationAnimationUp = true;
+            }
+
+            if (stationAnimationUp) {
+                this.moveBy(0,1);
+            } else {
+                this.moveBy(0,-1);
+            }
+            stationAnimationTimer = 0f;
+        }
     }
 
 //*****************************************************

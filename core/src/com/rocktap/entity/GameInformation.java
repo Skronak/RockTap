@@ -11,7 +11,9 @@ import java.util.List;
  *
  * Classe de stat & information sur le compte du jeu
  */
-public class GameInformation {
+public enum GameInformation {
+    INSTANCE;
+
     // dernier login
     private Long lastLogin;
     // Total d'or
@@ -45,8 +47,10 @@ public class GameInformation {
     private int factionExp;
     private int depth;
     private int achiev1,achiev2,achiev3,achiev4,achiev5,achiev6,achiev7,achiev8,achiev9,achiev10,achiev11,achiev12,achiev13,achiev14,achiev15,achiev16,achiev17,achiev18,achiev19,achiev20;
+    private boolean optionWeather, optionSound;
 
-    public GameInformation() {
+
+    GameInformation() {
         upgradeLevelList = new ArrayList<Integer>();
         prefs = Gdx.app.getPreferences("rockTapPreferences");
 
@@ -76,6 +80,8 @@ public class GameInformation {
             factionId=0;
             factionExp=0;
             firstPlay = true;
+            optionSound=true;
+            optionWeather=true;
         } else {
             currentGold = prefs.getFloat("currentGold");
             currency = prefs.getInteger("currentCurrency");
@@ -119,6 +125,8 @@ public class GameInformation {
             achiev18 = prefs.getInteger("achiev18");
             achiev19 = prefs.getInteger("achiev19");
             achiev20 = prefs.getInteger("achiev20");
+            optionSound=prefs.getBoolean("optionSound");
+            optionWeather=prefs.getBoolean("optionWeather");
         }
     }
 
@@ -172,7 +180,8 @@ public class GameInformation {
         prefs.putInteger("achiev18",achiev18);
         prefs.putInteger("achiev19",achiev19);
         prefs.putInteger("achiev20",achiev20);
-
+        prefs.putBoolean("optionSound", optionSound);
+        prefs.putBoolean("optionWeather", optionWeather);
         prefs.flush();
     }
 
@@ -458,5 +467,21 @@ public class GameInformation {
 
     public void setAchiev20(int achiev20) {
         this.achiev20 = achiev20;
+    }
+
+    public boolean isOptionWeather() {
+        return optionWeather;
+    }
+
+    public void setOptionWeather(boolean optionWeather) {
+        this.optionWeather = optionWeather;
+    }
+
+    public boolean isOptionSound() {
+        return optionSound;
+    }
+
+    public void setOptionSound(boolean optionSound) {
+        this.optionSound = optionSound;
     }
 }

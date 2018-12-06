@@ -12,12 +12,9 @@ import com.rocktap.utils.ValueDTO;
  * Created by Skronak on 30/07/2017.
  *
  * Classe de gestion globale du jeu
- * gerant le lien entre PlayScreen et gameInformation
+ * gerant le lien entre PlayScreen et GameInformation
  */
 public class GameManager {
-    // Information persistentes
-    private GameInformation gameInformation;
-
     private OldStationActor oldStationActor;
 
     private AssetManager assetManager;
@@ -29,12 +26,11 @@ public class GameManager {
     // Etat du jeu
     private GameState currentState;
 
-    public GameManager(GameInformation gameInformation, PlayScreen playScreen) {
-        this.gameInformation = gameInformation;
+    public GameManager(PlayScreen playScreen) {
         currentState = GameState.IN_GAME;
         assetManager = new AssetManager();
         this.playScreen = playScreen;
-        largeMath = new LargeMath(gameInformation);
+        largeMath = new LargeMath();
     }
 
     /**
@@ -54,9 +50,9 @@ public class GameManager {
      * methode d'ajout d'or au tap
      */
     public void increaseGoldActive(){
-        ValueDTO newValue = largeMath.increaseValue(gameInformation.getCurrentGold(), gameInformation.getCurrency(), gameInformation.getGenGoldActive(), gameInformation.getGenCurrencyActive());
-        gameInformation.setCurrentGold(newValue.getValue());
-        gameInformation.setCurrency(newValue.getCurrency());
+        ValueDTO newValue = largeMath.increaseValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency(), GameInformation.INSTANCE.getGenGoldActive(), GameInformation.INSTANCE.getGenCurrencyActive());
+        GameInformation.INSTANCE.setCurrentGold(newValue.getValue());
+        GameInformation.INSTANCE.setCurrency(newValue.getCurrency());
         largeMath.formatGameInformation();
     }
 
@@ -64,14 +60,14 @@ public class GameManager {
      * Ajout d'or passif
      */
     public void increaseGoldPassive(){
-        ValueDTO newValue = largeMath.increaseValue(gameInformation.getCurrentGold(), gameInformation.getCurrency(), gameInformation.getGenGoldPassive(), gameInformation.getGenCurrencyPassive());
-        gameInformation.setCurrentGold(newValue.getValue());
-        gameInformation.setCurrency(newValue.getCurrency());
+        ValueDTO newValue = largeMath.increaseValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency(), GameInformation.INSTANCE.getGenGoldPassive(), GameInformation.INSTANCE.getGenCurrencyPassive());
+        GameInformation.INSTANCE.setCurrentGold(newValue.getValue());
+        GameInformation.INSTANCE.setCurrency(newValue.getCurrency());
         largeMath.formatGameInformation();
     }
 
     public void calculateRestReward() {
-        long diff = System.currentTimeMillis() - gameInformation.getLastLogin();
+        long diff = System.currentTimeMillis() - GameInformation.INSTANCE.getLastLogin();
         float hours   = (diff / (1000*60*60));
 
         if (hours >= Constants.DELAY_HOURS_REWARD) {
@@ -81,7 +77,7 @@ public class GameManager {
 
     // Methode d'ajout d'or lors d'un critique
     public void increaseGoldCritical() {
-//        gameInformation.setCurrentGold(gameInformation.getCurrentGold() + getCriticalValue());
+//        GameInformation.INSTANCE.setCurrentGold(GameInformation.INSTANCE.getCurrentGold() + getCriticalValue());
     }
 
     /**
@@ -89,7 +85,7 @@ public class GameManager {
      * @return
      */
     public float getCriticalValue(){
-        return (gameInformation.getGenGoldActive() * gameInformation.getCriticalRate());
+        return (GameInformation.INSTANCE.getGenGoldActive() * GameInformation.INSTANCE.getCriticalRate());
     }
 
 //*****************************************************
@@ -101,14 +97,6 @@ public class GameManager {
 
     public void setCurrentState(GameState currentState) {
         this.currentState = currentState;
-    }
-
-    public GameInformation getGameInformation() {
-        return gameInformation;
-    }
-
-    public void setGameInformation(GameInformation gameInformation) {
-        this.gameInformation = gameInformation;
     }
 
     public OldStationActor getOldStationActor() {
