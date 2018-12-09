@@ -158,4 +158,8 @@ public class AssetManager {
     public Texture getDisabledIcon() {
         return disabledIcon;
     }
+
+    public BitmapFont getFont() {
+        return font;
+    }
 }

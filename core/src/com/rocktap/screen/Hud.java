@@ -85,7 +85,7 @@ public class Hud implements Disposable {
         viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
         stage = new Stage(viewport, sb);
         generator = new com.rocktap.utils.BitmapFontGenerator();
-        font = generator.getFont();
+        font = gameManager.getAssetManager().getFont();
         generator.dispose();
         font.setColor(Color.WHITE);
         this.playScreen = playscreen;
@@ -193,20 +193,6 @@ public class Hud implements Disposable {
         };
         optionButton.addListener(buttonListenerOption);
 
-        InputListener buttonListenerDEV = new ClickListener(){
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                GameInformation.INSTANCE.getUpgradeLevelList().set(0, 0);
-                GameInformation.INSTANCE.getUpgradeLevelList().set(1, 0);
-                GameInformation.INSTANCE.getUpgradeLevelList().set(2, 0);
-                GameInformation.INSTANCE.getUpgradeLevelList().set(3, 0);
-                GameInformation.INSTANCE.getUpgradeLevelList().set(4, 0);
-                GameInformation.INSTANCE.getUpgradeLevelList().set(5, 0);
-                GameInformation.INSTANCE.getUpgradeLevelList().set(6, 0);
-                GameInformation.INSTANCE.getUpgradeLevelList().set(7, 0);
-                GameInformation.INSTANCE.setStationId(1);
-                return false;
-            }
-        };
     }
 
     /**
@@ -240,19 +226,18 @@ public class Hud implements Disposable {
         table.row();
         table.add(depthLabel).colspan(activeMenuList.size());
         table.row();
-        table.add(upgradeButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/5);
-        table.add(skillButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/5);
-        table.add(mapButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/5);
-        table.add(achievButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/5);
-        table.add(optionButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/5);
-
+        table.add(upgradeButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
+        table.add(skillButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
+        table.add(mapButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
+        table.add(achievButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
+        table.add(optionButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
+        table.debug();
         // Ajout des menu a l'interface
         table.addActor(activeMenuList.get(0).getParentTable());
         table.addActor(activeMenuList.get(1).getParentTable());
         table.addActor(activeMenuList.get(2).getParentTable());
         table.addActor(activeMenuList.get(3).getParentTable());
         table.addActor(activeMenuList.get(4).getParentTable());
-
         stage.addActor(table);
     }
 

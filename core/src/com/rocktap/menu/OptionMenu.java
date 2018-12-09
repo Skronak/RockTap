@@ -11,11 +11,22 @@ public class OptionMenu extends AbstractMenu{
 
     private TextButton weatherButton;
     private TextButton soundButton;
+    private TextButton resetButton;
 
     public OptionMenu(GameManager gameManager) {
         super(gameManager);
 
-        weatherButton = new TextButton("",gameManager.getAssetManager().getSkin());
+        resetButton = new TextButton("reset account",gameManager.getAssetManager().getSkin());
+        resetButton.setDisabled(true);
+        resetButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                triggerReset();
+                return true;
+            }
+        });
+
+        weatherButton = new TextButton("disable weather",gameManager.getAssetManager().getSkin());
         weatherButton.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -33,6 +44,7 @@ public class OptionMenu extends AbstractMenu{
                 return true;
             }
         });
+
         customizeMenuTable();
     }
 
@@ -46,10 +58,16 @@ public class OptionMenu extends AbstractMenu{
         gameManager.getPlayScreen().getWeatherManager().stopAll();
     }
 
+    public void triggerReset(){
+        GameInformation.INSTANCE.reset();
+    }
+
     public void customizeMenuTable() {
         parentTable.add(new Label("OPTION", skin)).top();
         parentTable.row();
         parentTable.add(weatherButton).expandX().left().pad(20);
+        parentTable.row();
+        parentTable.add(resetButton).expandX().left().pad(20);
         parentTable.row();
         parentTable.add(soundButton).left().pad(20);
     }

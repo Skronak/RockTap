@@ -56,32 +56,8 @@ public enum GameInformation {
 
         if (!prefs.contains("lastLogin")) {
             Gdx.app.debug("GameInformation", "Initialisation du compte par defaut");
-            currentGold = 0;
-            currency = 0;
-            genGoldPassive = 2;
-            genGoldActive = 2;
-            genCurrencyPassive = 0;
-            genCurrencyActive = 0;
-            criticalRate = 5;
-
-            stationId = 0;
-            upgradeLevelList.add(0);
-            upgradeLevelList.add(0);
-            upgradeLevelList.add(0);
-            upgradeLevelList.add(0);
-            upgradeLevelList.add(0);
-            upgradeLevelList.add(0);
-            upgradeLevelList.add(0);
-            upgradeLevelList.add(0);
-            lastLogin = System.currentTimeMillis();
-            totalTapNumber=0;
-            totalGameTime=0l;
-            factionLvl=0;
-            factionId=0;
-            factionExp=0;
-            firstPlay = true;
-            optionSound=true;
-            optionWeather=true;
+            initGameInformation();
+            initGamePreference();
         } else {
             currentGold = prefs.getFloat("currentGold");
             currency = prefs.getInteger("currentCurrency");
@@ -185,6 +161,41 @@ public enum GameInformation {
         prefs.flush();
     }
 
+    public void reset(){
+        initGameInformation();
+        saveInformation();
+    }
+
+    public void initGameInformation(){
+        currentGold = 0;
+        currency = 0;
+        genGoldPassive = 2;
+        genGoldActive = 2;
+        genCurrencyPassive = 0;
+        genCurrencyActive = 0;
+        criticalRate = 5;
+        stationId = 0;
+        upgradeLevelList.add(0);
+        upgradeLevelList.add(0);
+        upgradeLevelList.add(0);
+        upgradeLevelList.add(0);
+        upgradeLevelList.add(0);
+        upgradeLevelList.add(0);
+        upgradeLevelList.add(0);
+        upgradeLevelList.add(0);
+        lastLogin = System.currentTimeMillis();
+        totalTapNumber=0;
+        totalGameTime=0l;
+        factionLvl=0;
+        factionId=0;
+        factionExp=0;
+    }
+
+    public void initGamePreference(){
+        firstPlay = true;
+        optionSound=true;
+        optionWeather=true;
+    }
 //*****************************************************
 //                  GETTER & SETTER
 // ****************************************************

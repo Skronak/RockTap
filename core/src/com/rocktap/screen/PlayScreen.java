@@ -241,7 +241,6 @@ public class PlayScreen implements Screen {
         stage.act();
         stage.draw();
         spriteBatch.setProjectionMatrix(hud.getStage().getCamera().combined);
-
         hud.draw();
 
         //DEBUG
@@ -478,6 +477,10 @@ public class PlayScreen implements Screen {
 
     public Group getLayer1GraphicObject() {
         return layer1GraphicObject;
+    }
+
+    public StationEntity getStationEntity() {
+        return stationEntity;
     }
 
     public StationActor getStationActor() {

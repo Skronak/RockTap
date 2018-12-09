@@ -115,7 +115,7 @@ public class ModuleManager {
         this.calculateGoldGen();
 
         // Regenere les upgrades a afficher en jeux
-        this.moduleMenu.getGameManager().getOldStationActor().loadUpgrade();
+        this.gameManager.getPlayScreen().getStationEntity().initModule();
      }
 
     /**
