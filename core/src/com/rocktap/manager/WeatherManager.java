@@ -26,7 +26,7 @@ public class WeatherManager {
     }
 
     /**
-     *
+     * Start a random climatic effect
      */
     public void addRandomWeather() {
         if (snowEffectActor.isComplete() && rainEffectActor.isComplete()) {
@@ -65,6 +65,10 @@ public class WeatherManager {
         rainEffectActor.stop();
     }
 
+    /**
+     * Check if any climatic effect is occuring
+     * @return
+     */
     public boolean isComplete(){
         return snowEffectActor.particleEffect.isComplete()&& rainEffectActor.isComplete();
     }

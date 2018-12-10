@@ -1,4 +1,4 @@
-package com.rocktap.menu;
+package com.rocktap.object;
 
 /**
  * Created by Skronak on 01/02/2017.

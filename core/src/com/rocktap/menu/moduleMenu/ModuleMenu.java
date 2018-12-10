@@ -1,17 +1,18 @@
-package com.rocktap.menu;
+package com.rocktap.menu.moduleMenu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
-import com.rocktap.manager.ModuleManager;
+import com.rocktap.menu.AbstractMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,26 +20,20 @@ import java.util.List;
 /**
  * Created by Skronak on 01/02/2017.
  * Menu d'update
- * // TODO: super menu desactivant l'input listener, gerer un state?
  */
-public class UpgradeModuleMenu extends AbstractMenu {
+public class ModuleMenu extends AbstractMenu {
     private Label detailGold;
     private Label detailDescription;
     private Label detailLevel;
     private Label detailTitre;
-    private ModuleManager moduleManager;
     private Stack stack;
-    private Label moduleLevelLabel;
-    private TextButton buyButton;
-    private Table moduleDetails;
     // indique le skill actuellement selectionne
     private int currentSelection;
     private List<ImageButton> moduleButtonList;
     private VerticalGroup scrollContainerVG;
 
-    public UpgradeModuleMenu(GameManager gameManager) {
+    public ModuleMenu(GameManager gameManager) {
         super(gameManager);
-        this.moduleManager = new ModuleManager(this, gameManager);
         customizeMenuTable();
         currentSelection = 1;         // selection 1 module par defaut
     }
@@ -56,6 +51,7 @@ public class UpgradeModuleMenu extends AbstractMenu {
         parentTable.debug();
     }
 
+
     /**
      * Methode d'initialisation des modules disponibles a
      * l'upgrade
@@ -68,7 +64,7 @@ public class UpgradeModuleMenu extends AbstractMenu {
         scrollContainerVG.space(5f);
         ScrollPane.ScrollPaneStyle paneStyle = new ScrollPane.ScrollPaneStyle();
         paneStyle.hScroll = paneStyle.hScrollKnob = paneStyle.vScroll = paneStyle.vScrollKnob;
-        paneStyle.vScrollKnob = new TextureRegionDrawable(new TextureRegion(gameManager.getAssetManager().getScrollTexture(), 10, 50));
+        paneStyle.vScrollKnob = new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getScrollTexture(), 10, 50));
 
         ScrollPane pane = new ScrollPane(scrollContainerVG, paneStyle);
         pane.setScrollingDisabled(true, false);
@@ -76,7 +72,7 @@ public class UpgradeModuleMenu extends AbstractMenu {
         // Definition drawables possibles pour les boutons
         moduleButtonList = new ArrayList<ImageButton>();
 
-        for (int i = 0; i < gameManager.getAssetManager().getModuleElementList().size(); i++) {
+        for (int i = 0; i < AssetManager.INSTANCE.getModuleElementList().size(); i++) {
             ModuleElementTable moduleElementTable = new ModuleElementTable(gameManager, this);
             moduleElementTable.initModuleElementMenu(i);
             scrollContainerVG.addActor(moduleElementTable);
@@ -86,9 +82,24 @@ public class UpgradeModuleMenu extends AbstractMenu {
         return pane;
     }
 
+    /**
+     * Check if button is disabled or not
+     */
+    public void updateUpgradeButton () {
+        for (int i=0;i<AssetManager.INSTANCE.getModuleElementList().size();i++) {
+            if (gameManager.moduleManager.isAvailableUpgrade(i)){
+                ((ModuleElementTable) getScrollContainerVG().getChildren().get(i)).getBuyButton().setTouchable(Touchable.enabled);
+                ((ModuleElementTable) getScrollContainerVG().getChildren().get(i)).getBuyButton().setColor(Color.YELLOW);
+            } else {
+                ((ModuleElementTable) getScrollContainerVG().getChildren().get(i)).getBuyButton().setTouchable(Touchable.disabled);
+                ((ModuleElementTable) getScrollContainerVG().getChildren().get(i)).getBuyButton().setColor(Color.GRAY);
+            }
+        }
+    }
+
     @Override
     public void update() {
-        moduleManager.updateUpgradeButton();
+        gameManager.moduleManager.updateUpgradeButton();
     }
 //*****************************************************
 //                  GETTER & SETTER
@@ -124,14 +135,6 @@ public class UpgradeModuleMenu extends AbstractMenu {
 
     public void setDetailTitre(Label detailTitre) {
         this.detailTitre = detailTitre;
-    }
-
-    public ModuleManager getModuleManager() {
-        return moduleManager;
-    }
-
-    public void setModuleManager(ModuleManager moduleManager) {
-        this.moduleManager = moduleManager;
     }
 
     public int getCurrentSelection() {

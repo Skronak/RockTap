@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
 import com.rocktap.utils.Constants;
 
@@ -30,8 +31,8 @@ public abstract class AbstractMenu {
     public void initMenu() {
         menu_width = Constants.V_WIDTH - Constants.UPDATE_MENU_PAD_EXTERNAL_WIDTH;
         menu_height = Constants.V_HEIGHT - Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT - (Constants.UPDATE_MENU_PAD_EXTERNAL_HEIGHT);
-        menuBackground = gameManager.getAssetManager().getMenuBackgroundTexture();
-        skin = gameManager.getAssetManager().getSkin();
+        menuBackground = AssetManager.INSTANCE.getMenuBackgroundTexture();
+        skin = AssetManager.INSTANCE.getSkin();
 
         // Definition du menu
         parentTable = new Table();

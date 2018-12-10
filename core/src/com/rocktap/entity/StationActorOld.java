@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Array;
 import com.rocktap.Animation.AnimatedActor;
 import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
-import com.rocktap.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.List;
  * Created by Skronak on 23/07/2017.
  */
 //TODO rendre la classe generique (module) et ajouter prise en charge atlas
-public class OldStationActor extends Actor {
+public class StationActorOld extends Actor {
     private Animation idleAnimation;
     private Array<TextureRegion> frames;
     private float deltatime;
@@ -30,14 +29,9 @@ public class OldStationActor extends Actor {
     private TextureRegion currentFrame;
     private AnimatedActor beamActor;
     private GameManager gameManager;
-    private float stationAnimationTimer;
-    private boolean stationAnimationUp;
 
-    public OldStationActor(int posX, int posY, int width, int height, float animSpeed, GameManager gameManager) {
+    public StationActorOld(int posX, int posY, int width, int height, float animSpeed, GameManager gameManager) {
         deltatime = 0;
-        stationAnimationTimer = 0f;
-        stationAnimationUp = false;
-
         this.width = width;
         this.height = height;
         this.animSpeed = animSpeed;
@@ -107,26 +101,6 @@ public class OldStationActor extends Actor {
     {
         super.act(deltaTime);
         deltatime += deltaTime;
-        updatePosition();
-    }
-
-    public void updatePosition(){
-        // station animation
-        if(stationAnimationTimer >= 0.2f) {
-            if (this.getY() >= Constants.STATION_ANIMATION_MAX_ALTITUDE && stationAnimationUp) {
-                stationAnimationUp = false;
-            }
-            if (this.getY() <= Constants.STATION_ANIMATION_MIN_ALTITUDE && !stationAnimationUp) {
-                stationAnimationUp = true;
-            }
-
-            if (stationAnimationUp) {
-                this.moveBy(0,1);
-            } else {
-                this.moveBy(0,-1);
-            }
-            stationAnimationTimer = 0f;
-        }
     }
 
 //*****************************************************

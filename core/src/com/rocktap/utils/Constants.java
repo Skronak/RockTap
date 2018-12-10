@@ -70,5 +70,7 @@ public class Constants {
 
     public static int DELAY_WEATHER_CHANGE = 30;
 
+    public static int MAX_FPS = 60;
+
 
 }

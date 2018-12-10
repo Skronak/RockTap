@@ -1,4 +1,4 @@
-package com.rocktap.menu;
+package com.rocktap.object;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -21,7 +21,7 @@ import com.rocktap.menu.moduleMenu.ModuleMenu;
  *
  */
 
-public class ModuleElementTable extends Table {
+public class ModuleElementMenu extends Table {
     private GameManager gameManager;
     private ModuleMenu moduleMenu;
 
@@ -35,7 +35,7 @@ public class ModuleElementTable extends Table {
     private Image goldIcon;
     private Image timeIcon;
 
-    public ModuleElementTable(GameManager gameManager, ModuleMenu moduleMenu){
+    public ModuleElementMenu(GameManager gameManager, ModuleMenu moduleMenu){
         this.gameManager = gameManager;
         this.moduleMenu = moduleMenu;
     }
@@ -72,7 +72,6 @@ public class ModuleElementTable extends Table {
 
         // Liste level actuel du module
         Table moduleLevelGroup = new Table();
-        moduleLevelGroup.debug();
         moduleLevelGroup.add(moduleLevelLabel).left().colspan(4);
         moduleLevelGroup.row();
         moduleLevelGroup.add(moduleLevelImage).size(120, 40).left().colspan(4);
@@ -85,7 +84,7 @@ public class ModuleElementTable extends Table {
         this.setHeight(30);
         this.add(vgCol0).width(80);
         this.add(moduleLevelGroup);
-        this.add(buyButton).height(90).width(70).padLeft(2);
+        this.add(buyButton).height(90).width(70);
     }
 
     /**
@@ -96,12 +95,16 @@ public class ModuleElementTable extends Table {
     // OBSOLETE
     public void updateModuleElementMenu(int i) {
         ModuleElementDTO moduleElementDTOSource = AssetManager.INSTANCE.getModuleElementList().get(i);
+
         moduleLevelLabel.setText("Level "+GameInformation.INSTANCE.getUpgradeLevelList().get(i));
         moduleLevelImage.setDrawable(new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i)))));
         skillIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getModuleDrawableUpList().get(i))));
         elementTitle.setText(moduleElementDTOSource.getTitle());
+        goldBonusLabel.setText("50");
+        timeBonusLabel.setText("20");
         buyButton.setText(gameManager.largeMath.getDisplayValue(moduleElementDTOSource.getLevel().get(i).getCost().getValue(), moduleElementDTOSource.getLevel().get(i).getCost().getCurrency()));
     }
+
 //*****************************************************
 //                  GETTER & SETTER
 // ****************************************************

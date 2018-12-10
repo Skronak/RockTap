@@ -21,9 +21,9 @@ public class GameInformationMenu extends AbstractMenu {
     public GameInformationMenu(GameManager gameManager) {
         super(gameManager);
         stationLvlLabel = new Label(String.valueOf(GameInformation.INSTANCE.getStationId()), skin);
-        goldLabel = new Label(gameManager.getLargeMath().getDisplayValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency()), skin);
-        activGoldGenLabel = new Label(gameManager.getLargeMath().getDisplayValue(GameInformation.INSTANCE.getGenGoldActive(), GameInformation.INSTANCE.getGenCurrencyActive()), skin);
-        passivGoldGenLabel = new Label(gameManager.getLargeMath().getDisplayValue(GameInformation.INSTANCE.getGenGoldPassive(), GameInformation.INSTANCE.getGenCurrencyPassive()), skin);
+        goldLabel = new Label(gameManager.largeMath.getDisplayValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency()), skin);
+        activGoldGenLabel = new Label(gameManager.largeMath.getDisplayValue(GameInformation.INSTANCE.getGenGoldActive(), GameInformation.INSTANCE.getGenCurrencyActive()), skin);
+        passivGoldGenLabel = new Label(gameManager.largeMath.getDisplayValue(GameInformation.INSTANCE.getGenGoldPassive(), GameInformation.INSTANCE.getGenCurrencyPassive()), skin);
         criticalHitLabel = new Label(String.valueOf("x "+GameInformation.INSTANCE.getCriticalRate()), skin);
         gameTimeLabel = new Label(String.valueOf((GameInformation.INSTANCE.getTotalGameTime()/ (1000*60*60)) + " hours"), skin);
         tapNumberLabel = new Label(String.valueOf(GameInformation.INSTANCE.getTotalTapNumber()), skin);
@@ -60,9 +60,9 @@ public class GameInformationMenu extends AbstractMenu {
     @Override
     public void update() {
         stationLvlLabel.setText(String.valueOf(GameInformation.INSTANCE.getStationId()));
-        goldLabel.setText(gameManager.getLargeMath().getDisplayValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency()));
-        activGoldGenLabel.setText(gameManager.getLargeMath().getDisplayValue(GameInformation.INSTANCE.getGenGoldActive(), GameInformation.INSTANCE.getGenCurrencyActive()));
-        passivGoldGenLabel.setText(gameManager.getLargeMath().getDisplayValue(GameInformation.INSTANCE.getGenGoldPassive(), GameInformation.INSTANCE.getGenCurrencyPassive()));
+        goldLabel.setText(gameManager.largeMath.getDisplayValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency()));
+        activGoldGenLabel.setText(gameManager.largeMath.getDisplayValue(GameInformation.INSTANCE.getGenGoldActive(), GameInformation.INSTANCE.getGenCurrencyActive()));
+        passivGoldGenLabel.setText(gameManager.largeMath.getDisplayValue(GameInformation.INSTANCE.getGenGoldPassive(), GameInformation.INSTANCE.getGenCurrencyPassive()));
         criticalHitLabel.setText("x "+GameInformation.INSTANCE.getCriticalRate());
         gameTimeLabel.setText(String.valueOf((GameInformation.INSTANCE.getTotalGameTime()/ (1000*60*60)) + " hours"));
         tapNumberLabel.setText(String.valueOf(GameInformation.INSTANCE.getTotalTapNumber()));

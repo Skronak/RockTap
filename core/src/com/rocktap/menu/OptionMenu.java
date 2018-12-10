@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.rocktap.entity.GameInformation;
+import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
 
 public class OptionMenu extends AbstractMenu{
@@ -16,7 +17,7 @@ public class OptionMenu extends AbstractMenu{
     public OptionMenu(GameManager gameManager) {
         super(gameManager);
 
-        resetButton = new TextButton("reset account",gameManager.getAssetManager().getSkin());
+        resetButton = new TextButton("reset account",AssetManager.INSTANCE.getSkin());
         resetButton.setDisabled(true);
         resetButton.addListener(new InputListener(){
             @Override
@@ -26,7 +27,7 @@ public class OptionMenu extends AbstractMenu{
             }
         });
 
-        weatherButton = new TextButton("disable weather",gameManager.getAssetManager().getSkin());
+        weatherButton = new TextButton("disable weather",AssetManager.INSTANCE.getSkin());
         weatherButton.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -35,7 +36,7 @@ public class OptionMenu extends AbstractMenu{
             }
         });
 
-        soundButton = new TextButton("disable sound",gameManager.getAssetManager().getSkin());
+        soundButton = new TextButton("disable sound", AssetManager.INSTANCE.getSkin());
         soundButton.setDisabled(true);
         soundButton.addListener(new InputListener(){
             @Override
@@ -55,7 +56,7 @@ public class OptionMenu extends AbstractMenu{
 
     public void switchWeatherMode(){
         GameInformation.INSTANCE.setOptionWeather(!GameInformation.INSTANCE.isOptionWeather());
-        gameManager.getPlayScreen().getWeatherManager().stopAll();
+        gameManager.weatherManager.stopAll();
     }
 
     public void triggerReset(){

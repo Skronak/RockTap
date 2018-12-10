@@ -40,7 +40,7 @@ public class AnimatedBaseActor extends BaseActor
     {
         TextureRegion reg = new TextureRegion(tex);
         TextureRegion[] frames = { reg };
-        Animation anim = new Animation(1.0f, frames);
+        Animation<TextureRegion> anim = new Animation<TextureRegion>(1.0f, frames);
         storeAnimation(name, anim);
     }
 
@@ -83,6 +83,13 @@ public class AnimatedBaseActor extends BaseActor
 
     public void startAnimation()
     {  pauseAnim = false;  }
+
+    public void restartAnimation(){
+        if (animationStorage.get(getAnimationName()).isAnimationFinished(elapsedTime)) {
+            elapsedTime = 0f;
+        }
+        startAnimation();
+    }
 
     public void setAnimationFrame(int n)
     {  elapsedTime = n * activeAnim.getFrameDuration();  }

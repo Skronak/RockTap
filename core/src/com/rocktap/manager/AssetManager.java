@@ -19,7 +19,8 @@ import java.util.ArrayList;
  * Classe de chargement des assets du jeu
  * TODO Utiliser atlas
  */
-public class AssetManager {
+public enum AssetManager {
+    INSTANCE;
     private Json json;
 
     private ArrayList<ModuleElementDTO> moduleElementList;
@@ -37,7 +38,7 @@ public class AssetManager {
 
     private int loadValue;
 
-    public AssetManager() {
+    AssetManager() {
         this.json = new Json();
 
         loadValue=0;

@@ -3,7 +3,7 @@ package com.rocktap.input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rocktap.entity.GameInformation;
-import com.rocktap.menu.UpgradeModuleMenu;
+import com.rocktap.menu.moduleMenu.ModuleMenu;
 
 /**
  * Created by Skronak on 29/01/2017.
@@ -11,21 +11,21 @@ import com.rocktap.menu.UpgradeModuleMenu;
  */
 public class BuyUpgradeButtonListener extends ClickListener {
 
-    private UpgradeModuleMenu moduleMenu;
+    private ModuleMenu moduleMenu;
     // Identifiant du module rattaché au listener
     private int idModule;
 
 
-    public BuyUpgradeButtonListener(UpgradeModuleMenu moduleMenu, int id) {
+    public BuyUpgradeButtonListener(ModuleMenu moduleMenu, int id) {
         this.moduleMenu = moduleMenu;
         this.idModule = id;
     }
 
     @Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-        if (moduleMenu.getModuleManager().isAvailableUpgrade(idModule)) {
-            this.moduleMenu.getModuleManager().increaseUpgradeLevel(idModule);
-            this.moduleMenu.getModuleManager().updateModuleInformation(idModule);
+        if (moduleMenu.getGameManager().moduleManager.isAvailableUpgrade(idModule)) {
+            this.moduleMenu.getGameManager().moduleManager.increaseModuleLevel(idModule);
+            this.moduleMenu.getGameManager().moduleManager.updateModuleMenuInformation(idModule);
             GameInformation.INSTANCE.saveInformation();
         }
         return false;

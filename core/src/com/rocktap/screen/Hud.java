@@ -27,13 +27,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rocktap.Animation.AnimatedBaseActor;
 import com.rocktap.entity.GameInformation;
 import com.rocktap.input.CameraDragListener;
+import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.AbstractMenu;
 import com.rocktap.menu.AchievmentMenu;
 import com.rocktap.menu.FactionMenu;
 import com.rocktap.menu.GameInformationMenu;
 import com.rocktap.menu.OptionMenu;
-import com.rocktap.menu.UpgradeModuleMenu;
+import com.rocktap.menu.moduleMenu.ModuleMenu;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
 import com.rocktap.utils.LargeMath;
@@ -50,7 +51,7 @@ import java.util.ArrayList;
 public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
-    private UpgradeModuleMenu upgradeModuleMenu;
+    private ModuleMenu moduleMenu;
     private FactionMenu factionMenu;
     private OptionMenu optionMenu;
     private GameInformationMenu gameInformationMenu;
@@ -73,17 +74,17 @@ public class Hud implements Disposable {
     private ArrayList<AbstractMenu> activeMenuList;
     private PlayScreen playScreen;
     private Label depthLabel;
-    private AnimatedBaseActor screAnimatedActor;
+    public AnimatedBaseActor screAnimatedActor;
     private Animation idleAnimation;
 
     public Hud(SpriteBatch sb, GameManager gameManager, PlayScreen playscreen) {
-        largeMath = gameManager.getLargeMath();
+        largeMath = gameManager.largeMath;
         this.gameManager = gameManager;
         OrthographicCamera camera = new OrthographicCamera();
         viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
         stage = new Stage(viewport, sb);
         generator = new com.rocktap.utils.BitmapFontGenerator();
-        font = gameManager.getAssetManager().getFont();
+        font = AssetManager.INSTANCE.getFont();
         generator.dispose();
         font.setColor(Color.WHITE);
         this.playScreen = playscreen;
@@ -96,13 +97,13 @@ public class Hud implements Disposable {
      * Initialise les menu
      */
     private void initMenu() {
-        upgradeModuleMenu = new UpgradeModuleMenu(gameManager);
+        moduleMenu = new ModuleMenu(gameManager);
         factionMenu = new FactionMenu(gameManager);
         gameInformationMenu = new GameInformationMenu(gameManager);
         optionMenu = new OptionMenu(gameManager);
 
         activeMenuList = new ArrayList<AbstractMenu>();
-        activeMenuList.add(upgradeModuleMenu);
+        activeMenuList.add(moduleMenu);
         activeMenuList.add(new AchievmentMenu(gameManager));
         activeMenuList.add(factionMenu);
         activeMenuList.add(gameInformationMenu);
@@ -117,10 +118,11 @@ public class Hud implements Disposable {
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("icons/screw_0.png"))));
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("icons/screw_1.png"))));
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("icons/screw_2.png"))));
-        idleAnimation = new Animation(0.3f, frames);
-        idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        idleAnimation = new Animation(0.2f, frames);
+        idleAnimation.setPlayMode(Animation.PlayMode.NORMAL);
         screAnimatedActor = new AnimatedBaseActor();
         screAnimatedActor.storeAnimation("idle",idleAnimation);
+        screAnimatedActor.pauseAnimation();
 
         Texture upgradeButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b2.png"));
         Texture skillButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b1.png"));
@@ -269,7 +271,7 @@ public class Hud implements Disposable {
     }
 
     public void animateDecreaseGold(ValueDTO valueDto) {
-        String text = this.gameManager.getLargeMath().getDisplayValue(valueDto.getValue(), valueDto.getCurrency());
+        String text = gameManager.largeMath.getDisplayValue(valueDto.getValue(), valueDto.getCurrency());
         goldDecreaseLabel.setText("- " + text);
         goldDecreaseLabel.clearActions();
         goldDecreaseLabel.addAction(Actions.sequence(
@@ -296,11 +298,11 @@ public class Hud implements Disposable {
         // Affiche le menu concerné si non visible
         if (menu.equals(currentMenu)) {
             menu.getParentTable().setVisible(false);
-            gameManager.setCurrentState(GameState.IN_GAME);
+            gameManager.currentState=GameState.IN_GAME;
             currentMenu = null;
         } else {
             menu.getParentTable().setVisible(true);
-            gameManager.setCurrentState(GameState.UPGRADE);
+            gameManager.currentState=GameState.MENU;
             currentMenu = menu;
         }
     }
@@ -334,8 +336,8 @@ public class Hud implements Disposable {
         viewport.update(width, height);
     }
 
-    public UpgradeModuleMenu getUpgradeModuleMenu() {
-        return upgradeModuleMenu;
+    public ModuleMenu getModuleMenu() {
+        return moduleMenu;
     }
 
 }

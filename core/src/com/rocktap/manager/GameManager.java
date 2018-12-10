@@ -1,7 +1,7 @@
 package com.rocktap.manager;
 
+import com.badlogic.gdx.Gdx;
 import com.rocktap.entity.GameInformation;
-import com.rocktap.entity.OldStationActor;
 import com.rocktap.screen.PlayScreen;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
@@ -15,37 +15,90 @@ import com.rocktap.utils.ValueDTO;
  * gerant le lien entre PlayScreen et GameInformation
  */
 public class GameManager {
-    private OldStationActor oldStationActor;
 
-    private AssetManager assetManager;
+    public PlayScreen playScreen;
 
-    private PlayScreen playScreen;
+    public LargeMath largeMath;
 
-    private LargeMath largeMath;
+    public WeatherManager weatherManager;
+
+    public ModuleManager moduleManager;
+
+    public float autoSaveTimer,weatherTimer, increaseGoldTimer, logicTimer;
+
 
     // Etat du jeu
-    private GameState currentState;
+    public GameState currentState;
 
     public GameManager(PlayScreen playScreen) {
         currentState = GameState.IN_GAME;
-        assetManager = new AssetManager();
         this.playScreen = playScreen;
         largeMath = new LargeMath();
+
+        weatherManager = new WeatherManager(playScreen);
+        moduleManager = new ModuleManager(this);
+        autoSaveTimer = 0f;
+        increaseGoldTimer = 0f;
+        weatherTimer = 0f;
+        logicTimer = 0f;
     }
 
-    /**
-     * Generation d'une oldStationActor en fonction des informations du compte
-     * @param posX
-     * @param posY
-     * @param width
-     * @param height
-     * @param animSpeed
-     * @return
-     */
-    public OldStationActor initStationActor(int posX, int posY, int width, int height, float animSpeed) {
-        oldStationActor = new OldStationActor(posX,posY,width,height,animSpeed, this);
-        return oldStationActor;
+    public void initialiseGame(){
+        moduleManager.initialize(playScreen.getHud().getModuleMenu());
     }
+    /**
+     * Modification de letat du jeu en fonction
+     * du temps passe
+     */
+    public void updateLogic(float delta) {
+        autoSaveTimer += Gdx.graphics.getDeltaTime();
+        increaseGoldTimer += Gdx.graphics.getDeltaTime();
+        weatherTimer += Gdx.graphics.getDeltaTime();
+        logicTimer += Gdx.graphics.getDeltaTime();
+
+        switch (currentState) {
+            case IN_GAME:
+                Gdx.input.setInputProcessor(playScreen.inputMultiplexer);
+                break;
+            case MENU:
+                Gdx.input.setInputProcessor(playScreen.getHud().getStage());
+                if (logicTimer > 1f) {
+                    moduleManager.updateUpgradeButton();
+                    logicTimer=0f;
+                }
+                break;
+            case CREDIT:
+                Gdx.input.setInputProcessor(playScreen.getHud().getStage());
+                break;
+            default:
+                break;
+        }
+
+        // Autosave
+        if(autoSaveTimer >= Constants.DELAY_AUTOSAVE){
+            Gdx.app.debug("PlayScreen","Saving");
+            GameInformation.INSTANCE.saveInformation();
+            autoSaveTimer=0f;
+        }
+
+        // Increase Gold
+        if(increaseGoldTimer >= Constants.DELAY_GENGOLD_PASSIV) {
+            increaseGoldPassive();
+            Gdx.app.debug("PlayScreen","Increasing Gold by "+GameInformation.INSTANCE.getGenGoldPassive()+" val "+GameInformation.INSTANCE.getGenCurrencyPassive());
+            increaseGoldPassive();
+            playScreen.getHud().updateGoldLabel();
+            increaseGoldTimer=0f;
+        }
+
+        if (GameInformation.INSTANCE.isOptionWeather()) {
+            if (weatherTimer >= Constants.DELAY_WEATHER_CHANGE) {
+                Gdx.app.debug("PlayScreen", "Changing weather");
+                weatherManager.addRandomWeather();
+                weatherTimer = 0f;
+            }
+        }
+    }
+
     /**
      * methode d'ajout d'or au tap
      */
@@ -66,15 +119,6 @@ public class GameManager {
         largeMath.formatGameInformation();
     }
 
-    public void calculateRestReward() {
-        long diff = System.currentTimeMillis() - GameInformation.INSTANCE.getLastLogin();
-        float hours   = (diff / (1000*60*60));
-
-        if (hours >= Constants.DELAY_HOURS_REWARD) {
-            // Calculer reward afk
-        }
-    }
-
     // Methode d'ajout d'or lors d'un critique
     public void increaseGoldCritical() {
 //        GameInformation.INSTANCE.setCurrentGold(GameInformation.INSTANCE.getCurrentGold() + getCriticalValue());
@@ -88,46 +132,5 @@ public class GameManager {
         return (GameInformation.INSTANCE.getGenGoldActive() * GameInformation.INSTANCE.getCriticalRate());
     }
 
-//*****************************************************
-//                  GETTER & SETTER
-// ****************************************************
-    public GameState getCurrentState() {
-        return currentState;
-    }
 
-    public void setCurrentState(GameState currentState) {
-        this.currentState = currentState;
-    }
-
-    public OldStationActor getOldStationActor() {
-        return oldStationActor;
-    }
-
-    public void setOldStationActor(OldStationActor oldStationActor) {
-        this.oldStationActor = oldStationActor;
-    }
-
-    public AssetManager getAssetManager() {
-        return assetManager;
-    }
-
-    public void setAssetManager(AssetManager assetManager) {
-        this.assetManager = assetManager;
-    }
-
-    public PlayScreen getPlayScreen() {
-        return playScreen;
-    }
-
-    public void setPlayScreen(PlayScreen playScreen) {
-        this.playScreen = playScreen;
-    }
-
-    public LargeMath getLargeMath() {
-        return largeMath;
-    }
-
-    public void setLargeMath(LargeMath largeMath) {
-        this.largeMath = largeMath;
-    }
 }

@@ -5,11 +5,10 @@ package com.rocktap.utils;
  */
 public enum GameState {
     //Objets directement construits
-    UPGRADE ("Upgrade"),
+    MENU ("Menu"),
     IN_GAME ("Ingame"),
     CREDIT ("Credit"),
-    SETTINGS ("Settings"),
-    ACHIEVEMENT ("Achievement");
+    PAUSE ("Pause");
 
     private String state = "";
 

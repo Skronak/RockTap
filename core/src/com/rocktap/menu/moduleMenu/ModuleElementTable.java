@@ -1,19 +1,16 @@
-package com.rocktap.menu;
+package com.rocktap.menu.moduleMenu;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.entity.GameInformation;
 import com.rocktap.entity.ModuleElementDTO;
 import com.rocktap.entity.ModuleLevelDTO;
 import com.rocktap.input.BuyUpgradeButtonListener;
 import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
-import com.rocktap.menu.moduleMenu.ModuleMenu;
 
 /**
  * Represente un module dans le menu deroulant des modules
@@ -88,20 +85,6 @@ public class ModuleElementTable extends Table {
         this.add(buyButton).height(90).width(70).padLeft(2);
     }
 
-    /**
-     * Methode de mise a jour des informations du menu
-     * d'un module existant
-     * @param i
-     */
-    // OBSOLETE
-    public void updateModuleElementMenu(int i) {
-        ModuleElementDTO moduleElementDTOSource = AssetManager.INSTANCE.getModuleElementList().get(i);
-        moduleLevelLabel.setText("Level "+GameInformation.INSTANCE.getUpgradeLevelList().get(i));
-        moduleLevelImage.setDrawable(new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i)))));
-        skillIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getModuleDrawableUpList().get(i))));
-        elementTitle.setText(moduleElementDTOSource.getTitle());
-        buyButton.setText(gameManager.largeMath.getDisplayValue(moduleElementDTOSource.getLevel().get(i).getCost().getValue(), moduleElementDTOSource.getLevel().get(i).getCost().getCurrency()));
-    }
 //*****************************************************
 //                  GETTER & SETTER
 // ****************************************************

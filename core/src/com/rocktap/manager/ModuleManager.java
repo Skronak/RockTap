@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.entity.GameInformation;
 import com.rocktap.entity.ModuleElementDTO;
 import com.rocktap.entity.ModuleLevelDTO;
-import com.rocktap.menu.ModuleElementTable;
-import com.rocktap.menu.UpgradeModuleMenu;
+import com.rocktap.menu.moduleMenu.ModuleElementTable;
+import com.rocktap.menu.moduleMenu.ModuleMenu;
 import com.rocktap.utils.ValueDTO;
 
 import java.util.List;
@@ -22,22 +22,25 @@ import java.util.List;
 public class ModuleManager {
 
     private GameManager gameManager;
-    private UpgradeModuleMenu moduleMenu;
+    private ModuleMenu moduleMenu;
     private List<ModuleElementDTO> moduleEntityList;
 
-    public ModuleManager(UpgradeModuleMenu moduleMenu, GameManager gameManager) {
+    public ModuleManager(GameManager gameManager) {
         this.moduleMenu = moduleMenu;
         this.gameManager = gameManager;
-        this.moduleEntityList = gameManager.getAssetManager().getModuleElementList();
+        this.moduleEntityList = AssetManager.INSTANCE.getModuleElementList();
+    }
 
-        this.calculateGoldGen();
+    public void initialize(ModuleMenu moduleMenu){
+        this.moduleMenu=moduleMenu;
+        evaluatePassivGen();
     }
 
     /**
-     * Recalcule le goldGen global en fonction
+     * Calculate passive incomes according to unlocked upgrade
      * du niveau des updates
      */
-    public void calculateGoldGen(){
+    public void evaluatePassivGen(){
         float goldGen = 0;
         int currGen = 0;
         float goldGenToAdd = 0;
@@ -54,7 +57,7 @@ public class ModuleManager {
                 // Dans les generations possible de l'upgrade, cherche celui du lvl puis cherche valeur de l'upgrade
                 goldGenToAdd = moduleEntityList.get(i).getLevel().get(upgradeLevel).getGeneration().getValue();
                 currGenToAdd = moduleEntityList.get(i).getLevel().get(upgradeLevel).getGeneration().getCurrency();
-                newVal = gameManager.getLargeMath().increaseValue(goldGen,currGen,goldGenToAdd,currGenToAdd);
+                newVal = gameManager.largeMath.increaseValue(goldGen,currGen,goldGenToAdd,currGenToAdd);
             }
         }
         GameInformation.INSTANCE.setGenGoldPassive(newVal.getValue());
@@ -85,7 +88,7 @@ public class ModuleManager {
      * Check if button is disabled or not
      */
     public void updateUpgradeButton () {
-        for (int i=0;i<gameManager.getAssetManager().getModuleElementList().size();i++) {
+        for (int i=0;i<AssetManager.INSTANCE.getModuleElementList().size();i++) {
             if (isAvailableUpgrade(i)){
                 ((ModuleElementTable) moduleMenu.getScrollContainerVG().getChildren().get(i)).getBuyButton().setTouchable(Touchable.enabled);
                 ((ModuleElementTable) moduleMenu.getScrollContainerVG().getChildren().get(i)).getBuyButton().setColor(Color.YELLOW);
@@ -97,41 +100,40 @@ public class ModuleManager {
     }
 
     /**
-     * Augmente le niveau d'un module
+     * Increase a module level
      * @param idSelect
      */
-    public void increaseUpgradeLevel(int idSelect) {
+    public void increaseModuleLevel(int idSelect) {
         // Calcul et Affichage de la soustraction
         ValueDTO decreaseValue = moduleEntityList.get(idSelect).getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(idSelect)).getCost();
-        this.gameManager.getPlayScreen().getHud().animateDecreaseGold(decreaseValue);
+        gameManager.playScreen.getHud().animateDecreaseGold(decreaseValue);
 
         // Mise a jour du montant des golds du joueur
-        ValueDTO gameInformationValue = gameManager.getLargeMath().decreaseValue(GameInformation.INSTANCE.getCurrentGold(),GameInformation.INSTANCE.getCurrency(),decreaseValue.getValue(), decreaseValue.getCurrency());
+        ValueDTO gameInformationValue = gameManager.largeMath.decreaseValue(GameInformation.INSTANCE.getCurrentGold(),GameInformation.INSTANCE.getCurrency(),decreaseValue.getValue(), decreaseValue.getCurrency());
         GameInformation.INSTANCE.setCurrentGold(gameInformationValue .getValue());
         GameInformation.INSTANCE.setCurrency(gameInformationValue .getCurrency());
 
         // Met a jour les informations de l'upgrade
         GameInformation.INSTANCE.getUpgradeLevelList().set(idSelect, GameInformation.INSTANCE.getUpgradeLevelList().get(idSelect) + 1);
-        this.calculateGoldGen();
+        this.evaluatePassivGen();
 
         // Regenere les upgrades a afficher en jeux
-        this.gameManager.getPlayScreen().getStationEntity().initModule();
+        this.gameManager.playScreen.getStationEntity().initModule();
      }
 
     /**
-     * Met a jour les informations d'un detail d'upgrade
-     * en fonction de l'upgrade selectionne
+     * Update upgrade information from the menu
      * @param id
      */
-    public void updateModuleInformation(int id) {
+    public void updateModuleMenuInformation(int id) {
         ModuleElementTable moduleElementTable = (ModuleElementTable) moduleMenu.getScrollContainerVG().getChildren().get(id);
-        ModuleLevelDTO moduleLevel = gameManager.getAssetManager().getModuleElementList().get(id).getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(id));
+        ModuleLevelDTO moduleLevel = AssetManager.INSTANCE.getModuleElementList().get(id).getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(id));
 
         moduleElementTable.getModuleLevelLabel().setText("Level "+GameInformation.INSTANCE.getUpgradeLevelList().get(id));
-        moduleElementTable.getModuleLevelImage().setDrawable(new TextureRegionDrawable(new TextureRegion(gameManager.getAssetManager().getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(id)))));
-        moduleElementTable.getSkillIcon().setDrawable(new TextureRegionDrawable(new TextureRegion(gameManager.getAssetManager().getModuleDrawableUpList().get(id))));
-        moduleElementTable.getGoldBonusLabel().setText("+"+gameManager.getLargeMath().getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()));
-        moduleElementTable.getBuyButton().setText(gameManager.getLargeMath().getDisplayValue(moduleLevel.getCost().getValue(), moduleLevel.getCost().getCurrency()));
+        moduleElementTable.getModuleLevelImage().setDrawable(new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(id)))));
+        moduleElementTable.getSkillIcon().setDrawable(new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getModuleDrawableUpList().get(id))));
+        moduleElementTable.getGoldBonusLabel().setText("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()));
+        moduleElementTable.getBuyButton().setText(gameManager.largeMath.getDisplayValue(moduleLevel.getCost().getValue(), moduleLevel.getCost().getCurrency()));
         animateLabel(moduleElementTable.getGoldBonusLabel());
         animateLabel(moduleElementTable.getTimeBonusLabel());
     }

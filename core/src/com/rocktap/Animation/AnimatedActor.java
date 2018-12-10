@@ -12,11 +12,11 @@ import com.badlogic.gdx.utils.Array;
  */
 public class AnimatedActor extends Actor {
 
-        private Animation animation;
+        public Animation animation;
         private float deltatime;
         private TextureRegion currentFrame;
 
-        public AnimatedActor (int posX, int posY, int width, int height, float animSpeed, Array<TextureRegion> frames, Animation.PlayMode playMode) {
+   public AnimatedActor (int posX, int posY, int width, int height, float animSpeed, Array<TextureRegion> frames, Animation.PlayMode playMode) {
             deltatime = 0;
             this.setWidth(width);
             this.setHeight(height);
@@ -24,6 +24,12 @@ public class AnimatedActor extends Actor {
             animation = new Animation(animSpeed, frames);
             animation.setPlayMode(playMode);
         }
+
+    public AnimatedActor (int width, int height) {
+        deltatime = 0;
+        this.setWidth(width);
+        this.setHeight(height);
+    }
 
         @Override
         public void draw (Batch batch, float parentAlpha) {
@@ -44,6 +50,10 @@ public class AnimatedActor extends Actor {
 
     public Animation getIdleAnimation() {
         return animation;
+    }
+
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
     }
 
     public void increaseSpeed(float value) {

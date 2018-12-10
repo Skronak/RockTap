@@ -33,9 +33,9 @@ public class SnowEffectActor extends AbstractParticleEffectActor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        snow1.setPosition(playScreen.getStationActor().getX(),playScreen.getStationActor().getY());
-        snow2.setPosition(playScreen.getStationActor().getX(),playScreen.getStationActor().getY());
-        snow3.setPosition(playScreen.getStationActor().getX(),playScreen.getStationActor().getY());
+        snow1.setPosition(playScreen.stationEntity.stationActor.getX(),playScreen.stationEntity.stationActor.getY());
+        snow2.setPosition(playScreen.stationEntity.stationActor.getX(),playScreen.stationEntity.stationActor.getY());
+        snow3.setPosition(playScreen.stationEntity.stationActor.getX(),playScreen.stationEntity.stationActor.getY());
     }
 
     @Override
@@ -47,14 +47,14 @@ public class SnowEffectActor extends AbstractParticleEffectActor {
         fog.setVisible(true);
         background.setVisible(true);
 
-        snow1.setSize(playScreen.getStationActor().getWidth(), playScreen.getStationActor().getHeight());
-        snow1.setPosition(playScreen.getStationActor().getX(),playScreen.getStationActor().getY());
+        snow1.setSize(playScreen.stationEntity.stationActor.getWidth(), playScreen.stationEntity.stationActor.getHeight());
+        snow1.setPosition(playScreen.stationEntity.stationActor.getX(),playScreen.stationEntity.stationActor.getY());
         snow1.getColor().a=0f;
-        snow2.setSize(playScreen.getStationActor().getWidth(), playScreen.getStationActor().getHeight());
-        snow2.setPosition(playScreen.getStationActor().getX(),playScreen.getStationActor().getY());
+        snow2.setSize(playScreen.stationEntity.stationActor.getWidth(), playScreen.stationEntity.stationActor.getHeight());
+        snow2.setPosition(playScreen.stationEntity.stationActor.getX(),playScreen.stationEntity.stationActor.getY());
         snow2.getColor().a=0f;
-        snow3.setSize(playScreen.getStationActor().getWidth(), playScreen.getStationActor().getHeight());
-        snow3.setPosition(playScreen.getStationActor().getX(),playScreen.getStationActor().getY());
+        snow3.setSize(playScreen.stationEntity.stationActor.getWidth(), playScreen.stationEntity.stationActor.getHeight());
+        snow3.setPosition(playScreen.stationEntity.stationActor.getX(),playScreen.stationEntity.stationActor.getY());
         snow3.getColor().a=0f;
         fog.setPosition(0,50);
         fog.setScale(2);

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.rocktap.actor.BeamActor;
 import com.rocktap.actor.StationActor;
+import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
 import com.rocktap.utils.Constants;
 
@@ -37,6 +38,7 @@ public class StationEntity {
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("sprites/station/ship"+ GameInformation.INSTANCE.getStationId()+"_3.png"))));
         Animation idleAnimation = new Animation(2f, frames);
         idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
         stationActor = new StationActor();
         stationActor.storeAnimation("idle",idleAnimation);
         stationActor.setSize(200,100);
@@ -48,7 +50,7 @@ public class StationEntity {
         for (int i = 0; i < GameInformation.INSTANCE.getUpgradeLevelList().size(); i++) {
             // Pour les upgrade 1-8, si lvl i > 0 alors ajoute dans liste a afficher
             if (GameInformation.INSTANCE.getUpgradeLevelList().get(i) > 0) {
-                ModuleElementDTO moduleElementDTO = gameManager.getAssetManager().getModuleElementList().get(i);
+                ModuleElementDTO moduleElementDTO = AssetManager.INSTANCE.getModuleElementList().get(i);
                 moduleElementDTO.setTextureRegion(new TextureRegion(new Texture(Gdx.files.internal(("sprites/upgrade/" + moduleElementDTO.getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i)).getSprite())))));
                 moduleToDraw.add(moduleElementDTO);
             }

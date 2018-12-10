@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.rocktap.utils.Constants;
 import com.rocktap.game.RocktapeGame;
+import com.rocktap.utils.Constants;
 
 /**
  * Created by Skronak on 15/07/2017.
