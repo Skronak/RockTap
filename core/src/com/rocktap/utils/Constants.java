@@ -41,7 +41,7 @@ public class Constants {
 
     public static Color NORMAL_LABEL_COLOR = Color.WHITE;
 
-    public static float UPDATE_MENU_PAD_EXTERNAL_HEIGHT = 20;
+    public static float UPDATE_MENU_PAD_EXTERNAL_HEIGHT = 40;
 
     public static float UPDATE_MENU_PAD_EXTERNAL_WIDTH = 20;
 
@@ -64,9 +64,9 @@ public class Constants {
     // nombre de digit qu'on conserve des gold du joueur
     public static int GOLD_PLAYER_SIZE_STORAGE = 9;
 
-    public static int STATION_ANIMATION_MAX_ALTITUDE = 408; //308
+    public static int STATION_ANIMATION_MAX_ALTITUDE = 370;//408;
 
-    public static int STATION_ANIMATION_MIN_ALTITUDE = 402;//302
+    public static int STATION_ANIMATION_MIN_ALTITUDE = 363;//402;
 
     public static int DELAY_WEATHER_CHANGE = 30;
 

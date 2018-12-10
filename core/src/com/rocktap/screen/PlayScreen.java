@@ -372,6 +372,7 @@ public class PlayScreen implements Screen {
             Actions.fadeIn(0.5f),
             Actions.fadeOut(0.5f),
             Actions.hide()));
+
     }}
 
     /**

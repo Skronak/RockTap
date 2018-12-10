@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.rocktap.actor.BeamActor;
 import com.rocktap.actor.StationActor;
 import com.rocktap.manager.GameManager;
+import com.rocktap.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class StationEntity {
         stationActor = new StationActor();
         stationActor.storeAnimation("idle",idleAnimation);
         stationActor.setSize(200,100);
-        stationActor.setPosition(70,400);
+        stationActor.setPosition(70, Constants.STATION_ANIMATION_MAX_ALTITUDE);
     }
 
     public void initModule() {

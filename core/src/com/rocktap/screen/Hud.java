@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,12 +18,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.rocktap.Animation.AnimatedBaseActor;
 import com.rocktap.entity.GameInformation;
 import com.rocktap.input.CameraDragListener;
 import com.rocktap.manager.GameManager;
@@ -50,6 +52,7 @@ public class Hud implements Disposable {
     private Viewport viewport;
     private UpgradeModuleMenu upgradeModuleMenu;
     private FactionMenu factionMenu;
+    private OptionMenu optionMenu;
     private GameInformationMenu gameInformationMenu;
     private Label versionLabel;
     private Label scoreLabel;
@@ -58,25 +61,20 @@ public class Hud implements Disposable {
     private com.rocktap.utils.BitmapFontGenerator generator;
     private Table table;
     private GameManager gameManager;
-    private Texture upgradeButtonTextureUp;
-    private Texture skillButtonTextureUp;
-    private Texture achievButtonTextureUp;
-    private Texture mapButtonTextureUp;
-    private Texture upgradeButtonTextureDown;
-    private Texture skillButtonTextureDown;
-    private Texture achievButtonTextureDown;
-    private Texture mapButtonTextureDown;
     private Button skillButton;
     private Button upgradeButton;
     private Button mapButton;
     private Button achievButton;
     private Button optionButton;
+    private Button passiveButton;
     private LargeMath largeMath;
     private AbstractMenu currentMenu;
     // Liste de tous les menus du jeu
     private ArrayList<AbstractMenu> activeMenuList;
     private PlayScreen playScreen;
     private Label depthLabel;
+    private AnimatedBaseActor screAnimatedActor;
+    private Animation idleAnimation;
 
     public Hud(SpriteBatch sb, GameManager gameManager, PlayScreen playscreen) {
         largeMath = gameManager.getLargeMath();
@@ -101,6 +99,7 @@ public class Hud implements Disposable {
         upgradeModuleMenu = new UpgradeModuleMenu(gameManager);
         factionMenu = new FactionMenu(gameManager);
         gameInformationMenu = new GameInformationMenu(gameManager);
+        optionMenu = new OptionMenu(gameManager);
 
         activeMenuList = new ArrayList<AbstractMenu>();
         activeMenuList.add(upgradeModuleMenu);
@@ -109,46 +108,55 @@ public class Hud implements Disposable {
         activeMenuList.add(gameInformationMenu);
         activeMenuList.add(new OptionMenu(gameManager));
     }
+
     /**
      * Initialisation des bouton du hud
      */
     private void initButton() {
-        upgradeButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b2.png"));
-        skillButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b1.png"));
-        achievButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b3.png"));
-        mapButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b4.png"));
-        upgradeButtonTextureDown = new Texture(Gdx.files.internal("icons/hud_b2_r.png"));
-        skillButtonTextureDown = new Texture(Gdx.files.internal("icons/hud_b1_r.png"));
-        achievButtonTextureDown = new Texture(Gdx.files.internal("icons/hud_b3_r.png"));
-        mapButtonTextureDown = new Texture(Gdx.files.internal("icons/hud_b4_r.png"));
-        Drawable upgradeDrawableUp = new TextureRegionDrawable(new TextureRegion(upgradeButtonTextureUp));
-        Drawable skillDrawableUp = new TextureRegionDrawable(new TextureRegion(skillButtonTextureUp));
-        Drawable mapDrawableUp = new TextureRegionDrawable(new TextureRegion(achievButtonTextureUp));
-        Drawable achievDrawableUp = new TextureRegionDrawable(new TextureRegion(mapButtonTextureUp));
-        Drawable upgradeDrawableDown = new TextureRegionDrawable(new TextureRegion(upgradeButtonTextureDown));
-        Drawable skillDrawableDown = new TextureRegionDrawable(new TextureRegion(skillButtonTextureDown));
-        Drawable mapDrawableDown = new TextureRegionDrawable(new TextureRegion(achievButtonTextureDown));
-        Drawable achievDrawableDown = new TextureRegionDrawable(new TextureRegion(mapButtonTextureDown));
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("icons/screw_0.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("icons/screw_1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("icons/screw_2.png"))));
+        idleAnimation = new Animation(0.3f, frames);
+        idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        screAnimatedActor = new AnimatedBaseActor();
+        screAnimatedActor.storeAnimation("idle",idleAnimation);
+
+        Texture upgradeButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b2.png"));
+        Texture skillButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b1.png"));
+        Texture achievButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b3.png"));
+        Texture mapButtonTextureUp = new Texture(Gdx.files.internal("icons/hud_b4.png"));
+        Texture upgradeButtonTextureDown = new Texture(Gdx.files.internal("icons/hud_b2_r.png"));
+        Texture skillButtonTextureDown = new Texture(Gdx.files.internal("icons/hud_b1_r.png"));
+        Texture achievButtonTextureDown = new Texture(Gdx.files.internal("icons/hud_b3_r.png"));
+        Texture mapButtonTextureDown = new Texture(Gdx.files.internal("icons/hud_b4_r.png"));
+        Texture passivButtonTextureup = new Texture(Gdx.files.internal("icons/hud_b5_r.png"));
+        Texture passivButtonTextureDown = new Texture(Gdx.files.internal("icons/hud_b5.png"));
+
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-        style.up = skillDrawableUp;
-        style.down = skillDrawableDown;
+        style.up = new TextureRegionDrawable(new TextureRegion(skillButtonTextureUp));
+        style.down = new TextureRegionDrawable(new TextureRegion(skillButtonTextureDown));
         upgradeButton = new ImageButton(style);
         ImageButton.ImageButtonStyle style2 = new ImageButton.ImageButtonStyle();
-        style2.up = upgradeDrawableUp;
-        style2.down = upgradeDrawableDown;
+        style2.up = new TextureRegionDrawable(new TextureRegion(upgradeButtonTextureUp));
+        style2.down =  new TextureRegionDrawable(new TextureRegion(upgradeButtonTextureDown));
         skillButton = new ImageButton(style2);
         ImageButton.ImageButtonStyle style3 = new ImageButton.ImageButtonStyle();
-        style3.up = mapDrawableUp;
-        style3.down = mapDrawableDown;
+        style3.up = new TextureRegionDrawable(new TextureRegion(achievButtonTextureUp));
+        style3.down = new TextureRegionDrawable(new TextureRegion(achievButtonTextureDown));
         mapButton = new ImageButton(style3);
         ImageButton.ImageButtonStyle style4 = new ImageButton.ImageButtonStyle();
-        style4.up = achievDrawableUp;
-        style4.down = achievDrawableDown;
+        style4.up = new TextureRegionDrawable(new TextureRegion(mapButtonTextureUp));
+        style4.down =  new TextureRegionDrawable(new TextureRegion(mapButtonTextureDown));
         achievButton = new ImageButton(style4);
         ImageButton.ImageButtonStyle style5 = new ImageButton.ImageButtonStyle();
-        style5.up = achievDrawableUp;
-        style5.down = achievDrawableDown;
+        style5.up = new TextureRegionDrawable(new TextureRegion(mapButtonTextureUp));
+        style5.down =  new TextureRegionDrawable(new TextureRegion(mapButtonTextureDown));
         optionButton = new ImageButton(style5);
+        ImageButton.ImageButtonStyle style6 = new ImageButton.ImageButtonStyle();
+        style6.up = new TextureRegionDrawable(new TextureRegion(passivButtonTextureDown));
+        style6.down = new TextureRegionDrawable(new TextureRegion(passivButtonTextureup));
+        passiveButton = new ImageButton(style6);
 
         stage.addListener(new CameraDragListener(playScreen));
 
@@ -191,7 +199,7 @@ public class Hud implements Disposable {
                 return false;
             }
         };
-        optionButton.addListener(buttonListenerOption);
+        passiveButton.addListener(buttonListenerOption);
 
     }
 
@@ -204,7 +212,7 @@ public class Hud implements Disposable {
         versionLabel.setFontScale(0.5f);
         versionLabel.setWrap(true);
         scoreLabel = new Label(largeMath.getDisplayValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency()), new Label.LabelStyle(font, Color.WHITE));
-        scoreLabel.setAlignment(Align.right);
+        scoreLabel.setAlignment(Align.center);
         scoreLabel.setFontScale(2);
         depthLabel = new Label(String.valueOf(GameInformation.INSTANCE.getDepth()+" Meters"), new Label.LabelStyle(font, Color.WHITE));
         depthLabel.setFontScale(1);
@@ -217,28 +225,32 @@ public class Hud implements Disposable {
         stack.add(scoreLabel);
         stack.add(goldDecreaseLabel);
 
+        Table tableTopMiddle = new Table();
+        tableTopMiddle.add(stack).expandX().align(Align.center);
+        tableTopMiddle.row();
+        tableTopMiddle.add(depthLabel).colspan(activeMenuList.size());
+        tableTopMiddle.row();
+        tableTopMiddle.add(screAnimatedActor).width(100).height(20);
+
         table = new Table();
-//        table.top();
         table.setFillParent(true);
-        table.add(stack).expandX().align(Align.right).colspan(activeMenuList.size());
+        table.add(passiveButton).height(50).width(50);
+        table.add(tableTopMiddle).colspan(activeMenuList.size()).align(Align.left).padLeft(Constants.V_WIDTH/2-45-60);
         table.row();
         table.add(versionLabel).expandX().align(Align.right).colspan(activeMenuList.size()-1).bottom();
-        table.row();
-        table.add(depthLabel).colspan(activeMenuList.size());
         table.row();
         table.add(upgradeButton).expandY().bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
         table.add(skillButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
         table.add(mapButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
         table.add(achievButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
         table.add(optionButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
-        table.debug();
+      //  table.debug();
+
         // Ajout des menu a l'interface
-        table.addActor(activeMenuList.get(0).getParentTable());
-        table.addActor(activeMenuList.get(1).getParentTable());
-        table.addActor(activeMenuList.get(2).getParentTable());
-        table.addActor(activeMenuList.get(3).getParentTable());
-        table.addActor(activeMenuList.get(4).getParentTable());
-        stage.addActor(table);
+        for(int i=0;i<activeMenuList.size();i++) {
+            table.addActor(activeMenuList.get(i).getParentTable());
+            stage.addActor(table);
+        }
     }
 
     /**
@@ -297,6 +309,10 @@ public class Hud implements Disposable {
     public void updateGoldLabel(){
         String scoreAffichage = largeMath.getDisplayValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency());
         scoreLabel.setText(scoreAffichage);
+    }
+
+    public Animation getIdleAnimation() {
+        return idleAnimation;
     }
 
     // Met a jour l'affichage du menu actif
