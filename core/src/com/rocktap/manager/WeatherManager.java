@@ -1,6 +1,7 @@
 package com.rocktap.manager;
 
 import com.rocktap.screen.PlayScreen;
+import com.rocktap.utils.FogEffectActor;
 import com.rocktap.utils.RainEffectActor;
 import com.rocktap.utils.SnowEffectActor;
 
@@ -11,18 +12,19 @@ public class WeatherManager {
     private RainEffectActor rainEffectActor;
     private PlayScreen screen;
     private SnowEffectActor snowEffectActor;
+    private FogEffectActor fogEffectActor;
     private Random random;
-
 
     public WeatherManager(PlayScreen screen){
         this.screen = screen;
-        rainEffectActor = new RainEffectActor(screen);
-
         random = new Random();
+        rainEffectActor = new RainEffectActor(screen);
         snowEffectActor = new SnowEffectActor(screen);
+        fogEffectActor = new FogEffectActor(screen);
 
         screen.getLayer1GraphicObject().addActor(snowEffectActor);
         screen.getLayer1GraphicObject().addActor(rainEffectActor);
+        screen.getLayer1GraphicObject().addActor(fogEffectActor);
     }
 
     /**
@@ -47,6 +49,14 @@ public class WeatherManager {
     public void stopAll(){
         snowEffectActor.stop();
         rainEffectActor.stop();
+    }
+
+    public void addFog(){
+        fogEffectActor.start();
+    }
+
+    public void stopFog(){
+        fogEffectActor.stop();
     }
 
     public void addSnow() {

@@ -53,6 +53,7 @@ public class PlayScreen implements Screen {
     private int textAnimMinX;
     private com.rocktap.utils.BitmapFontGenerator generator;
     private Image backgroundImage;
+    private Image undergroundImage;
     private Image skyImage;
     private Image holeImage;
     private Group layer0GraphicObject = new Group(); // Background
@@ -109,11 +110,23 @@ public class PlayScreen implements Screen {
         holeImage.setSize(80,30);
         holeImage.setPosition(Constants.V_WIDTH/2-holeImage.getWidth()/2, 70);
 
-        backgroundImage = new Image(new Texture(files.internal("sprites/background/rockValley2.png")));
-        backgroundImage.setScale(0.6f,0.6f);
-        backgroundImage.setPosition(-180,-(backgroundImage.getHeight()-550)*0.6f);
+       // backgroundImage = new Image(new Texture(files.internal("sprites/background/rockValley2.png")));
+       // backgroundImage.setSize(0.6f,0.6f);
+       // backgroundImage.setPosition(-180,-(backgroundImage.getHeight()-550)*0.6f);
+        Texture backgroundTexture = new Texture(files.internal("sprites/background/background_island.png"));
+        backgroundTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        backgroundImage = new Image(backgroundTexture);
+        //backgroundImage.setSize(1980,1140);
+        backgroundImage.setSize(1190,684);
+        backgroundImage.setPosition(-backgroundImage.getWidth()/2,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
+
+        undergroundImage = new Image(new Texture(files.internal("sprites/background/underground.png")));
+        undergroundImage.setSize(backgroundImage.getWidth(), 3000);
+        undergroundImage.setPosition(-backgroundImage.getWidth()/2,-undergroundImage.getHeight()+Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
+
         skyImage = new Image(new Texture(files.internal("sprites/background/sky.png")));
-        skyImage.scaleBy(0.4f);
+        skyImage.setPosition(-Constants.V_WIDTH/2,0);
+        skyImage.scaleBy(0.6f);
 
         scrollingBackground = new ScrollingBackground("sprites/background/cl.png");
 
@@ -125,6 +138,7 @@ public class PlayScreen implements Screen {
         // Ajout des objets dans les calques
         layer0GraphicObject.addActor(skyImage);
         layer0GraphicObject.addActor(scrollingBackground);
+        layer0GraphicObject.addActor(undergroundImage);
         layer0GraphicObject.addActor(backgroundImage);
         layer0GraphicObject.addActor(holeImage);
 
@@ -161,6 +175,7 @@ public class PlayScreen implements Screen {
         hud.draw();
 
         //DEBUG
+        //todo bloquer rezoom si deja zoom max, pareil max dezoom
         if (timeToCameraZoomTarget > 0) {
             timeToCameraZoomTarget -= delta;
             float progress = timeToCameraZoomTarget < 0 ? 1 : 1f - timeToCameraZoomTarget / cameraZoomDuration;
