@@ -140,7 +140,7 @@ public class PlayScreen implements Screen {
         layer0GraphicObject.addActor(scrollingBackground);
         layer0GraphicObject.addActor(undergroundImage);
         layer0GraphicObject.addActor(backgroundImage);
-        layer0GraphicObject.addActor(holeImage);
+//        layer0GraphicObject.addActor(holeImage);
 
         layer1GraphicObject.addActor(stationEntity.beamActor);
         layer1GraphicObject.addActor(tapActor);
