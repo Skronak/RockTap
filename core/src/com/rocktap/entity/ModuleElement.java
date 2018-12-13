@@ -7,15 +7,15 @@ import java.util.List;
 
 /**
  * Created by Skronak on 17/07/2017.
- * Classe representant l'ensemble des modules du jeu
+ * Module element from a station
  *
  */
-public class ModuleElementDTO implements Serializable {
+public class ModuleElement implements Serializable {
 
     private int id;
     private String title;
     private String description;
-    private List<ModuleLevelDTO> level;
+    private List<ModuleElementLevel> level;
     private float posX;
     private float posY;
     private String sprite;
@@ -26,7 +26,7 @@ public class ModuleElementDTO implements Serializable {
     private float iconPosY;
     private TextureRegion textureRegion;
 
-    public ModuleElementDTO() {
+    public ModuleElement() {
     }
 
 //*****************************************************
@@ -57,11 +57,11 @@ public class ModuleElementDTO implements Serializable {
         this.description = description;
     }
 
-    public List<ModuleLevelDTO> getLevel() {
+    public List<ModuleElementLevel> getLevel() {
         return level;
     }
 
-    public void setLevel(List<ModuleLevelDTO> level) {
+    public void setLevel(List<ModuleElementLevel> level) {
         this.level = level;
     }
 

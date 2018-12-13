@@ -47,7 +47,7 @@ public enum GameInformation {
     private int factionExp;
     private int depth;
     private int achiev1,achiev2,achiev3,achiev4,achiev5,achiev6,achiev7,achiev8,achiev9,achiev10,achiev11,achiev12,achiev13,achiev14,achiev15,achiev16,achiev17,achiev18,achiev19,achiev20;
-    private boolean optionWeather, optionSound;
+    private boolean optionWeather, optionSound, optionFps;
 
 
     GameInformation() {
@@ -103,6 +103,7 @@ public enum GameInformation {
             achiev20 = prefs.getInteger("achiev20");
             optionSound=prefs.getBoolean("optionSound");
             optionWeather=prefs.getBoolean("optionWeather");
+            optionFps=prefs.getBoolean("optionFps");
         }
     }
 
@@ -120,7 +121,6 @@ public enum GameInformation {
         prefs.putFloat("genGoldPassive", genGoldPassive);
         prefs.putInteger("genCurrencyPassive", genCurrencyPassive);
         prefs.putInteger("criticalRate", criticalRate);
-
         prefs.putInteger("stationId", stationId);
         prefs.putInteger("upgradeLevel1", upgradeLevelList.get(0));
         prefs.putInteger("upgradeLevel2", upgradeLevelList.get(1));
@@ -158,6 +158,7 @@ public enum GameInformation {
         prefs.putInteger("achiev20",achiev20);
         prefs.putBoolean("optionSound", optionSound);
         prefs.putBoolean("optionWeather", optionWeather);
+        prefs.putBoolean("optionFps", optionFps);
         prefs.flush();
     }
 
@@ -195,6 +196,7 @@ public enum GameInformation {
         firstPlay = true;
         optionSound=true;
         optionWeather=true;
+        optionFps=false;
     }
 //*****************************************************
 //                  GETTER & SETTER
@@ -494,5 +496,13 @@ public enum GameInformation {
 
     public void setOptionSound(boolean optionSound) {
         this.optionSound = optionSound;
+    }
+
+    public boolean isOptionFps() {
+        return optionFps;
+    }
+
+    public void setOptionFps(boolean optionFps) {
+        this.optionFps = optionFps;
     }
 }

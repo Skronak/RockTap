@@ -1,19 +1,21 @@
 package com.rocktap.manager;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.entity.GameInformation;
-import com.rocktap.entity.ModuleElementDTO;
-import com.rocktap.entity.ModuleLevelDTO;
-import com.rocktap.menu.moduleMenu.ModuleElementTable;
+import com.rocktap.entity.ModuleElement;
+import com.rocktap.entity.ModuleElementLevel;
 import com.rocktap.menu.moduleMenu.ModuleMenu;
+import com.rocktap.menu.moduleMenu.ModuleMenuElement;
 import com.rocktap.utils.ValueDTO;
 
 import java.util.List;
+
+import static com.rocktap.manager.AssetManager.INSTANCE;
 
 /**
  * Created by Skronak on 14/08/2017.
@@ -22,8 +24,8 @@ import java.util.List;
 public class ModuleManager {
 
     private GameManager gameManager;
-    private ModuleMenu moduleMenu;
-    private List<ModuleElementDTO> moduleEntityList;
+    public ModuleMenu moduleMenu;
+    private List<ModuleElement> moduleEntityList;
 
     public ModuleManager(GameManager gameManager) {
         this.moduleMenu = moduleMenu;
@@ -65,13 +67,15 @@ public class ModuleManager {
     }
 
     /**
-     * Verifie qu'on peut cliquer sur l'upgrade
+     * Compare current gold with a module cost
+     *
      * @param
-     * @return
+     * @return true if current gold > module cost
+     * @return false if current gold < module cost
      */
     public boolean isAvailableUpgrade (int idSelect) {
         int currentlevel = GameInformation.INSTANCE.getUpgradeLevelList().get(idSelect);
-        ModuleLevelDTO moduleLevelCurrent = moduleEntityList.get(idSelect).getLevel().get(currentlevel);
+        ModuleElementLevel moduleLevelCurrent = moduleEntityList.get(idSelect).getLevel().get(currentlevel);
 
         if ( (moduleEntityList.get(idSelect).getLevel().size() > currentlevel + 1)
            && (GameInformation.INSTANCE.getCurrency() > moduleLevelCurrent.getCost().getCurrency())
@@ -84,19 +88,24 @@ public class ModuleManager {
         }
     }
 
+    public void getModuleElementById(){
+    }
+
     /**
-     * Check if button is disabled or not
+     * Return level texture depending on module element level
+      * @param level
+     * @return
      */
-    public void updateUpgradeButton () {
-        for (int i=0;i<AssetManager.INSTANCE.getModuleElementList().size();i++) {
-            if (isAvailableUpgrade(i)){
-                ((ModuleElementTable) moduleMenu.getScrollContainerVG().getChildren().get(i)).getBuyButton().setTouchable(Touchable.enabled);
-                ((ModuleElementTable) moduleMenu.getScrollContainerVG().getChildren().get(i)).getBuyButton().setColor(Color.YELLOW);
-            } else {
-                ((ModuleElementTable) moduleMenu.getScrollContainerVG().getChildren().get(i)).getBuyButton().setTouchable(Touchable.disabled);
-                ((ModuleElementTable) moduleMenu.getScrollContainerVG().getChildren().get(i)).getBuyButton().setColor(Color.GRAY);
-            }
+    public Texture getLevelTextureByLevel(int level) {
+        Texture levelTexture = AssetManager.INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(level));
+        if (null==levelTexture) {
+            levelTexture = AssetManager.INSTANCE.getUpgradeLvlImageList().get(0);
         }
+        return levelTexture;
+    }
+
+    public void getModuleElementByLevel(){
+
     }
 
     /**
@@ -118,7 +127,11 @@ public class ModuleManager {
         this.evaluatePassivGen();
 
         // Regenere les upgrades a afficher en jeux
-        this.gameManager.playScreen.getStationEntity().initModule();
+        this.gameManager.playScreen.getStationEntity().initModules();
+     }
+
+     public void animateNewModule() {
+
      }
 
     /**
@@ -126,16 +139,16 @@ public class ModuleManager {
      * @param id
      */
     public void updateModuleMenuInformation(int id) {
-        ModuleElementTable moduleElementTable = (ModuleElementTable) moduleMenu.getScrollContainerVG().getChildren().get(id);
-        ModuleLevelDTO moduleLevel = AssetManager.INSTANCE.getModuleElementList().get(id).getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(id));
+        ModuleMenuElement moduleMenuElement = (ModuleMenuElement) moduleMenu.getScrollContainerVG().getChildren().get(id);
+        ModuleElementLevel moduleLevel = moduleEntityList.get(id).getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(id));
 
-        moduleElementTable.getModuleLevelLabel().setText("Level "+GameInformation.INSTANCE.getUpgradeLevelList().get(id));
-        moduleElementTable.getModuleLevelImage().setDrawable(new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(id)))));
-        moduleElementTable.getSkillIcon().setDrawable(new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getModuleDrawableUpList().get(id))));
-        moduleElementTable.getGoldBonusLabel().setText("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()));
-        moduleElementTable.getBuyButton().setText(gameManager.largeMath.getDisplayValue(moduleLevel.getCost().getValue(), moduleLevel.getCost().getCurrency()));
-        animateLabel(moduleElementTable.getGoldBonusLabel());
-        animateLabel(moduleElementTable.getTimeBonusLabel());
+        moduleMenuElement.getModuleLevelLabel().setText("Level "+GameInformation.INSTANCE.getUpgradeLevelList().get(id));
+        moduleMenuElement.getModuleLevelImage().setDrawable(new TextureRegionDrawable(new TextureRegion(INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(id)))));
+        moduleMenuElement.getSkillIcon().setDrawable(new TextureRegionDrawable(new TextureRegion(INSTANCE.getModuleDrawableUpList().get(id))));
+        moduleMenuElement.getGoldBonusLabel().setText("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()));
+        moduleMenuElement.getBuyButton().setText(gameManager.largeMath.getDisplayValue(moduleLevel.getCost().getValue(), moduleLevel.getCost().getCurrency()));
+        animateLabel(moduleMenuElement.getGoldBonusLabel());
+        animateLabel(moduleMenuElement.getTimeBonusLabel());
     }
 
     public void animateLabel(Label label) {

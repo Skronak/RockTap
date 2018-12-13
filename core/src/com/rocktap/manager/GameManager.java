@@ -63,7 +63,7 @@ public class GameManager {
             case MENU:
                 Gdx.input.setInputProcessor(playScreen.getHud().getStage());
                 if (logicTimer > 1f) {
-                    moduleManager.updateUpgradeButton();
+                    moduleManager.moduleMenu.updateUpgradeButton();
                     logicTimer=0f;
                 }
                 break;

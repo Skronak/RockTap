@@ -18,14 +18,14 @@ import static com.badlogic.gdx.Gdx.files;
 
 public class StationEntity {
     public StationActor stationActor;
-    public List<ModuleElementDTO> moduleToDraw;
+    public List<ModuleElement> moduleToDraw;
     public BeamActor beamActor;
     public GameManager gameManager;
 
     public StationEntity(GameManager gameManager){
         this.gameManager=gameManager;
 
-        initModule();
+        initModules();
         initStation();
         initBeam();
     }
@@ -45,14 +45,14 @@ public class StationEntity {
         stationActor.setPosition(70, Constants.STATION_ANIMATION_MAX_ALTITUDE);
     }
 
-    public void initModule() {
-        moduleToDraw=new ArrayList<ModuleElementDTO>();
+    public void initModules() {
+        moduleToDraw=new ArrayList<ModuleElement>();
         for (int i = 0; i < GameInformation.INSTANCE.getUpgradeLevelList().size(); i++) {
             // Pour les upgrade 1-8, si lvl i > 0 alors ajoute dans liste a afficher
             if (GameInformation.INSTANCE.getUpgradeLevelList().get(i) > 0) {
-                ModuleElementDTO moduleElementDTO = AssetManager.INSTANCE.getModuleElementList().get(i);
-                moduleElementDTO.setTextureRegion(new TextureRegion(new Texture(Gdx.files.internal(("sprites/upgrade/" + moduleElementDTO.getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i)).getSprite())))));
-                moduleToDraw.add(moduleElementDTO);
+                ModuleElement moduleElement = AssetManager.INSTANCE.getModuleElementList().get(i);
+                moduleElement.setTextureRegion(new TextureRegion(new Texture(Gdx.files.internal(("sprites/upgrade/" + moduleElement.getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i)).getSprite())))));
+                moduleToDraw.add(moduleElement);
             }
         }
     }

@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.entity.GameInformation;
-import com.rocktap.entity.ModuleElementDTO;
-import com.rocktap.entity.ModuleLevelDTO;
+import com.rocktap.entity.ModuleElement;
+import com.rocktap.entity.ModuleElementLevel;
 import com.rocktap.input.BuyUpgradeButtonListener;
 import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
@@ -46,9 +46,9 @@ public class ModuleElementMenu extends Table {
      * @param i
      */
     public void initModuleElementMenu(int i) {
-        ModuleElementDTO moduleElementDTOSource = AssetManager.INSTANCE.getModuleElementList().get(i);
+        ModuleElement moduleElementDTOSource = AssetManager.INSTANCE.getModuleElementList().get(i);
         int currentLevel = GameInformation.INSTANCE.getUpgradeLevelList().get(i);
-        ModuleLevelDTO moduleLevel = AssetManager.INSTANCE.getModuleElementList().get(i).getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i));
+        ModuleElementLevel moduleLevel = AssetManager.INSTANCE.getModuleElementList().get(i).getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i));
 
         moduleLevelLabel = new Label("Level "+currentLevel, AssetManager.INSTANCE.getSkin());
         moduleLevelImage = new Image(AssetManager.INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i)));
@@ -56,7 +56,7 @@ public class ModuleElementMenu extends Table {
         goldBonusLabel = new Label("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()), AssetManager.INSTANCE.getSkin());
         timeBonusLabel = new Label("- 1 min", AssetManager.INSTANCE.getSkin());
         buyButton = new TextButton(gameManager.largeMath.getDisplayValue(moduleElementDTOSource.getLevel().get(currentLevel).getCost().getValue(), moduleElementDTOSource.getLevel().get(currentLevel).getCost().getCurrency()),AssetManager.INSTANCE.getModuleMenuBuyTxtBtnStyle());
-        buyButton.addListener(new BuyUpgradeButtonListener(moduleMenu, i));
+        buyButton.addListener(new BuyUpgradeButtonListener(gameManager.moduleManager, i));
         if (GameInformation.INSTANCE.getUpgradeLevelList().get(i)==0) {
             skillIcon = new Image(AssetManager.INSTANCE.getDisabledIcon());
         } else {
@@ -94,7 +94,7 @@ public class ModuleElementMenu extends Table {
      */
     // OBSOLETE
     public void updateModuleElementMenu(int i) {
-        ModuleElementDTO moduleElementDTOSource = AssetManager.INSTANCE.getModuleElementList().get(i);
+        ModuleElement moduleElementDTOSource = AssetManager.INSTANCE.getModuleElementList().get(i);
 
         moduleLevelLabel.setText("Level "+GameInformation.INSTANCE.getUpgradeLevelList().get(i));
         moduleLevelImage.setDrawable(new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i)))));

@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
-import com.rocktap.entity.ModuleElementDTO;
+import com.rocktap.entity.ModuleElement;
 import com.rocktap.utils.BitmapFontGenerator;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public enum AssetManager {
     INSTANCE;
     private Json json;
 
-    private ArrayList<ModuleElementDTO> moduleElementList;
+    private ArrayList<ModuleElement> moduleElementList;
     private TextButton.TextButtonStyle moduleMenuBuyTxtBtnStyle;
     private TextureRegionDrawable menuBackgroundTexture;
     private BitmapFont font;
@@ -64,8 +64,8 @@ public enum AssetManager {
     }
 
     public void loadUpgradeFile(){
-        moduleElementList = new ArrayList<ModuleElementDTO>();
-        moduleElementList = json.fromJson(ArrayList.class, ModuleElementDTO.class, Gdx.files.internal("json/moduleElement.json"));
+        moduleElementList = new ArrayList<ModuleElement>();
+        moduleElementList = json.fromJson(ArrayList.class, ModuleElement.class, Gdx.files.internal("json/moduleElement.json"));
 
         loadValue+=1;
         Gdx.app.log("AssetManager","Chargement asset termine");
@@ -148,7 +148,7 @@ public enum AssetManager {
         return loadValue;
     }
 
-    public ArrayList<ModuleElementDTO> getModuleElementList() {
+    public ArrayList<ModuleElement> getModuleElementList() {
         return moduleElementList;
     }
 

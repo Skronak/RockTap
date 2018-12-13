@@ -35,6 +35,7 @@ import com.rocktap.menu.FactionMenu;
 import com.rocktap.menu.GameInformationMenu;
 import com.rocktap.menu.OptionMenu;
 import com.rocktap.menu.moduleMenu.ModuleMenu;
+import com.rocktap.object.FpsActor;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
 import com.rocktap.utils.LargeMath;
@@ -76,6 +77,7 @@ public class Hud implements Disposable {
     private Label depthLabel;
     public AnimatedBaseActor screAnimatedActor;
     private Animation idleAnimation;
+    public FpsActor fpsActor;
 
     public Hud(SpriteBatch sb, GameManager gameManager, PlayScreen playscreen) {
         largeMath = gameManager.largeMath;
@@ -209,7 +211,7 @@ public class Hud implements Disposable {
      * Initialise les informations du HUD et
      * ajoute les elemnts dans le stage
      */
-    private void initHud(){
+    private void initHud() {
         versionLabel = new Label(Constants.CURRENT_VERSION, new Label.LabelStyle(font, Color.WHITE));
         versionLabel.setFontScale(0.5f);
         versionLabel.setWrap(true);
@@ -246,13 +248,20 @@ public class Hud implements Disposable {
         table.add(mapButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
         table.add(achievButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
         table.add(optionButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
-      //  table.debug();
+        table.debug();
 
         // Ajout des menu a l'interface
         for(int i=0;i<activeMenuList.size();i++) {
             table.addActor(activeMenuList.get(i).getParentTable());
             stage.addActor(table);
         }
+
+        // Optionnal element
+        fpsActor = new FpsActor();
+        fpsActor.setVisible(GameInformation.INSTANCE.isOptionFps());
+        fpsActor.setPosition(Constants.V_WIDTH-30, Constants.V_HEIGHT-30);
+        fpsActor.setFontScale(1.5f);
+        stage.addActor(fpsActor);
     }
 
     /**
@@ -307,18 +316,19 @@ public class Hud implements Disposable {
         }
     }
 
+    public void update(){
+        updateGoldLabel();
+        updateCurrentMenu();
+    }
+
     // Met a jour l'affichage de l'or
     public void updateGoldLabel(){
         String scoreAffichage = largeMath.getDisplayValue(GameInformation.INSTANCE.getCurrentGold(), GameInformation.INSTANCE.getCurrency());
         scoreLabel.setText(scoreAffichage);
     }
 
-    public Animation getIdleAnimation() {
-        return idleAnimation;
-    }
-
     // Met a jour l'affichage du menu actif
-    public void updateMenu() {
+    public void updateCurrentMenu() {
         if (null != currentMenu) {
             currentMenu.update();
         }

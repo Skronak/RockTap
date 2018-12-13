@@ -39,18 +39,10 @@ public class ModuleMenu extends AbstractMenu {
     }
 
     public void customizeMenuTable() {
-        // titre
         parentTable.add(new Label("UPGRADE", skin)).colspan(2).height(50);
         parentTable.row();
-
-        // Contenu
-        stack = new Stack();
-        stack.addActor(initScrollingModuleSelection());
-        //stack.addActor(moduleDetails);
-        parentTable.add(stack);
-        parentTable.debug();
+        parentTable.add(initScrollingModuleSelection());
     }
-
 
     /**
      * Methode d'initialisation des modules disponibles a
@@ -73,9 +65,9 @@ public class ModuleMenu extends AbstractMenu {
         moduleButtonList = new ArrayList<ImageButton>();
 
         for (int i = 0; i < AssetManager.INSTANCE.getModuleElementList().size(); i++) {
-            ModuleElementTable moduleElementTable = new ModuleElementTable(gameManager, this);
-            moduleElementTable.initModuleElementMenu(i);
-            scrollContainerVG.addActor(moduleElementTable);
+            ModuleMenuElement moduleMenuElement = new ModuleMenuElement(gameManager);
+            moduleMenuElement.initModuleMenuElement(i);
+            scrollContainerVG.addActor(moduleMenuElement);
         }
         Gdx.app.log("ModuleMenu", "Generation des boutons de Module terminee");
 
@@ -83,23 +75,23 @@ public class ModuleMenu extends AbstractMenu {
     }
 
     /**
-     * Check if button is disabled or not
+     * Update all module buybutton to check if player can click them
      */
     public void updateUpgradeButton () {
         for (int i=0;i<AssetManager.INSTANCE.getModuleElementList().size();i++) {
             if (gameManager.moduleManager.isAvailableUpgrade(i)){
-                ((ModuleElementTable) getScrollContainerVG().getChildren().get(i)).getBuyButton().setTouchable(Touchable.enabled);
-                ((ModuleElementTable) getScrollContainerVG().getChildren().get(i)).getBuyButton().setColor(Color.YELLOW);
+                ((ModuleMenuElement) getScrollContainerVG().getChildren().get(i)).getBuyButton().setTouchable(Touchable.enabled);
+                ((ModuleMenuElement) getScrollContainerVG().getChildren().get(i)).getBuyButton().setColor(Color.YELLOW);
             } else {
-                ((ModuleElementTable) getScrollContainerVG().getChildren().get(i)).getBuyButton().setTouchable(Touchable.disabled);
-                ((ModuleElementTable) getScrollContainerVG().getChildren().get(i)).getBuyButton().setColor(Color.GRAY);
+                ((ModuleMenuElement) getScrollContainerVG().getChildren().get(i)).getBuyButton().setTouchable(Touchable.disabled);
+                ((ModuleMenuElement) getScrollContainerVG().getChildren().get(i)).getBuyButton().setColor(Color.GRAY);
             }
         }
     }
 
     @Override
     public void update() {
-        gameManager.moduleManager.updateUpgradeButton();
+        updateUpgradeButton();
     }
 //*****************************************************
 //                  GETTER & SETTER

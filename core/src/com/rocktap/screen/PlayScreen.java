@@ -168,7 +168,6 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameManager.updateLogic(delta);
         hud.updateGoldLabel();
-        hud.updateMenu(); // TODO keep or not?...
         stage.act();
         stage.draw();
         spriteBatch.setProjectionMatrix(hud.getStage().getCamera().combined);

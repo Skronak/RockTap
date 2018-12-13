@@ -8,11 +8,15 @@ import com.rocktap.entity.GameInformation;
 import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
 
+/**
+ * Menu to change game settings
+ */
 public class OptionMenu extends AbstractMenu{
 
     private TextButton weatherButton;
     private TextButton soundButton;
     private TextButton resetButton;
+    private TextButton fpsButton;
 
     public OptionMenu(GameManager gameManager) {
         super(gameManager);
@@ -46,12 +50,27 @@ public class OptionMenu extends AbstractMenu{
             }
         });
 
+        fpsButton = new TextButton("Show FPS",AssetManager.INSTANCE.getSkin());
+        fpsButton.setDisabled(true);
+        fpsButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                switchFpsMode();
+                return true;
+            }
+        });
+
         customizeMenuTable();
     }
 
 
     public void switchSoundMode(){
         GameInformation.INSTANCE.setOptionWeather(!GameInformation.INSTANCE.isOptionSound());
+    }
+
+    public void switchFpsMode(){
+        GameInformation.INSTANCE.setOptionFps(!GameInformation.INSTANCE.isOptionFps());
+        gameManager.playScreen.getHud().fpsActor.setVisible(GameInformation.INSTANCE.isOptionFps());
     }
 
     public void switchWeatherMode(){
@@ -71,6 +90,8 @@ public class OptionMenu extends AbstractMenu{
         parentTable.add(resetButton).expandX().left().pad(20);
         parentTable.row();
         parentTable.add(soundButton).left().pad(20);
+        parentTable.row();
+        parentTable.add(fpsButton).left().pad(20);
     }
 
     @Override
@@ -84,6 +105,11 @@ public class OptionMenu extends AbstractMenu{
             soundButton.setText("Disable Sound");
         } else {
             soundButton.setText("Enable Sound");
+        }
+        if (GameInformation.INSTANCE.isOptionFps()){
+            fpsButton.setText("Hide Fps");
+        } else {
+            fpsButton.setText("Show Fps");
         }
     }
 }
