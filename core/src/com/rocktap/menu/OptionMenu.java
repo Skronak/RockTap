@@ -17,6 +17,7 @@ public class OptionMenu extends AbstractMenu{
     private TextButton soundButton;
     private TextButton resetButton;
     private TextButton fpsButton;
+    private TextButton goldButton;
 
     public OptionMenu(GameManager gameManager) {
         super(gameManager);
@@ -60,6 +61,16 @@ public class OptionMenu extends AbstractMenu{
             }
         });
 
+        goldButton = new TextButton("Add Gold FPS",AssetManager.INSTANCE.getSkin());
+        goldButton.setDisabled(true);
+        goldButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                addGoldMode();
+                return true;
+            }
+        });
+
         customizeMenuTable();
     }
 
@@ -82,6 +93,11 @@ public class OptionMenu extends AbstractMenu{
         GameInformation.INSTANCE.reset();
     }
 
+    public void addGoldMode(){
+        GameInformation.INSTANCE.setCurrentGold(9999);
+        GameInformation.INSTANCE.setCurrency(90);
+    }
+
     public void customizeMenuTable() {
         parentTable.add(new Label("OPTION", skin)).top();
         parentTable.row();
@@ -92,6 +108,8 @@ public class OptionMenu extends AbstractMenu{
         parentTable.add(soundButton).left().pad(20);
         parentTable.row();
         parentTable.add(fpsButton).left().pad(20);
+        parentTable.row();
+        parentTable.add(goldButton).left().pad(20);
     }
 
     @Override

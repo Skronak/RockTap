@@ -16,6 +16,10 @@ import java.util.List;
 
 import static com.badlogic.gdx.Gdx.files;
 
+/**
+ * Parent element repressenting a station, its upgrade
+ * and the beam
+ */
 public class StationEntity {
     public StationActor stationActor;
     public List<ModuleElement> moduleToDraw;
@@ -56,6 +60,7 @@ public class StationEntity {
             }
         }
     }
+
     private void initBeam() {
         beamActor = new BeamActor(stationActor);
         Array<TextureRegion> frames = new Array<TextureRegion>();

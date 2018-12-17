@@ -77,7 +77,7 @@ public class ModuleMenu extends AbstractMenu {
     /**
      * Update all module buybutton to check if player can click them
      */
-    public void updateUpgradeButton () {
+    public void updateBuyButton () {
         for (int i=0;i<AssetManager.INSTANCE.getModuleElementList().size();i++) {
             if (gameManager.moduleManager.isAvailableUpgrade(i)){
                 ((ModuleMenuElement) getScrollContainerVG().getChildren().get(i)).getBuyButton().setTouchable(Touchable.enabled);
@@ -91,7 +91,7 @@ public class ModuleMenu extends AbstractMenu {
 
     @Override
     public void update() {
-        updateUpgradeButton();
+        updateBuyButton();
     }
 //*****************************************************
 //                  GETTER & SETTER

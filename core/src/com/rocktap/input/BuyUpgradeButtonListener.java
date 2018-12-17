@@ -30,6 +30,4 @@ public class BuyUpgradeButtonListener extends ClickListener {
         }
         return false;
     }
-
-
 }

@@ -104,15 +104,14 @@ public class PlayScreen implements Screen {
         Animation idleAnimation = new Animation(2f, frames);
         idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
-        stationEntity = new StationEntity(gameManager);
-
+        stationEntity = gameManager.initializeStationEntity();
         holeImage = new Image(new Texture(files.internal("sprites/background/hole.png")));
         holeImage.setSize(80,30);
         holeImage.setPosition(Constants.V_WIDTH/2-holeImage.getWidth()/2, 70);
 
-       // backgroundImage = new Image(new Texture(files.internal("sprites/background/rockValley2.png")));
-       // backgroundImage.setSize(0.6f,0.6f);
-       // backgroundImage.setPosition(-180,-(backgroundImage.getHeight()-550)*0.6f);
+        // backgroundImage = new Image(new Texture(files.internal("sprites/background/rockValley2.png")));
+        // backgroundImage.setSize(0.6f,0.6f);
+        // backgroundImage.setPosition(-180,-(backgroundImage.getHeight()-550)*0.6f);
         Texture backgroundTexture = new Texture(files.internal("sprites/background/background_island.png"));
         backgroundTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         backgroundImage = new Image(backgroundTexture);
@@ -171,6 +170,11 @@ public class PlayScreen implements Screen {
         stage.act();
         stage.draw();
         spriteBatch.setProjectionMatrix(hud.getStage().getCamera().combined);
+        //spriteBatch.begin();
+        //for (int i=0;i<stationEntity.moduleToDraw.size();i++) {
+        //    spriteBatch.draw(stationEntity.moduleToDraw.get(i).getTextureRegion(), stationEntity.stationActor.getX()+ stationEntity.moduleToDraw.get(i).getPosX(), stationEntity.stationActor.getY()+ stationEntity.moduleToDraw.get(i).getPosY(), stationEntity.moduleToDraw.get(i).getWidth(), stationEntity.moduleToDraw.get(i).getHeight());
+        //}
+        //spriteBatch.end();
         hud.draw();
 
         //DEBUG
@@ -294,23 +298,21 @@ public class PlayScreen implements Screen {
      */
     public void processNormalHit() {
         if (stationEntity.beamActor.getCurrentAnimation().getFrameDuration() <= 0.04f) {
-          //  beamMaxSpeedImage.clearActions();
-          //  beamMaxSpeedImage.addAction(Actions.sequence(
-          //          Actions.show(),
-          //          Actions.fadeIn(0.5f),
-          //          Actions.fadeOut(0.5f),
-          //          Actions.hide()));
+            //  beamMaxSpeedImage.clearActions();
+            //  beamMaxSpeedImage.addAction(Actions.sequence(
+            //          Actions.show(),
+            //          Actions.fadeIn(0.5f),
+            //          Actions.fadeOut(0.5f),
+            //          Actions.hide()));
         } else {
             stationEntity.beamActor.clearActions();
             stationEntity.beamActor.addAction(Actions.sequence(
-            Actions.show(),
-            Actions.fadeIn(0.5f),
-            Actions.fadeOut(0.5f),
-            Actions.hide()));
+                    Actions.show(),
+                    Actions.fadeIn(0.5f),
+                    Actions.fadeOut(0.5f),
+                    Actions.hide()));
 
-    }}
-
-
+        }}
 
     //TODO: a terminer
     //afficher tuto en surimpression

@@ -2,6 +2,7 @@ package com.rocktap.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.rocktap.entity.GameInformation;
+import com.rocktap.entity.StationEntity;
 import com.rocktap.screen.PlayScreen;
 import com.rocktap.utils.Constants;
 import com.rocktap.utils.GameState;
@@ -26,6 +27,7 @@ public class GameManager {
 
     public float autoSaveTimer,weatherTimer, increaseGoldTimer, logicTimer;
 
+    public StationEntity stationEntity;
 
     // Etat du jeu
     public GameState currentState;
@@ -46,6 +48,11 @@ public class GameManager {
     public void initialiseGame(){
         moduleManager.initialize(playScreen.getHud().getModuleMenu());
     }
+
+    public StationEntity initializeStationEntity(){
+        stationEntity = new StationEntity(this);
+        return stationEntity;
+    }
     /**
      * Modification de letat du jeu en fonction
      * du temps passe
@@ -63,7 +70,6 @@ public class GameManager {
             case MENU:
                 Gdx.input.setInputProcessor(playScreen.getHud().getStage());
                 if (logicTimer > 1f) {
-                    moduleManager.moduleMenu.updateUpgradeButton();
                     logicTimer=0f;
                 }
                 break;

@@ -300,7 +300,7 @@ public class Hud implements Disposable {
      */
     private void toggleMenu(AbstractMenu menu) {
         // Masque tous les menu
-        for (int i = 1; i < activeMenuList.size(); i++) {
+        for (int i = 0; i < activeMenuList.size(); i++) {
             activeMenuList.get(i).getParentTable().setVisible(false);
         }
 
