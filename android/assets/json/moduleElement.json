@@ -11,15 +11,15 @@
     "width": 30,
     "height": 40,
     "level":[{
-      "cost":{"value":200,"currency":0},
-      "generation":{"value":0,"currency":0},
+      "cost":{"value":50,"currency":0},
+      "generation":{"value":10,"currency":0},
       "sprite": ""
       },{
-      "cost":{"value":100,"currency":1},
-      "generation":{"value":50,"currency":0},
+      "cost":{"value":100,"currency":0},
+      "generation":{"value":20,"currency":0},
       "sprite": "module0.png"
     },{
-      "cost":{"value":300,"currency":1},
+      "cost":{"value":200,"currency":0},
       "generation":{"value":100,"currency":0},
       "sprite": "module0_0.png"
       },{

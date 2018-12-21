@@ -73,7 +73,6 @@ public class ModuleMenuElement extends Table {
 
         // Liste level actuel du module
         Table moduleLevelGroup = new Table();
-        moduleLevelGroup.debug();
         moduleLevelGroup.add(moduleLevelLabel).left().colspan(4);
         moduleLevelGroup.row();
         moduleLevelGroup.add(moduleLevelImage).size(120, 40).left().colspan(4);
@@ -85,8 +84,10 @@ public class ModuleMenuElement extends Table {
 
         this.setHeight(30);
         this.add(vgCol0).width(80);
-        this.add(moduleLevelGroup);
-        this.add(buyButton).height(90).width(70).padLeft(2);
+        this.add(moduleLevelGroup).width(140);
+        this.add(buyButton).height(90).width(70).padRight(10);
+
+        this.setDebug(true,true);
     }
 
     public void update() {

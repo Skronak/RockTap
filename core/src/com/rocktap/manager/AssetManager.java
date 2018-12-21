@@ -9,8 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
 import com.rocktap.entity.ModuleElement;
-import com.rocktap.entity.ModuleElementActor;
-import com.rocktap.entity.ModuleElementDTO;
 import com.rocktap.utils.BitmapFontGenerator;
 
 import java.util.ArrayList;
@@ -69,25 +67,27 @@ public enum AssetManager {
         moduleElementList = new ArrayList<ModuleElement>();
         moduleElementList = json.fromJson(ArrayList.class, ModuleElement.class, Gdx.files.internal("json/moduleElement.json"));
 
-        ArrayList<ModuleElementDTO> moduleElementDTOList = new ArrayList<ModuleElementDTO>();
-        for (int i=0;i<moduleElementDTOList.size();i++) {
-            for (int y = 0; i < moduleElementDTOList.get(i).getLevel().size(); i++) {
-                ModuleElementActor moduleElementActor = new ModuleElementActor();
-                moduleElementActor.id = moduleElementDTOList.get(i).getId();
-                moduleElementActor.title = moduleElementDTOList.get(i).getTitle();
-                moduleElementActor.description = moduleElementDTOList.get(i).getDescription();
-                moduleElementActor.posX = moduleElementDTOList.get(i).getPosX();
-                moduleElementActor.posY = moduleElementDTOList.get(i).getPosY();
-                moduleElementActor.icon = moduleElementDTOList.get(i).getIcon();
-                moduleElementActor.width = moduleElementDTOList.get(i).getWidth();
-                moduleElementActor.height = moduleElementDTOList.get(i).getHeight();
-                moduleElementActor.posX = moduleElementDTOList.get(i).getIconPosX();
-                moduleElementActor.posY = moduleElementDTOList.get(i).getIconPosY();
-                moduleElementActor.cost = moduleElementDTOList.get(i).getLevel().get(y).getCost();
-                moduleElementActor.generation = moduleElementDTOList.get(i).getLevel().get(y).getGeneration();
-                moduleElementActor.setDrawable(new TextureRegionDrawable(new Texture(moduleElementDTOList.get(i).getLevel().get(y).getSprite())));
-            }
-        }
+
+        //Useless
+       // ArrayList<ModuleElementDTO> moduleElementDTOList = new ArrayList<ModuleElementDTO>();
+       // for (int i=0;i<moduleElementDTOList.size();i++) {
+       //     for (int y = 0; i < moduleElementDTOList.get(i).getLevel().size(); i++) {
+       //         ModuleElementActor moduleElementActor = new ModuleElementActor(null);
+       //         moduleElementActor.id = moduleElementDTOList.get(i).getId();
+       //         moduleElementActor.title = moduleElementDTOList.get(i).getTitle();
+       //         moduleElementActor.description = moduleElementDTOList.get(i).getDescription();
+       //         moduleElementActor.posX = moduleElementDTOList.get(i).getPosX();
+       //         moduleElementActor.posY = moduleElementDTOList.get(i).getPosY();
+       //         moduleElementActor.icon = moduleElementDTOList.get(i).getIcon();
+       //         moduleElementActor.width = moduleElementDTOList.get(i).getWidth();
+       //         moduleElementActor.height = moduleElementDTOList.get(i).getHeight();
+       //         moduleElementActor.posX = moduleElementDTOList.get(i).getIconPosX();
+       //         moduleElementActor.posY = moduleElementDTOList.get(i).getIconPosY();
+       //         moduleElementActor.cost = moduleElementDTOList.get(i).getLevel().get(y).getCost();
+       //         moduleElementActor.generation = moduleElementDTOList.get(i).getLevel().get(y).getGeneration();
+       //         moduleElementActor.setDrawable(new TextureRegionDrawable(new Texture(moduleElementDTOList.get(i).getLevel().get(y).getSprite())));
+       //     }
+       // }
 
         loadValue+=1;
         Gdx.app.log("AssetManager","Chargement asset termine");
@@ -186,4 +186,6 @@ public enum AssetManager {
     public BitmapFont getFont() {
         return font;
     }
+
+
 }

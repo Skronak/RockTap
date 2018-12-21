@@ -117,7 +117,8 @@ public class PlayScreen implements Screen {
         backgroundImage = new Image(backgroundTexture);
         //backgroundImage.setSize(1980,1140);
         backgroundImage.setSize(1190,684);
-        backgroundImage.setPosition(-backgroundImage.getWidth()/2,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
+        backgroundImage.setScale(0.7f);
+        backgroundImage.setPosition(-backgroundImage.getWidth()/4,Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
 
         undergroundImage = new Image(new Texture(files.internal("sprites/background/underground.png")));
         undergroundImage.setSize(backgroundImage.getWidth(), 3000);
@@ -143,7 +144,7 @@ public class PlayScreen implements Screen {
 
         layer1GraphicObject.addActor(stationEntity.beamActor);
         layer1GraphicObject.addActor(tapActor);
-        layer2GraphicObject.addActor(stationEntity.stationActor);
+        layer2GraphicObject.addActor(stationEntity);
 
         if (GameInformation.INSTANCE.isFirstPlay()) {
             displayTutorial();
@@ -170,11 +171,13 @@ public class PlayScreen implements Screen {
         stage.act();
         stage.draw();
         spriteBatch.setProjectionMatrix(hud.getStage().getCamera().combined);
+
         //spriteBatch.begin();
         //for (int i=0;i<stationEntity.moduleToDraw.size();i++) {
         //    spriteBatch.draw(stationEntity.moduleToDraw.get(i).getTextureRegion(), stationEntity.stationActor.getX()+ stationEntity.moduleToDraw.get(i).getPosX(), stationEntity.stationActor.getY()+ stationEntity.moduleToDraw.get(i).getPosY(), stationEntity.moduleToDraw.get(i).getWidth(), stationEntity.moduleToDraw.get(i).getHeight());
         //}
         //spriteBatch.end();
+
         hud.draw();
 
         //DEBUG

@@ -71,6 +71,7 @@ public class GameManager {
                 Gdx.input.setInputProcessor(playScreen.getHud().getStage());
                 if (logicTimer > 1f) {
                     logicTimer=0f;
+                    playScreen.getHud().update();
                 }
                 break;
             case CREDIT:

@@ -10,6 +10,7 @@ import java.util.List;
  * Created by Skronak on 30/01/2017.
  *
  * Classe de stat & information sur le compte du jeu
+ * // TODO store all current ModuleElement
  */
 public enum GameInformation {
     INSTANCE;
@@ -176,14 +177,14 @@ public enum GameInformation {
         genCurrencyActive = 0;
         criticalRate = 5;
         stationId = 0;
-        upgradeLevelList.add(0);
-        upgradeLevelList.add(0);
-        upgradeLevelList.add(0);
-        upgradeLevelList.add(0);
-        upgradeLevelList.add(0);
-        upgradeLevelList.add(0);
-        upgradeLevelList.add(0);
-        upgradeLevelList.add(0);
+        upgradeLevelList.set(0,0);
+        upgradeLevelList.set(1,0);
+        upgradeLevelList.set(2,0);
+        upgradeLevelList.set(3,0);
+        upgradeLevelList.set(4,0);
+        upgradeLevelList.set(5,0);
+        upgradeLevelList.set(6,0);
+
         lastLogin = System.currentTimeMillis();
         totalTapNumber=0;
         totalGameTime=0l;

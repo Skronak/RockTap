@@ -61,7 +61,7 @@ public class OptionMenu extends AbstractMenu{
             }
         });
 
-        goldButton = new TextButton("Add Gold FPS",AssetManager.INSTANCE.getSkin());
+        goldButton = new TextButton("Max Gold",AssetManager.INSTANCE.getSkin());
         goldButton.setDisabled(true);
         goldButton.addListener(new InputListener(){
             @Override
@@ -76,17 +76,20 @@ public class OptionMenu extends AbstractMenu{
 
 
     public void switchSoundMode(){
-        GameInformation.INSTANCE.setOptionWeather(!GameInformation.INSTANCE.isOptionSound());
+        GameInformation.INSTANCE.setOptionSound(!GameInformation.INSTANCE.isOptionSound());
+        update();
     }
 
     public void switchFpsMode(){
         GameInformation.INSTANCE.setOptionFps(!GameInformation.INSTANCE.isOptionFps());
         gameManager.playScreen.getHud().fpsActor.setVisible(GameInformation.INSTANCE.isOptionFps());
+        update();
     }
 
     public void switchWeatherMode(){
         GameInformation.INSTANCE.setOptionWeather(!GameInformation.INSTANCE.isOptionWeather());
         gameManager.weatherManager.stopAll();
+        update();
     }
 
     public void triggerReset(){
@@ -94,8 +97,8 @@ public class OptionMenu extends AbstractMenu{
     }
 
     public void addGoldMode(){
-        GameInformation.INSTANCE.setCurrentGold(9999);
-        GameInformation.INSTANCE.setCurrency(90);
+        GameInformation.INSTANCE.setCurrentGold(999);
+        GameInformation.INSTANCE.setCurrency(99);
     }
 
     public void customizeMenuTable() {
@@ -103,11 +106,13 @@ public class OptionMenu extends AbstractMenu{
         parentTable.row();
         parentTable.add(weatherButton).expandX().left().pad(20);
         parentTable.row();
-        parentTable.add(resetButton).expandX().left().pad(20);
-        parentTable.row();
         parentTable.add(soundButton).left().pad(20);
         parentTable.row();
         parentTable.add(fpsButton).left().pad(20);
+        parentTable.row();
+        parentTable.add(new Label("***DEBUG***", AssetManager.INSTANCE.getSkin()));
+        parentTable.row();
+        parentTable.add(resetButton).expandX().left().pad(20);
         parentTable.row();
         parentTable.add(goldButton).left().pad(20);
     }

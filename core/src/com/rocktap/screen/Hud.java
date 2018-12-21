@@ -248,7 +248,7 @@ public class Hud implements Disposable {
         table.add(mapButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
         table.add(achievButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
         table.add(optionButton).bottom().height(Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT).width(Constants.V_WIDTH/activeMenuList.size());
-        table.debug();
+//        table.debug();
 
         // Ajout des menu a l'interface
         for(int i=0;i<activeMenuList.size();i++) {
@@ -259,7 +259,7 @@ public class Hud implements Disposable {
         // Optionnal element
         fpsActor = new FpsActor();
         fpsActor.setVisible(GameInformation.INSTANCE.isOptionFps());
-        fpsActor.setPosition(Constants.V_WIDTH-30, Constants.V_HEIGHT-30);
+        fpsActor.setPosition(Constants.V_WIDTH-60, Constants.V_HEIGHT-30);
         fpsActor.setFontScale(1.5f);
         stage.addActor(fpsActor);
     }

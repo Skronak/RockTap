@@ -13,7 +13,6 @@ public class StationActor extends AnimatedBaseActor {
     public StationActor(){
         stationAnimationTimer = 0f;
         stationAnimationUp = false;
-
     }
 
     public void updatePosition(){
