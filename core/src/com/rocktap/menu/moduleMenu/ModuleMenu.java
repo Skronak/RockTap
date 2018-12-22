@@ -39,7 +39,7 @@ public class ModuleMenu extends AbstractMenu {
     }
 
     public void customizeMenuTable() {
-        parentTable.add(new Label("UPGRADE", skin)).colspan(2).height(50);
+        parentTable.add(new Label("UPGRADE", skin)).bottom().padTop(20);
         parentTable.row();
         parentTable.add(initScrollingModuleSelection());
     }

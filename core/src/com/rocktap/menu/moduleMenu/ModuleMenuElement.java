@@ -1,5 +1,6 @@
 package com.rocktap.menu.moduleMenu;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -59,9 +60,13 @@ public class ModuleMenuElement extends Table {
         buyButton = new TextButton(gameManager.largeMath.getDisplayValue(moduleElementSource.getLevel().get(currentLevel).getCost().getValue(), moduleElementSource.getLevel().get(currentLevel).getCost().getCurrency()),AssetManager.INSTANCE.getModuleMenuBuyTxtBtnStyle());
         buyButton.addListener(new BuyUpgradeButtonListener(gameManager.moduleManager, i));
         if (currentLevel==0) {
-            skillIcon = new Image(AssetManager.INSTANCE.getDisabledIcon());
+            Texture skillTexture = AssetManager.INSTANCE.getDisabledIcon();
+            skillTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            skillIcon = new Image(skillTexture);
         } else {
-            skillIcon = new Image(AssetManager.INSTANCE.getModuleDrawableUpList().get(i));
+            Texture skillTexture = AssetManager.INSTANCE.getModuleDrawableUpList().get(i);
+            skillTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            skillIcon = new Image(skillTexture);
         }
         goldIcon = new Image(AssetManager.INSTANCE.getGoldIcon());
         timeIcon = new Image(AssetManager.INSTANCE.getTimeIcon());
@@ -83,11 +88,11 @@ public class ModuleMenuElement extends Table {
         moduleLevelGroup.add(timeBonusLabel).left();
 
         this.setHeight(30);
-        this.add(vgCol0).width(80);
+        this.add(skillIcon).width(80).height(80);
         this.add(moduleLevelGroup).width(140);
         this.add(buyButton).height(90).width(70).padRight(10);
 
-        this.setDebug(true,true);
+//        this.setDebug(true,true);
     }
 
     public void update() {
@@ -95,6 +100,7 @@ public class ModuleMenuElement extends Table {
         moduleLevelLabel.setText("Level "+GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()));
         moduleLevelImage.setDrawable(new TextureRegionDrawable(new TextureRegion(INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId())))));
         skillIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(INSTANCE.getModuleDrawableUpList().get(moduleElementSource.getId()))));
+        skillIcon.setSize(60,60);
         goldBonusLabel.setText("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()));
         buyButton.setText(gameManager.largeMath.getDisplayValue(moduleLevel.getCost().getValue(), moduleLevel.getCost().getCurrency()));
     }

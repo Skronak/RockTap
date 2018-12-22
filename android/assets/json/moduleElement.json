@@ -7,7 +7,7 @@
     "posY": 90,
     "iconPosX":115,
     "iconPosY":0,
-    "icon": "icon0.png",
+    "icon": "mod0.png",
     "width": 30,
     "height": 40,
     "level":[{
@@ -17,7 +17,7 @@
       },{
       "cost":{"value":100,"currency":0},
       "generation":{"value":20,"currency":0},
-      "sprite": "module0.png"
+      "sprite": "module0_0.png"
     },{
       "cost":{"value":200,"currency":0},
       "generation":{"value":100,"currency":0},
@@ -161,7 +161,7 @@
     "posY": 94,
     "iconPosX":115,
     "iconPosY":0,
-    "icon": "icon1.png",
+    "icon": "mod1.png",
     "width": 30,
     "height": 25,
     "level":[{
@@ -195,7 +195,7 @@
     "posY": -12,
     "iconPosX":115,
     "iconPosY":0,
-    "icon": "icon2.png",
+    "icon": "mod2.png",
     "width": 40,
     "height": 20,
     "level":[{
@@ -229,7 +229,7 @@
     "posY": -19,
     "iconPosX":115,
     "iconPosY":0,
-    "icon": "icon3.png",
+    "icon": "mod3.png",
     "width": 36,
     "height": 15,
     "level":[{

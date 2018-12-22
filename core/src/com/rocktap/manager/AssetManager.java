@@ -96,12 +96,12 @@ public enum AssetManager {
     public void loadIcons(){
         goldIcon = new Texture(Gdx.files.internal("icons/gold+.png"));
         timeIcon = new Texture(Gdx.files.internal("icons/speed+.png"));
-        disabledIcon = new Texture(Gdx.files.internal("icons/disabled.png"));
+        disabledIcon = new Texture(Gdx.files.internal("sprites/menu/lock.png"));
     }
 
     public void loadTexture() {
         scrollTexture = new Texture(Gdx.files.internal("sprites/menu/bar.png"));
-        menuBackgroundTexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("credit.png"))));
+        menuBackgroundTexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sprites/menu/menuBackground.png"))));
     }
     public void loadImage() {
         moduleDrawableUpList = new ArrayList<Texture>();
