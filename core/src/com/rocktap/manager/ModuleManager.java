@@ -31,35 +31,51 @@ public class ModuleManager {
 
     public void initialize(ModuleMenu moduleMenu){
         this.moduleMenu=moduleMenu;
-        evaluatePassivGen();
+        evaluateModuleGeneration();
     }
 
     /**
-     * Calculate passive incomes according to unlocked upgrade
+     * Calculate incomes according to unlocked upgrade
      * du niveau des updates
      */
-    public void evaluatePassivGen(){
-        float goldGen = 0;
-        int currGen = 0;
+    public void evaluateModuleGeneration(){
+        float passGoldGen = 0;
+        int passCurrGen = 0;
+        float actGoldGen = 0;
+        int actCurrGen = 0;
         float goldGenToAdd = 0;
         int currGenToAdd = 0;
         // Total a additionner
-        ValueDTO newVal = new ValueDTO(0,0);
+        ValueDTO passGenSum = new ValueDTO(0,0);
+        ValueDTO actGenSum = new ValueDTO(0,0);
+        int upgradeLevel=0;
 
         // Parcours la liste upgrades du joueur
         for (int i=0;i<GameInformation.INSTANCE.getUpgradeLevelList().size();i++) {
             if (GameInformation.INSTANCE.getUpgradeLevelList().get(i) > 0) {
-                int upgradeLevel = GameInformation.INSTANCE.getUpgradeLevelList().get(i);
-                goldGen = newVal.getValue();
-                currGen = newVal.getCurrency();
-                // Dans les generations possible de l'upgrade, cherche celui du lvl puis cherche valeur de l'upgrade
-                goldGenToAdd = moduleEntityList.get(i).getLevel().get(upgradeLevel).getGeneration().getValue();
-                currGenToAdd = moduleEntityList.get(i).getLevel().get(upgradeLevel).getGeneration().getCurrency();
-                newVal = gameManager.largeMath.increaseValue(goldGen,currGen,goldGenToAdd,currGenToAdd);
+                upgradeLevel = GameInformation.INSTANCE.getUpgradeLevelList().get(i);
+
+                //Passive generation
+                passGoldGen = passGenSum.getValue();
+                passCurrGen = passGenSum.getCurrency();
+
+                goldGenToAdd = moduleEntityList.get(i).getLevel().get(upgradeLevel).getPassGen().getValue();
+                currGenToAdd = moduleEntityList.get(i).getLevel().get(upgradeLevel).getPassGen().getCurrency();
+                passGenSum = gameManager.largeMath.increaseValue(passGoldGen ,passCurrGen ,goldGenToAdd,currGenToAdd);
+
+                //Active generation
+                actGoldGen = actGenSum.getValue();
+                actCurrGen = actGenSum.getCurrency();
+                goldGenToAdd = moduleEntityList.get(i).getLevel().get(upgradeLevel).getActGen().getValue();
+                currGenToAdd = moduleEntityList.get(i).getLevel().get(upgradeLevel).getActGen().getCurrency();
+                actGenSum = gameManager.largeMath.increaseValue(actGoldGen,actCurrGen ,goldGenToAdd,currGenToAdd);
+
             }
         }
-        GameInformation.INSTANCE.setGenGoldPassive(newVal.getValue());
-        GameInformation.INSTANCE.setGenCurrencyPassive(newVal.getCurrency());
+        GameInformation.INSTANCE.setGenGoldPassive(passGenSum.getValue());
+        GameInformation.INSTANCE.setGenCurrencyPassive(passGenSum.getCurrency());
+        GameInformation.INSTANCE.setGenGoldActive(actGenSum.getValue());
+        GameInformation.INSTANCE.setGenCurrencyActive(actGenSum.getCurrency());
     }
 
     /**
@@ -74,10 +90,11 @@ public class ModuleManager {
         ModuleElementLevel moduleLevelCurrent = moduleEntityList.get(idSelect).getLevel().get(currentlevel);
 
         if ( (moduleEntityList.get(idSelect).getLevel().size() > currentlevel + 1)
-           && (GameInformation.INSTANCE.getCurrency() > moduleLevelCurrent.getCost().getCurrency())
-           || ( (GameInformation.INSTANCE.getCurrency() == moduleLevelCurrent.getCost().getCurrency())
-              && (GameInformation.INSTANCE.getCurrentGold() >= moduleLevelCurrent.getCost().getValue())
-              )){
+                && ( (GameInformation.INSTANCE.getCurrency() > moduleLevelCurrent.getCost().getCurrency()
+                    || (GameInformation.INSTANCE.getCurrency() == moduleLevelCurrent.getCost().getCurrency()
+                        && (GameInformation.INSTANCE.getCurrentGold() >= moduleLevelCurrent.getCost().getValue())
+                        ))))
+        {
             return true;
         } else {
             return false;
@@ -120,7 +137,7 @@ public class ModuleManager {
 
         // Met a jour le gameInformation
         GameInformation.INSTANCE.getUpgradeLevelList().set(idSelect, GameInformation.INSTANCE.getUpgradeLevelList().get(idSelect) + 1);
-        this.evaluatePassivGen();
+        this.evaluateModuleGeneration();
 
         // Regenere les upgrades a afficher en jeux
         this.gameManager.playScreen.getStationEntity().initModules();

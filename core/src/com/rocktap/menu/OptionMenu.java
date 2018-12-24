@@ -94,6 +94,9 @@ public class OptionMenu extends AbstractMenu{
 
     public void triggerReset(){
         GameInformation.INSTANCE.reset();
+        gameManager.moduleManager.evaluateModuleGeneration();
+        gameManager.playScreen.getHud().updateCurrentMenu();
+        gameManager.stationEntity.initModules();
     }
 
     public void addGoldMode(){

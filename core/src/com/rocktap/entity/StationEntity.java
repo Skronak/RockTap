@@ -23,7 +23,6 @@ import static com.badlogic.gdx.Gdx.files;
  */
 public class StationEntity extends Group {
     public StationActor stationActor;
-    public List<ModuleElement> moduleToDraw;
     public List<ModuleElementActor> moduleElementActors;
     public BeamActor beamActor;
     public GameManager gameManager;
@@ -55,25 +54,19 @@ public class StationEntity extends Group {
     }
 
     public void initModules() {
-        moduleToDraw = new ArrayList<ModuleElement>();
         moduleElementActors = new ArrayList<ModuleElementActor>();
 
         for (int i = 0; i < GameInformation.INSTANCE.getUpgradeLevelList().size(); i++) {
             // Pour les upgrade 1-8, si lvl i > 0 alors ajoute dans liste a afficher
             if (GameInformation.INSTANCE.getUpgradeLevelList().get(i) > 0) {
                 ModuleElement moduleElement = AssetManager.INSTANCE.getModuleElementList().get(i);
-                moduleElement.setTextureRegion(new TextureRegion(new Texture(Gdx.files.internal(("sprites/upgrade/" + moduleElement.getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(i)).getSprite())))));
-                moduleToDraw.add(moduleElement);
+                if (null!=moduleElement.getSprite() && !moduleElement.getSprite().equals("")) {
+                    ModuleElementActor moduleElementActor = new ModuleElementActor(stationActor, moduleElement);
+                    moduleElementActor.setSize(moduleElement.getWidth(), moduleElement.getHeight());
+                    moduleElementActor.setPosition(moduleElement.getPosX(), stationActor.getY() + moduleElement.getPosX());
 
-                Array<TextureRegion> frames = new Array<TextureRegion>();
-                frames.add(moduleElement.getTextureRegion());
-                Animation animation = new Animation(0.5f, frames);
-                ModuleElementActor moduleElementActor = new ModuleElementActor(stationActor);
-                moduleElementActor.storeAnimation("idle", animation);
-                moduleElementActor.setSize(moduleElement.getWidth(), moduleElement.getPosY());
-                moduleElementActor.setPosition(moduleElement.getPosX(), stationActor.getY());
-
-                this.addActor(moduleElementActor);
+                    this.addActor(moduleElementActor);
+                }
             }
         }
     }

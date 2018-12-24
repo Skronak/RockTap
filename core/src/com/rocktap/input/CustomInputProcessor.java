@@ -47,7 +47,6 @@ public class CustomInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         int randCritical = random.nextInt(Constants.CRITICAL_CHANCE) + 1;
-        GameInformation.INSTANCE.setTotalTapNumber(GameInformation.INSTANCE.getTotalTapNumber()+1);
         playScreen.processHit();
         if (randCritical == 1) {
             gameManager.increaseGoldCritical();
@@ -62,6 +61,8 @@ public class CustomInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        GameInformation.INSTANCE.setTotalTapNumber(GameInformation.INSTANCE.getTotalTapNumber()+1);
+
         return false;
     }
 

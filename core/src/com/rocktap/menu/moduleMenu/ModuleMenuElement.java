@@ -37,7 +37,6 @@ public class ModuleMenuElement extends Table {
     private Image timeIcon;
     private ModuleElement moduleElementSource;
 
-
     public ModuleMenuElement(GameManager gameManager){
         this.gameManager = gameManager;
     }
@@ -55,7 +54,7 @@ public class ModuleMenuElement extends Table {
         moduleLevelLabel = new Label("Level "+currentLevel, AssetManager.INSTANCE.getSkin());
         moduleLevelImage = new Image(gameManager.moduleManager.getLevelTextureByLevel(i));
         elementTitle = new Label(moduleElementSource.getTitle(), AssetManager.INSTANCE.getSkin());
-        goldBonusLabel = new Label("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()), AssetManager.INSTANCE.getSkin());
+        goldBonusLabel = new Label("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getPassGen().getValue(), moduleLevel.getPassGen().getCurrency()), AssetManager.INSTANCE.getSkin());
         timeBonusLabel = new Label("- 1 min", AssetManager.INSTANCE.getSkin());
         buyButton = new TextButton(gameManager.largeMath.getDisplayValue(moduleElementSource.getLevel().get(currentLevel).getCost().getValue(), moduleElementSource.getLevel().get(currentLevel).getCost().getCurrency()),AssetManager.INSTANCE.getModuleMenuBuyTxtBtnStyle());
         buyButton.addListener(new BuyUpgradeButtonListener(gameManager.moduleManager, i));
@@ -71,24 +70,19 @@ public class ModuleMenuElement extends Table {
         goldIcon = new Image(AssetManager.INSTANCE.getGoldIcon());
         timeIcon = new Image(AssetManager.INSTANCE.getTimeIcon());
 
-        // Premiere colonne
-        VerticalGroup vgCol0 = new VerticalGroup();
-        vgCol0.addActor(elementTitle);
-        vgCol0.addActor(skillIcon);
-
         // Liste level actuel du module
         Table moduleLevelGroup = new Table();
         moduleLevelGroup.add(moduleLevelLabel).left().colspan(4);
         moduleLevelGroup.row();
-        moduleLevelGroup.add(moduleLevelImage).size(120, 40).left().colspan(4);
-        moduleLevelGroup.row();
+//        moduleLevelGroup.add(moduleLevelImage).size(moduleElementSource.getWidth(), moduleElementSource .getHeight()).left().colspan(4);
+//        moduleLevelGroup.row();
         moduleLevelGroup.add(goldIcon).size(20,20).left();
         moduleLevelGroup.add(goldBonusLabel).left();
         moduleLevelGroup.add(timeIcon).size(20,20).left();
         moduleLevelGroup.add(timeBonusLabel).left();
 
         this.setHeight(30);
-        this.add(skillIcon).width(80).height(80);
+        this.add(skillIcon).width(80).height(80).padLeft(10);
         this.add(moduleLevelGroup).width(140);
         this.add(buyButton).height(90).width(70).padRight(10);
 
@@ -96,12 +90,12 @@ public class ModuleMenuElement extends Table {
     }
 
     public void update() {
-        ModuleElementLevel moduleLevel = INSTANCE.getModuleElementList().get(moduleElementSource.getId()).getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()));
+        ModuleElementLevel moduleLevel = AssetManager.INSTANCE.getModuleElementList().get(moduleElementSource.getId()).getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()));
         moduleLevelLabel.setText("Level "+GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()));
         moduleLevelImage.setDrawable(new TextureRegionDrawable(new TextureRegion(INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId())))));
         skillIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(INSTANCE.getModuleDrawableUpList().get(moduleElementSource.getId()))));
         skillIcon.setSize(60,60);
-        goldBonusLabel.setText("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getGeneration().getValue(), moduleLevel.getGeneration().getCurrency()));
+        goldBonusLabel.setText("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getPassGen().getValue(), moduleLevel.getPassGen().getCurrency()));
         buyButton.setText(gameManager.largeMath.getDisplayValue(moduleLevel.getCost().getValue(), moduleLevel.getCost().getCurrency()));
     }
 

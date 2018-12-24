@@ -67,7 +67,6 @@ public enum AssetManager {
         moduleElementList = new ArrayList<ModuleElement>();
         moduleElementList = json.fromJson(ArrayList.class, ModuleElement.class, Gdx.files.internal("json/moduleElement.json"));
 
-
         //Useless
        // ArrayList<ModuleElementDTO> moduleElementDTOList = new ArrayList<ModuleElementDTO>();
        // for (int i=0;i<moduleElementDTOList.size();i++) {

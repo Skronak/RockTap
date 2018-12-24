@@ -13,8 +13,10 @@ public class ModuleElementLevel implements Serializable {
 
     // Cout du niveau suivant
     private ValueDTO cost;
-    // Generation du niveau en cours
-    private ValueDTO generation;
+    // Generation passive du niveau en cours
+    private ValueDTO passGen;
+    // Generation actif du niveau en cours
+    private ValueDTO actGen;
     // Sprite
     private String sprite;
 
@@ -30,12 +32,20 @@ public class ModuleElementLevel implements Serializable {
         this.cost = cost;
     }
 
-    public ValueDTO getGeneration() {
-        return generation;
+    public ValueDTO getPassGen() {
+        return passGen;
     }
 
-    public void setGeneration(ValueDTO generation) {
-        this.generation = generation;
+    public void setPassGen(ValueDTO passGen) {
+        this.passGen = passGen;
+    }
+
+    public ValueDTO getActGen() {
+        return actGen;
+    }
+
+    public void setActGen(ValueDTO actGen) {
+        this.actGen = actGen;
     }
 
     public String getSprite() {
