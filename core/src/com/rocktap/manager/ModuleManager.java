@@ -154,8 +154,8 @@ public class ModuleManager {
     public void updateModuleMenuInformation(int id) {
         ModuleMenuElement moduleMenuElement = (ModuleMenuElement) moduleMenu.getScrollContainerVG().getChildren().get(id);
         moduleMenuElement.update();
-        animateLabel(moduleMenuElement.getGoldBonusLabel());
-        animateLabel(moduleMenuElement.getTimeBonusLabel());
+        animateLabel(moduleMenuElement.getActiveGoldLabel());
+        animateLabel(moduleMenuElement.getPassiveGoldLabel());
     }
 
     public void animateLabel(Label label) {

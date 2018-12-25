@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.entity.GameInformation;
 import com.rocktap.entity.ModuleElement;
@@ -30,8 +29,8 @@ public class ModuleMenuElement extends Table {
     private TextButton buyButton;
     private Image moduleLevelImage;
     private Label elementTitle;
-    private Label goldBonusLabel;
-    private Label timeBonusLabel;
+    private Label activeGoldLabel;
+    private Label passiveGoldLabel;
     private Image skillIcon;
     private Image goldIcon;
     private Image timeIcon;
@@ -54,8 +53,10 @@ public class ModuleMenuElement extends Table {
         moduleLevelLabel = new Label("Level "+currentLevel, AssetManager.INSTANCE.getSkin());
         moduleLevelImage = new Image(gameManager.moduleManager.getLevelTextureByLevel(i));
         elementTitle = new Label(moduleElementSource.getTitle(), AssetManager.INSTANCE.getSkin());
-        goldBonusLabel = new Label("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getPassGen().getValue(), moduleLevel.getPassGen().getCurrency()), AssetManager.INSTANCE.getSkin());
-        timeBonusLabel = new Label("- 1 min", AssetManager.INSTANCE.getSkin());
+        activeGoldLabel = new Label("Passive gold: +"+gameManager.largeMath.getDisplayValue(moduleLevel.getPassGen().getValue(), moduleLevel.getPassGen().getCurrency()), AssetManager.INSTANCE.getSkin());
+        activeGoldLabel.setFontScale(0.8f);
+        passiveGoldLabel = new Label("Active gold: +"+gameManager.largeMath.getDisplayValue(moduleLevel.getActGen().getValue(), moduleLevel.getActGen().getCurrency()), AssetManager.INSTANCE.getSkin());
+        passiveGoldLabel.setFontScale(0.8f);
         buyButton = new TextButton(gameManager.largeMath.getDisplayValue(moduleElementSource.getLevel().get(currentLevel).getCost().getValue(), moduleElementSource.getLevel().get(currentLevel).getCost().getCurrency()),AssetManager.INSTANCE.getModuleMenuBuyTxtBtnStyle());
         buyButton.addListener(new BuyUpgradeButtonListener(gameManager.moduleManager, i));
         if (currentLevel==0) {
@@ -72,15 +73,16 @@ public class ModuleMenuElement extends Table {
 
         // Liste level actuel du module
         Table moduleLevelGroup = new Table();
-        moduleLevelGroup.add(moduleLevelLabel).left().colspan(4);
+         moduleLevelGroup.add(moduleLevelLabel).left().top().expandX();
         moduleLevelGroup.row();
 //        moduleLevelGroup.add(moduleLevelImage).size(moduleElementSource.getWidth(), moduleElementSource .getHeight()).left().colspan(4);
 //        moduleLevelGroup.row();
-        moduleLevelGroup.add(goldIcon).size(20,20).left();
-        moduleLevelGroup.add(goldBonusLabel).left();
-        moduleLevelGroup.add(timeIcon).size(20,20).left();
-        moduleLevelGroup.add(timeBonusLabel).left();
-
+//        moduleLevelGroup.add(goldIcon).size(20,20).left();
+        moduleLevelGroup.add(activeGoldLabel).left();
+        moduleLevelGroup.row();
+//        moduleLevelGroup.add(timeIcon).size(20,20).left();
+        moduleLevelGroup.add(passiveGoldLabel).left();
+        moduleLevelGroup.debug();
         this.setHeight(30);
         this.add(skillIcon).width(80).height(80).padLeft(10);
         this.add(moduleLevelGroup).width(140);
@@ -90,12 +92,13 @@ public class ModuleMenuElement extends Table {
     }
 
     public void update() {
-        ModuleElementLevel moduleLevel = AssetManager.INSTANCE.getModuleElementList().get(moduleElementSource.getId()).getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()));
+        ModuleElementLevel moduleLevel = moduleElementSource.getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()));
         moduleLevelLabel.setText("Level "+GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()));
         moduleLevelImage.setDrawable(new TextureRegionDrawable(new TextureRegion(INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId())))));
         skillIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(INSTANCE.getModuleDrawableUpList().get(moduleElementSource.getId()))));
         skillIcon.setSize(60,60);
-        goldBonusLabel.setText("+"+gameManager.largeMath.getDisplayValue(moduleLevel.getPassGen().getValue(), moduleLevel.getPassGen().getCurrency()));
+        activeGoldLabel.setText("Active gold: +"+gameManager.largeMath.getDisplayValue(moduleLevel.getActGen().getValue(), moduleLevel.getActGen().getCurrency()));
+        passiveGoldLabel.setText("Passive gold: +"+gameManager.largeMath.getDisplayValue(moduleLevel.getPassGen().getValue(), moduleLevel.getPassGen().getCurrency()));
         buyButton.setText(gameManager.largeMath.getDisplayValue(moduleLevel.getCost().getValue(), moduleLevel.getCost().getCurrency()));
     }
 
@@ -139,20 +142,20 @@ public class ModuleMenuElement extends Table {
         this.elementTitle = elementTitle;
     }
 
-    public Label getGoldBonusLabel() {
-        return goldBonusLabel;
+    public Label getActiveGoldLabel() {
+        return activeGoldLabel;
     }
 
-    public void setGoldBonusLabel(Label goldBonusLabel) {
-        this.goldBonusLabel = goldBonusLabel;
+    public void setActiveGoldLabel(Label activeGoldLabel) {
+        this.activeGoldLabel = activeGoldLabel;
     }
 
-    public Label getTimeBonusLabel() {
-        return timeBonusLabel;
+    public Label getPassiveGoldLabel() {
+        return passiveGoldLabel;
     }
 
-    public void setTimeBonusLabel(Label timeBonusLabel) {
-        this.timeBonusLabel = timeBonusLabel;
+    public void setPassiveGoldLabel(Label passiveGoldLabel) {
+        this.passiveGoldLabel = passiveGoldLabel;
     }
 
     public Image getSkillIcon() {
