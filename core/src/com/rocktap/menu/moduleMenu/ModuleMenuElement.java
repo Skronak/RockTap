@@ -1,8 +1,10 @@
 package com.rocktap.menu.moduleMenu;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -26,11 +28,16 @@ import static com.rocktap.manager.AssetManager.INSTANCE;
 public class ModuleMenuElement extends Table {
     private GameManager gameManager;
     private Label moduleLevelLabel;
+    private String PASSIVE_GOLD_LABEL = "Passive Gold: ";
+    private String ACTIVE_GOLD_LABEL = "Active Gold: ";
+    private String PLUS_GOLD_LABEL =" + ";
     private TextButton buyButton;
     private Image moduleLevelImage;
     private Label elementTitle;
     private Label activeGoldLabel;
     private Label passiveGoldLabel;
+    private Label nextActiveGoldLabel;
+    private Label nextPassiveGoldLabel;
     private Image skillIcon;
     private Image goldIcon;
     private Image timeIcon;
@@ -53,11 +60,16 @@ public class ModuleMenuElement extends Table {
         moduleLevelLabel = new Label("Level "+currentLevel, AssetManager.INSTANCE.getSkin());
         moduleLevelImage = new Image(gameManager.moduleManager.getLevelTextureByLevel(i));
         elementTitle = new Label(moduleElementSource.getTitle(), AssetManager.INSTANCE.getSkin());
-        activeGoldLabel = new Label("Passive gold: +"+gameManager.largeMath.getDisplayValue(moduleLevel.getPassGen().getValue(), moduleLevel.getPassGen().getCurrency()), AssetManager.INSTANCE.getSkin());
-        activeGoldLabel.setFontScale(0.8f);
-        passiveGoldLabel = new Label("Active gold: +"+gameManager.largeMath.getDisplayValue(moduleLevel.getActGen().getValue(), moduleLevel.getActGen().getCurrency()), AssetManager.INSTANCE.getSkin());
-        passiveGoldLabel.setFontScale(0.8f);
-        buyButton = new TextButton(gameManager.largeMath.getDisplayValue(moduleElementSource.getLevel().get(currentLevel).getCost().getValue(), moduleElementSource.getLevel().get(currentLevel).getCost().getCurrency()),AssetManager.INSTANCE.getModuleMenuBuyTxtBtnStyle());
+        activeGoldLabel = new Label("", AssetManager.INSTANCE.getSkin());
+        activeGoldLabel.setFontScale(0.7f);
+        passiveGoldLabel = new Label("", AssetManager.INSTANCE.getSkin());
+        passiveGoldLabel.setFontScale(0.7f);
+        nextActiveGoldLabel = new Label("", AssetManager.INSTANCE.getSkin());
+        nextActiveGoldLabel.setFontScale(0.9f);
+        nextPassiveGoldLabel= new Label("", AssetManager.INSTANCE.getSkin());
+        nextPassiveGoldLabel.setFontScale(0.9f);
+
+        buyButton = new TextButton("",AssetManager.INSTANCE.getModuleMenuBuyTxtBtnStyle());
         buyButton.addListener(new BuyUpgradeButtonListener(gameManager.moduleManager, i));
         if (currentLevel==0) {
             Texture skillTexture = AssetManager.INSTANCE.getDisabledIcon();
@@ -73,32 +85,44 @@ public class ModuleMenuElement extends Table {
 
         // Liste level actuel du module
         Table moduleLevelGroup = new Table();
-         moduleLevelGroup.add(moduleLevelLabel).left().top().expandX();
+        moduleLevelGroup.add(moduleLevelLabel).colspan(2).left().expandX().top().padBottom(10);
         moduleLevelGroup.row();
 //        moduleLevelGroup.add(moduleLevelImage).size(moduleElementSource.getWidth(), moduleElementSource .getHeight()).left().colspan(4);
 //        moduleLevelGroup.row();
 //        moduleLevelGroup.add(goldIcon).size(20,20).left();
         moduleLevelGroup.add(activeGoldLabel).left();
+        moduleLevelGroup.add(nextActiveGoldLabel);
         moduleLevelGroup.row();
 //        moduleLevelGroup.add(timeIcon).size(20,20).left();
         moduleLevelGroup.add(passiveGoldLabel).left();
-        moduleLevelGroup.debug();
+        moduleLevelGroup.add(nextPassiveGoldLabel);
+        //moduleLevelGroup.add(buyButton).height(30).width(140);
+
         this.setHeight(30);
         this.add(skillIcon).width(80).height(80).padLeft(10);
         this.add(moduleLevelGroup).width(140);
-        this.add(buyButton).height(90).width(70).padRight(10);
+        this.add(buyButton).height(80).width(70).padRight(10);
 
-//        this.setDebug(true,true);
+        update();
     }
 
     public void update() {
         ModuleElementLevel moduleLevel = moduleElementSource.getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()));
+        ModuleElementLevel moduleNextLevel=null;
+        if (GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId())<moduleElementSource.getLevel().size()-1) {
+            moduleNextLevel = moduleElementSource.getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()) + 1);
+        } else {
+            buyButton.setTouchable(Touchable.disabled);
+            buyButton.setColor(Color.GRAY);
+        }
         moduleLevelLabel.setText("Level "+GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()));
         moduleLevelImage.setDrawable(new TextureRegionDrawable(new TextureRegion(INSTANCE.getUpgradeLvlImageList().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId())))));
         skillIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(INSTANCE.getModuleDrawableUpList().get(moduleElementSource.getId()))));
         skillIcon.setSize(60,60);
-        activeGoldLabel.setText("Active gold: +"+gameManager.largeMath.getDisplayValue(moduleLevel.getActGen().getValue(), moduleLevel.getActGen().getCurrency()));
-        passiveGoldLabel.setText("Passive gold: +"+gameManager.largeMath.getDisplayValue(moduleLevel.getPassGen().getValue(), moduleLevel.getPassGen().getCurrency()));
+        activeGoldLabel.setText(ACTIVE_GOLD_LABEL+PLUS_GOLD_LABEL+gameManager.largeMath.getDisplayValue(moduleLevel.getActGen().getValue(), moduleLevel.getActGen().getCurrency()));
+        passiveGoldLabel.setText(PASSIVE_GOLD_LABEL+PLUS_GOLD_LABEL+gameManager.largeMath.getDisplayValue(moduleLevel.getPassGen().getValue(), moduleLevel.getPassGen().getCurrency()));
+        nextActiveGoldLabel.setText(PLUS_GOLD_LABEL +(null!=moduleNextLevel?gameManager.largeMath.getDisplayValue(moduleNextLevel.getActGen().getValue(), moduleNextLevel.getActGen().getCurrency()):"max"));
+        nextPassiveGoldLabel.setText(PLUS_GOLD_LABEL +(null!=moduleNextLevel?gameManager.largeMath.getDisplayValue(moduleNextLevel.getPassGen().getValue(), moduleNextLevel.getPassGen().getCurrency()):"max"));
         buyButton.setText(gameManager.largeMath.getDisplayValue(moduleLevel.getCost().getValue(), moduleLevel.getCost().getCurrency()));
     }
 
@@ -168,5 +192,21 @@ public class ModuleMenuElement extends Table {
 
     public Image getTimeIcon() {
         return timeIcon;
+    }
+
+    public Label getNextActiveGoldLabel() {
+        return nextActiveGoldLabel;
+    }
+
+    public void setNextActiveGoldLabel(Label nextActiveGoldLabel) {
+        this.nextActiveGoldLabel = nextActiveGoldLabel;
+    }
+
+    public Label getNextPassiveGoldLabel() {
+        return nextPassiveGoldLabel;
+    }
+
+    public void setNextPassiveGoldLabel(Label nextPassiveGoldLabel) {
+        this.nextPassiveGoldLabel = nextPassiveGoldLabel;
     }
 }

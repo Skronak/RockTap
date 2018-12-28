@@ -53,7 +53,7 @@ public class ModuleMenu extends AbstractMenu {
     public ScrollPane initScrollingModuleSelection() {
         scrollContainerVG = new VerticalGroup();
 
-        scrollContainerVG.space(5f);
+        scrollContainerVG.space(10f);
         ScrollPane.ScrollPaneStyle paneStyle = new ScrollPane.ScrollPaneStyle();
         paneStyle.hScroll = paneStyle.hScrollKnob = paneStyle.vScroll = paneStyle.vScrollKnob;
         paneStyle.vScrollKnob = new TextureRegionDrawable(new TextureRegion(AssetManager.INSTANCE.getScrollTexture(), 10, 50));
