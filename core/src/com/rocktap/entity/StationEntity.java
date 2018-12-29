@@ -71,6 +71,18 @@ public class StationEntity extends Group {
         }
     }
 
+    public void addModule(int id){
+        ModuleElement moduleElement = AssetManager.INSTANCE.getModuleElementList().get(id);
+        if (null!=moduleElement.getSprite() && !moduleElement.getSprite().equals("")) {
+            ModuleElementActor moduleElementActor = new ModuleElementActor(stationActor, moduleElement);
+            moduleElementActor.setSize(moduleElement.getWidth(), moduleElement.getHeight());
+            moduleElementActor.setPosition(moduleElement.getPosX(), stationActor.getY() + moduleElement.getPosX());
+            this.addActor(moduleElementActor);
+            moduleElementActor.playJustAddedAnimation();
+        }
+
+    }
+
     private void initBeam() {
         beamActor = new BeamActor(stationActor);
         Array<TextureRegion> frames = new Array<TextureRegion>();

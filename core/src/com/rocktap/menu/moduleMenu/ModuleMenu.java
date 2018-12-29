@@ -93,6 +93,7 @@ public class ModuleMenu extends AbstractMenu {
     public void update() {
         updateBuyButton();
     }
+
 //*****************************************************
 //                  GETTER & SETTER
 // ****************************************************

@@ -139,8 +139,10 @@ public class ModuleManager {
         GameInformation.INSTANCE.getUpgradeLevelList().set(idSelect, GameInformation.INSTANCE.getUpgradeLevelList().get(idSelect) + 1);
         this.evaluateModuleGeneration();
 
-        // Regenere les upgrades a afficher en jeux
-        this.gameManager.playScreen.getStationEntity().initModules();
+        // Ajoute l'element dans la station
+        if (GameInformation.INSTANCE.getUpgradeLevelList().get(idSelect)==1){
+            gameManager.newModuleIdList.add(idSelect);
+        }
      }
 
      public void animateNewModule() {

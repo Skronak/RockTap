@@ -9,6 +9,8 @@ import com.rocktap.utils.GameState;
 import com.rocktap.utils.LargeMath;
 import com.rocktap.utils.ValueDTO;
 
+import java.util.ArrayList;
+
 /**
  * Created by Skronak on 30/07/2017.
  *
@@ -29,6 +31,8 @@ public class GameManager {
 
     public StationEntity stationEntity;
 
+    public ArrayList<Integer> newModuleIdList;
+
     // Etat du jeu
     public GameState currentState;
 
@@ -36,7 +40,7 @@ public class GameManager {
         currentState = GameState.IN_GAME;
         this.playScreen = playScreen;
         largeMath = new LargeMath();
-
+        newModuleIdList = new ArrayList<Integer>();
         weatherManager = new WeatherManager(playScreen);
         moduleManager = new ModuleManager(this);
         autoSaveTimer = 0f;
@@ -63,6 +67,14 @@ public class GameManager {
         weatherTimer += Gdx.graphics.getDeltaTime();
         logicTimer += Gdx.graphics.getDeltaTime();
 
+        if(newModuleIdList.size()>0){
+            if (currentState.equals(GameState.IN_GAME)){
+                for (int i=0;i<newModuleIdList.size();i++) {
+                    stationEntity.addModule(newModuleIdList.get(i));
+                }
+                newModuleIdList.clear();
+            }
+        }
         switch (currentState) {
             case IN_GAME:
                 Gdx.input.setInputProcessor(playScreen.inputMultiplexer);

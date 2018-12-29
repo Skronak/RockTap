@@ -3,8 +3,10 @@ package com.rocktap.entity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import com.rocktap.Animation.AnimatedBaseActor;
+import com.rocktap.Animation.BlinkAction;
 import com.rocktap.actor.StationActor;
 
 /**
@@ -27,6 +29,12 @@ public class ModuleElementActor extends AnimatedBaseActor {
         frames.add(new TextureRegion(new Texture("sprites/upgrade/"+moduleElement.getSprite())));
         storeAnimation("idle", new Animation(0.5f, frames));
     }
+
+    public void playJustAddedAnimation(){
+        BlinkAction blinkAction = new BlinkAction(1f);
+        this.addAction(Actions.sequence(Actions.repeat(4,blinkAction)));
+    }
+
     public void act(float delta) {
         super.act(delta);
         this.setY(stationActor.getY()+moduleElement.getPosY());
