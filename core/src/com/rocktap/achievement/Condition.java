@@ -1,8 +1,8 @@
 package com.rocktap.achievement;
 
-public interface Condition {
+public class Condition {
 
-    public boolean isAchieved();
+    public boolean isAchieved(){return false;};
 
-    public int getConditionProgression();
+    public int getConditionProgression(){return 0;};
 }

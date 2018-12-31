@@ -310,6 +310,7 @@ public class Hud implements Disposable {
             gameManager.currentState=GameState.IN_GAME;
             currentMenu = null;
         } else {
+            menu.updateOnShow();
             menu.getParentTable().setVisible(true);
             gameManager.currentState=GameState.MENU;
             currentMenu = menu;

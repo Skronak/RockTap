@@ -44,10 +44,19 @@ public abstract class AbstractMenu {
         parentTable.top();
     }
 
+    /**
+     * Update Menu baed on logic timer
+     */
     public void update(){
 
     }
 
+    /**
+     * Update menu only on menu show
+     */
+    public void updateOnShow(){
+
+    }
     /**
      * Definition du fond du menu
      * @param fname

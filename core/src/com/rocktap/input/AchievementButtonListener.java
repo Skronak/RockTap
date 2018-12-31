@@ -1,6 +1,5 @@
 package com.rocktap.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rocktap.entity.AchivementElement;
@@ -24,7 +23,6 @@ public class AchievementButtonListener extends ClickListener {
 
     @Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-        Gdx.app.log("",String.valueOf(achivementElement.id));
         achievementMenu.titleLabel.setText(achivementElement.title);
         achievementMenu.descriptionLabel.setText(achivementElement.description);
         return false;

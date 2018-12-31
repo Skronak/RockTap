@@ -121,7 +121,7 @@ public class OptionMenu extends AbstractMenu{
     }
 
     @Override
-    public void update() {
+    public void updateOnShow(){
         if (GameInformation.INSTANCE.isOptionWeather()){
             weatherButton.setText("Disable Weather");
         } else {

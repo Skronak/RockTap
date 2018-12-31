@@ -2,12 +2,13 @@ package com.rocktap.achievement;
 
 import com.rocktap.entity.GameInformation;
 
-public class GoldCondition implements Condition {
+public class GoldCondition extends Condition {
     private int conditionValue;
     private int conditionCurrency;
 
     public GoldCondition(){}
 
+    @Override
     public boolean isAchieved() {
         boolean val = false;
         if (GameInformation.INSTANCE.getCurrency()>=conditionCurrency) {
@@ -20,7 +21,7 @@ public class GoldCondition implements Condition {
         }
         return val;
     }
-
+    @Override
     public int getConditionProgression(){
         float progression = (GameInformation.INSTANCE.getCurrency()/conditionCurrency)*100;
         return (int) progression;

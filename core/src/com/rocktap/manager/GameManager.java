@@ -101,6 +101,7 @@ public class GameManager {
             Gdx.app.debug("PlayScreen","Saving");
             GameInformation.INSTANCE.saveInformation();
             autoSaveTimer=0f;
+            Gdx.app.log("r","autosave");
         }
 
         // Increase Gold

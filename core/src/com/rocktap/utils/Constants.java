@@ -25,8 +25,8 @@ public class Constants {
     // Delay pour generation coffre rattrapage gold offline
     public static int DELAY_GENGOLD_LAST_CO = 300;
 
-    // Delay pour generation coffre rattrapage gold offline
-    public static int DELAY_AUTOSAVE = 300;
+    // Delay pour declenchement save automatique
+    public static int DELAY_AUTOSAVE = 5;
 
     // Taille du texte du HUD
     public static int HUD_TEXT_SIZE = 15;
