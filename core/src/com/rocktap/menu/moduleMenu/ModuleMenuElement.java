@@ -71,6 +71,7 @@ public class ModuleMenuElement extends Table {
 
         buyButton = new TextButton("",AssetManager.INSTANCE.getModuleMenuBuyTxtBtnStyle());
         buyButton.addListener(new BuyUpgradeButtonListener(gameManager.moduleManager, i));
+
         if (currentLevel==0) {
             Texture skillTexture = AssetManager.INSTANCE.getDisabledIcon();
             skillTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

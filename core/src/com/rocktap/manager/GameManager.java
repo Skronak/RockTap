@@ -27,6 +27,8 @@ public class GameManager {
 
     public ModuleManager moduleManager;
 
+    public AchievementManager achievementManager;
+
     public float autoSaveTimer,weatherTimer, increaseGoldTimer, logicTimer;
 
     public StationEntity stationEntity;
@@ -43,6 +45,7 @@ public class GameManager {
         newModuleIdList = new ArrayList<Integer>();
         weatherManager = new WeatherManager(playScreen);
         moduleManager = new ModuleManager(this);
+        achievementManager = new AchievementManager(this);
         autoSaveTimer = 0f;
         increaseGoldTimer = 0f;
         weatherTimer = 0f;

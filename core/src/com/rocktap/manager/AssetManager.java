@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
+import com.rocktap.entity.AchivementElement;
 import com.rocktap.entity.ModuleElement;
 import com.rocktap.utils.BitmapFontGenerator;
 
@@ -35,6 +36,7 @@ public enum AssetManager {
     private Texture scrollTexture;
     private Skin skin;
     private ArrayList<Texture> upgradeLvlImageList;
+    private ArrayList<AchivementElement> achievementElementList;
 
     private int loadValue;
 
@@ -67,26 +69,8 @@ public enum AssetManager {
         moduleElementList = new ArrayList<ModuleElement>();
         moduleElementList = json.fromJson(ArrayList.class, ModuleElement.class, Gdx.files.internal("json/moduleElement.json"));
 
-        //Useless
-       // ArrayList<ModuleElementDTO> moduleElementDTOList = new ArrayList<ModuleElementDTO>();
-       // for (int i=0;i<moduleElementDTOList.size();i++) {
-       //     for (int y = 0; i < moduleElementDTOList.get(i).getLevel().size(); i++) {
-       //         ModuleElementActor moduleElementActor = new ModuleElementActor(null);
-       //         moduleElementActor.id = moduleElementDTOList.get(i).getId();
-       //         moduleElementActor.title = moduleElementDTOList.get(i).getTitle();
-       //         moduleElementActor.description = moduleElementDTOList.get(i).getDescription();
-       //         moduleElementActor.posX = moduleElementDTOList.get(i).getPosX();
-       //         moduleElementActor.posY = moduleElementDTOList.get(i).getPosY();
-       //         moduleElementActor.icon = moduleElementDTOList.get(i).getIcon();
-       //         moduleElementActor.width = moduleElementDTOList.get(i).getWidth();
-       //         moduleElementActor.height = moduleElementDTOList.get(i).getHeight();
-       //         moduleElementActor.posX = moduleElementDTOList.get(i).getIconPosX();
-       //         moduleElementActor.posY = moduleElementDTOList.get(i).getIconPosY();
-       //         moduleElementActor.cost = moduleElementDTOList.get(i).getLevel().get(y).getCost();
-       //         moduleElementActor.generation = moduleElementDTOList.get(i).getLevel().get(y).getGeneration();
-       //         moduleElementActor.setDrawable(new TextureRegionDrawable(new Texture(moduleElementDTOList.get(i).getLevel().get(y).getSprite())));
-       //     }
-       // }
+        achievementElementList = new ArrayList<AchivementElement>();
+        achievementElementList = json.fromJson(ArrayList.class, AchivementElement.class, Gdx.files.internal("json/achievementElement.json"));
 
         loadValue+=1;
         Gdx.app.log("AssetManager","Chargement asset termine");
@@ -186,5 +170,7 @@ public enum AssetManager {
         return font;
     }
 
-
+    public ArrayList<AchivementElement> getAchievementElementList() {
+        return achievementElementList;
+    }
 }

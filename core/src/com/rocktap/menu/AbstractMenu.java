@@ -13,8 +13,8 @@ import com.rocktap.utils.Constants;
 
 /**
  * Created by Skronak on 04/08/2017.
+ * Default Menu layout used by all menu
  */
-
 public abstract class AbstractMenu {
     protected GameManager gameManager;
     protected Table parentTable;

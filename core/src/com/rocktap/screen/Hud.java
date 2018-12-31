@@ -30,7 +30,7 @@ import com.rocktap.input.CameraDragListener;
 import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
 import com.rocktap.menu.AbstractMenu;
-import com.rocktap.menu.AchievmentMenu;
+import com.rocktap.menu.AchievementMenu;
 import com.rocktap.menu.FactionMenu;
 import com.rocktap.menu.GameInformationMenu;
 import com.rocktap.menu.OptionMenu;
@@ -106,7 +106,7 @@ public class Hud implements Disposable {
 
         activeMenuList = new ArrayList<AbstractMenu>();
         activeMenuList.add(moduleMenu);
-        activeMenuList.add(new AchievmentMenu(gameManager));
+        activeMenuList.add(new AchievementMenu(gameManager));
         activeMenuList.add(factionMenu);
         activeMenuList.add(gameInformationMenu);
         activeMenuList.add(new OptionMenu(gameManager));
