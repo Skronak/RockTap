@@ -25,6 +25,9 @@ import com.rocktap.manager.GameManager;
 public class AchievementMenu extends AbstractMenu {
     public Label titleLabel;
     public Label descriptionLabel;
+    public Label skillPointLabel;
+    public TextButton claimButton;
+
     private int max_element_row=3;
     private Table achievementTable;
 
@@ -39,6 +42,8 @@ public class AchievementMenu extends AbstractMenu {
         descriptionLabel = new Label(gameManager.achievementManager.achivementElementList.get(0).description,skin);
         descriptionLabel.setWrap(true);
         descriptionLabel.setScale(0.8f);
+        skillPointLabel = new Label(String.valueOf(gameManager.achievementManager.achivementElementList.get(0).skillPoint)+"SP",skin);
+        claimButton = new TextButton("claim",AssetManager.INSTANCE.getModuleMenuBuyTxtBtnStyle());
 
         VerticalGroup scrollContainerVG = new VerticalGroup();
         scrollContainerVG.space(5f);
@@ -64,10 +69,12 @@ public class AchievementMenu extends AbstractMenu {
         scrollContainerVG.addActor(achievementTable);
         Table descriptionTable = new Table();
         descriptionTable.add(titleLabel).expand().fill();
+//        descriptionTable.add()
         descriptionTable.row();
         descriptionTable.add(descriptionLabel).fillX();
-        descriptionTable.row();
-        descriptionTable.add(new TextButton("claim",AssetManager.INSTANCE.getSkin())).width(100);
+        //descriptionTable.row();
+       // descriptionTable.add(claimButton).width(100);
+        descriptionTable.add(claimButton).width(70).height(70);
         NinePatch patch = new NinePatch(new Texture(Gdx.files.internal("grey.9.png")),
                 6,6, 6, 6);
         NinePatchDrawable background = new NinePatchDrawable(patch);
@@ -80,8 +87,17 @@ public class AchievementMenu extends AbstractMenu {
         parentTable.add(descriptionTable).fillX();
     }
 
+    public void animateClaim(){
+        claimButton.addAction(Actions.parallel(Actions.moveBy(100,1f), Actions.fadeOut(1f)));
+    }
     @Override
     public void update() {
+       // if (GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId())<moduleElementSource.getLevel().size()-1) {
+       //     moduleNextLevel = moduleElementSource.getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()) + 1);
+       // } else {
+       //     buyButton.setTouchable(Touchable.disabled);
+       //     buyButton.setColor(Color.GRAY);
+       // }
     }
 
     @Override

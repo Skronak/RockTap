@@ -19,6 +19,8 @@ public class AchivementElement {
 
     public ValueDTO rewardValue;
 
+    public int skillPoint;
+
     public boolean isClaimed;
 
     public boolean isAchieved;

@@ -50,7 +50,7 @@ public enum GameInformation {
     private int depth;
     private List<Integer> achievList; //0: locked 1: unlocked,2: claimed
     private boolean optionWeather, optionSound, optionFps;
-
+    private int skillPoint;
 
     GameInformation() {
         upgradeLevelList = new ArrayList<Integer>();
@@ -96,6 +96,7 @@ public enum GameInformation {
         prefs.putBoolean("optionSound", optionSound);
         prefs.putBoolean("optionWeather", optionWeather);
         prefs.putBoolean("optionFps", optionFps);
+        prefs.putInteger("skillPoint",skillPoint);
         prefs.flush();
     }
 
@@ -113,6 +114,7 @@ public enum GameInformation {
         genCurrencyActive = 0;
         criticalRate = 5;
         stationId = 0;
+        skillPoint = 0;
 
         for (int i=0;i<AssetManager.INSTANCE.getModuleElementList().size();i++){
             upgradeLevelList.add(0);
@@ -145,6 +147,7 @@ public enum GameInformation {
         genCurrencyActive = prefs.getInteger("genCurrencyActive");
         criticalRate = prefs.getInteger("criticalRate");
         stationId = prefs.getInteger("stationId");
+        skillPoint = prefs.getInteger("skillPoint");
         for (int i=0;i<AssetManager.INSTANCE.getModuleElementList().size();i++){
             upgradeLevelList.add(prefs.getInteger("upgradeLevel"+i));
         }
@@ -315,5 +318,13 @@ public enum GameInformation {
 
     public void setOptionFps(boolean optionFps) {
         this.optionFps = optionFps;
+    }
+
+    public int getSkillPoint() {
+        return skillPoint;
+    }
+
+    public void setSkillPoint(int skillPoint) {
+        this.skillPoint = skillPoint;
     }
 }
