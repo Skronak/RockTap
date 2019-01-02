@@ -13,12 +13,10 @@ public class ClaimAchievementButtonListener extends ClickListener {
 
     // Identifiant du module rattaché au listener
     private AchievementMenu achievementMenu;
-    private AchivementElement achivementElement;
+    public AchivementElement achivementElement;
 
-
-    public ClaimAchievementButtonListener(AchievementMenu achievementMenu, AchivementElement achivementElement) {
+    public ClaimAchievementButtonListener(AchievementMenu achievementMenu) {
         this.achievementMenu = achievementMenu;
-        this.achivementElement = achivementElement;
     }
 
     @Override

@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rocktap.entity.GameInformation;
 import com.rocktap.input.AchievementButtonListener;
+import com.rocktap.input.ClaimAchievementButtonListener;
 import com.rocktap.manager.AssetManager;
 import com.rocktap.manager.GameManager;
 
@@ -27,6 +28,7 @@ public class AchievementMenu extends AbstractMenu {
     public Label descriptionLabel;
     public Label skillPointLabel;
     public TextButton claimButton;
+    public ClaimAchievementButtonListener claimAchievementButtonListener;
 
     private int max_element_row=3;
     private Table achievementTable;
@@ -44,6 +46,8 @@ public class AchievementMenu extends AbstractMenu {
         descriptionLabel.setScale(0.8f);
         skillPointLabel = new Label(String.valueOf(gameManager.achievementManager.achivementElementList.get(0).skillPoint)+"SP",skin);
         claimButton = new TextButton("claim",AssetManager.INSTANCE.getModuleMenuBuyTxtBtnStyle());
+        claimAchievementButtonListener = new ClaimAchievementButtonListener(this);
+        claimButton.addListener(claimAchievementButtonListener);
 
         VerticalGroup scrollContainerVG = new VerticalGroup();
         scrollContainerVG.space(5f);
@@ -69,11 +73,8 @@ public class AchievementMenu extends AbstractMenu {
         scrollContainerVG.addActor(achievementTable);
         Table descriptionTable = new Table();
         descriptionTable.add(titleLabel).expand().fill();
-//        descriptionTable.add()
         descriptionTable.row();
         descriptionTable.add(descriptionLabel).fillX();
-        //descriptionTable.row();
-       // descriptionTable.add(claimButton).width(100);
         descriptionTable.add(claimButton).width(70).height(70);
         NinePatch patch = new NinePatch(new Texture(Gdx.files.internal("grey.9.png")),
                 6,6, 6, 6);
@@ -92,19 +93,13 @@ public class AchievementMenu extends AbstractMenu {
     }
     @Override
     public void update() {
-       // if (GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId())<moduleElementSource.getLevel().size()-1) {
-       //     moduleNextLevel = moduleElementSource.getLevel().get(GameInformation.INSTANCE.getUpgradeLevelList().get(moduleElementSource.getId()) + 1);
-       // } else {
-       //     buyButton.setTouchable(Touchable.disabled);
-       //     buyButton.setColor(Color.GRAY);
-       // }
     }
 
     @Override
     public void updateOnShow(){
         Gdx.app.log("r","rr");
         for (int i=0;i<gameManager.achievementManager.achivementElementList.size();i++) {
-            if (gameManager.achievementManager.achivementElementList.get(i).condition.isAchieved()) {
+            if (gameManager.achievementManager.achivementElementList.get(i).isAchieved || gameManager.achievementManager.achivementElementList.get(i).condition.isAchieved()) {
                 ((Image) achievementTable.getCells().get(i).getActor()).setDrawable(new TextureRegionDrawable(new Texture(Gdx.files.internal("icons/achievment2.png"))));
                 achievementTable.getCells().get(i).getActor().setOrigin(achievementTable.getCells().get(i).getActor().getWidth()/2,achievementTable.getCells().get(i).getActor().getHeight()/2);
 

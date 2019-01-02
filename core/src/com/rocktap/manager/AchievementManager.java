@@ -14,7 +14,11 @@ public class AchievementManager {
 
     public AchievementManager(GameManager gameManager) {
         this.gameManager = gameManager;
+
+        // Retrieve Achievement from AssetManager
         this.achivementElementList = AssetManager.INSTANCE.getAchievementElementList();
+
+        // Init all achievement status with information from current GameInformation
         updateAchivementElementStatus();
     }
 
