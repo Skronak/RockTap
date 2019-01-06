@@ -25,6 +25,7 @@ public class AchievementButtonListener extends ClickListener {
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
         achievementMenu.titleLabel.setText(achivementElement.title);
         achievementMenu.descriptionLabel.setText(achivementElement.description);
+        achievementMenu.claimAchievementButtonListener.achivementElement = achivementElement;
         return false;
      }
 }

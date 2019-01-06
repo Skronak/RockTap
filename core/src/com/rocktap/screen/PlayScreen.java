@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -130,6 +131,18 @@ public class PlayScreen implements Screen {
 
         scrollingBackground = new ScrollingBackground("sprites/background/cl.png");
 
+        Table customTiledTable = new Table();
+        for (int i=0;i<10;i++) {
+            for (int y = 0; y < 5; y++) {
+                customTiledTable.add(new Image(new Texture(files.internal("sprites/background/under1.png"))));
+            }
+            customTiledTable.row();
+        }
+        customTiledTable.setWidth(Constants.V_WIDTH);
+        customTiledTable.setHeight(Constants.V_WIDTH*2);
+        customTiledTable.setPosition(0,-customTiledTable.getHeight()+Constants.PLAYSCREEN_MENU_BUTTON_HEIGHT);
+        customTiledTable.debug();
+
         // Gestion des calques
         stage.addActor(layer0GraphicObject);
         stage.addActor(layer1GraphicObject);
@@ -138,9 +151,9 @@ public class PlayScreen implements Screen {
         // Ajout des objets dans les calques
         layer0GraphicObject.addActor(skyImage);
         layer0GraphicObject.addActor(scrollingBackground);
-        layer0GraphicObject.addActor(undergroundImage);
+        layer0GraphicObject.addActor(customTiledTable);
+//        layer0GraphicObject.addActor(undergroundImage);
         layer0GraphicObject.addActor(backgroundImage);
-//        layer0GraphicObject.addActor(holeImage);
 
         layer1GraphicObject.addActor(stationEntity.beamActor);
         layer1GraphicObject.addActor(tapActor);
@@ -171,12 +184,6 @@ public class PlayScreen implements Screen {
         stage.act();
         stage.draw();
         spriteBatch.setProjectionMatrix(hud.getStage().getCamera().combined);
-
-        //spriteBatch.begin();
-        //for (int i=0;i<stationEntity.moduleToDraw.size();i++) {
-        //    spriteBatch.draw(stationEntity.moduleToDraw.get(i).getTextureRegion(), stationEntity.stationActor.getX()+ stationEntity.moduleToDraw.get(i).getPosX(), stationEntity.stationActor.getY()+ stationEntity.moduleToDraw.get(i).getPosY(), stationEntity.moduleToDraw.get(i).getWidth(), stationEntity.moduleToDraw.get(i).getHeight());
-        //}
-        //spriteBatch.end();
 
         hud.draw();
 
